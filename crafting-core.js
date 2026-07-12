@@ -1090,6 +1090,28 @@
     return explicitMods(item).concat(item.desecratedMods || []);
   }
 
+  function qualityCapBonusFromMod(mod) {
+    if (!mod) return 0;
+    const text = [mod.template, mod.sourceText, mod.name, mod.group].join(" ");
+    if (!/品质\s*上限|Quality\s*(?:Limit|Maximum|Cap)/i.test(text)) return 0;
+    const values = [];
+    (mod.values || []).forEach(function (value) {
+      const numeric = Number(value);
+      if (Number.isFinite(numeric)) values.push(numeric);
+    });
+    (mod.rolls || []).forEach(function (roll) {
+      const numeric = Number(roll.max);
+      if (Number.isFinite(numeric)) values.push(numeric);
+    });
+    return Math.max(0, values.length ? Math.max.apply(null, values) : 0);
+  }
+
+  function qualityCapFor(item) {
+    return 20 + allMods(item).reduce(function (sum, mod) {
+      return sum + qualityCapBonusFromMod(mod);
+    }, 0);
+  }
+
   function countExplicit(item) {
     return item.prefixes.length + item.suffixes.length;
   }
@@ -1244,6 +1266,29 @@
     if (catalystTags.length === 0) return false;
     const modTags = mod.tags || [];
     return catalystTags.some(function (tag) { return modTags.includes(tag); });
+  }
+
+  function catalysingExaltMultiplier(item, mod, omenEntry) {
+    if (!omenEntry || !omenEntry.effect || !omenEntry.effect.consumeCatalystQuality) return 1;
+    if (!item || !item.catalyst || !item.catalyst.quality) return 1;
+    if (!catalystMatchesMod(item, mod)) return 1;
+    return 1 + Math.max(0, Number(item.catalyst.quality) || 0);
+  }
+
+  function applyEffectiveRollWeights(item, mods, options) {
+    const omenEntry = options && options.omenEntry ? options.omenEntry : null;
+    if (!omenEntry || !omenEntry.effect || !omenEntry.effect.consumeCatalystQuality) return mods;
+    return mods.map(function (mod) {
+      const multiplier = catalysingExaltMultiplier(item, mod, omenEntry);
+      if (multiplier === 1) return mod;
+      const effectiveWeight = Math.max(1, Number(mod.weight) || 1) * multiplier;
+      return Object.assign({}, mod, {
+        baseWeight: mod.weight,
+        effectiveWeight,
+        weightMultiplier: multiplier,
+        catalystBoosted: true,
+      });
+    });
   }
 
   function isUnrevealedDesecrated(mod) {
@@ -1564,22 +1609,27 @@
     return unique;
   }
 
+  function modRollWeight(mod) {
+    const weight = mod && mod.effectiveWeight != null ? mod.effectiveWeight : mod && mod.weight;
+    return Math.max(0, Number(weight) || 0);
+  }
+
   function totalWeight(mods) {
-    return mods.reduce(function (sum, mod) { return sum + mod.weight; }, 0);
+    return mods.reduce(function (sum, mod) { return sum + modRollWeight(mod); }, 0);
   }
 
   function pickWeighted(item, mods) {
     const total = totalWeight(mods);
     let roll = nextFloat(item) * total;
     for (const mod of mods) {
-      roll -= mod.weight;
+      roll -= modRollWeight(mod);
       if (roll <= 0) return mod;
     }
     return mods[mods.length - 1];
   }
 
   function addRandomMod(item, options) {
-    const mods = eligibleMods(item, options || {});
+    const mods = applyEffectiveRollWeights(item, eligibleMods(item, options || {}), options || {});
     if (mods.length === 0) {
       return { ok: false, reason: "当前底材、物品等级、词缀组和前后缀槽位下没有可添加的词缀。" };
     }
@@ -1721,7 +1771,7 @@
     if (!definition) return { ok: false, reason: "找不到该催化剂的 PoE2DB 数据。" };
     const classes = definition.classes || [];
     if (!classes.includes(base.classId)) return { ok: false, reason: "该催化剂不能用于当前底材。" };
-    if (item.catalyst && item.catalyst.id === definition.id && item.catalyst.quality >= 20) return { ok: false, reason: "该催化剂品质已经达到 20%。" };
+    if (item.catalyst && item.catalyst.id === definition.id && item.catalyst.quality >= qualityCapFor(item)) return { ok: false, reason: "该催化剂品质已经达到当前品质上限。" };
     return { ok: true, definition };
   }
 
@@ -2135,19 +2185,19 @@
 
     if (actionId === "armour_scrap") {
       if (!canHaveQuality(item, "armour")) return { ok: false, reason: "护甲片只能用于护甲类物品。" };
-      if (item.quality >= 20) return { ok: false, reason: "品质已经达到 20%。" };
+      if (item.quality >= qualityCapFor(item)) return { ok: false, reason: "品质已经达到当前品质上限。" };
       return { ok: true };
     }
 
     if (actionId === "whetstone") {
       if (!canHaveQuality(item, "weapon")) return { ok: false, reason: "磨刀石只能用于攻击武器。" };
-      if (item.quality >= 20) return { ok: false, reason: "品质已经达到 20%。" };
+      if (item.quality >= qualityCapFor(item)) return { ok: false, reason: "品质已经达到当前品质上限。" };
       return { ok: true };
     }
 
     if (actionId === "arcanist_etcher") {
       if (!canHaveQuality(item, "caster")) return { ok: false, reason: "奥术蚀刻石只能用于法术武器。" };
-      if (item.quality >= 20) return { ok: false, reason: "品质已经达到 20%。" };
+      if (item.quality >= qualityCapFor(item)) return { ok: false, reason: "品质已经达到当前品质上限。" };
       return { ok: true };
     }
 
@@ -2286,7 +2336,7 @@
     const base = getBase(item.baseId);
     if (!isMutable(item)) return { ok: false, reason: "腐化或镜像物品不能使用液化情感。" };
     if (item.rarity !== "rare") return { ok: false, reason: "液化情感只能用于稀有物品。" };
-    if (!baseHasTag(base, "time_lost_jewel")) return { ok: false, reason: "液化情感只能用于失落时空珠宝。" };
+    if (base.classId !== "jewel") return { ok: false, reason: "液化情感只能用于珠宝。" };
     if (liquidEmotionRemovalCandidates(item, action).length === 0) {
       return { ok: false, reason: "没有可在移除后成功加入该液化情感词缀的候选词缀。" };
     }
@@ -2419,7 +2469,7 @@
     if (action.category === "catalyst") {
       const definition = catalystDefinition(action);
       const before = item.catalyst && item.catalyst.id === definition.id ? item.catalyst.quality : 0;
-      const after = Math.min(20, before + catalystAmount(item, null));
+      const after = Math.min(qualityCapFor(item), before + catalystAmount(item, null));
       item.catalyst = {
         id: definition.id,
         name: definition.name,
@@ -2545,7 +2595,7 @@
     if (actionId === "armour_scrap" || actionId === "whetstone" || actionId === "arcanist_etcher") {
       const before = item.quality;
       const amount = item.rarity === "normal" ? 5 : item.rarity === "magic" ? 2 : 1;
-      item.quality = Math.min(20, item.quality + amount);
+      item.quality = Math.min(qualityCapFor(item), item.quality + amount);
       step.note = "品质 " + before + "% -> " + item.quality + "%";
     }
 
@@ -2589,7 +2639,7 @@
     if (actionId === "exalted") {
       const addCount = omenEntry && omenEntry.effect.addCount ? omenEntry.effect.addCount : 1;
       for (let index = 0; index < addCount; index += 1) {
-        const added = addRandomMod(item, { minLevel, type: addType });
+        const added = addRandomMod(item, { minLevel, type: addType, omenEntry });
         if (!added.ok) return { ok: false, item: original, reason: added.reason };
         step.added.push(added.mod);
       }
@@ -2784,10 +2834,12 @@
     }
 
     const minLevel = actionId ? tierMinLevel(actionId, tierId || "normal") : 0;
+    const omenEntry = actionId ? activeOmen(item, actionId) : null;
+    const addType = omenEntry && (omenEntry.effect.addType || (omenEntry.effect.addSameType ? sameKindType(item) : null));
     const mods = uniqueModifiers(previewItemsForAction(item, actionId).flatMap(function (draft) {
-      return eligibleMods(draft, { minLevel });
+      return eligibleMods(draft, { minLevel, type: addType });
     }));
-    const summary = summarizeMods(mods);
+    const summary = summarizeMods(actionId === "exalted" ? applyEffectiveRollWeights(item, mods, { omenEntry }) : mods);
     summary.minLevel = minLevel;
     summary.actionId = actionId || "";
     summary.tierId = tierId || "normal";
@@ -2831,6 +2883,7 @@
     countExplicit,
     countByType,
     capFor,
+    qualityCapFor,
     hasOpenSlot,
     eligibleMods,
     eligibleDesecratedMods,

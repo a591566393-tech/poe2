@@ -1,8 +1,8 @@
 (function (root) {
   root.POE2DB_CRAFTING_DATA = 
 {
-  "version": "poe2db-crafting-2026-07-12-liquid-catalyst1",
-  "generatedAt": "2026-07-12T08:28:18.989Z",
+  "version": "poe2db-crafting-2026-07-12-liquid-basic-catalyst2",
+  "generatedAt": "2026-07-12T13:07:44.688Z",
   "source": "PoE2DB Essence, Catalyst, Desecrated Modifiers, Jewel Liquid Emotion, and Soul Core pages cached under .cache/",
   "notes": [
     "Essence and alloy guaranteed modifier text is parsed from PoE2DB item cards.",
@@ -7063,6 +7063,1805 @@
     }
   ],
   "liquidEmotions": [
+    {
+      "id": "Diluted_Liquid_Ire",
+      "slug": "Diluted_Liquid_Ire",
+      "name": "稀释的液化愤怒",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Diluted_Liquid_Ire_jewel_ruby_prefix_2",
+          "baseId": "Liquid_Emotions_Diluted_Liquid_Ire_jewel_ruby_prefix_2",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Diluted_Liquid_Ire_jewel_ruby_prefix_护甲_提高",
+          "name": "稀释的液化愤怒",
+          "template": "护甲 提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "armour",
+            "defences"
+          ],
+          "rolls": [
+            {
+              "min": 10,
+              "max": 20,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "护甲 提高 (10 — 20) %"
+        },
+        {
+          "id": "poe2db_liquid_Diluted_Liquid_Ire_jewel_sapphire_prefix_3",
+          "baseId": "Liquid_Emotions_Diluted_Liquid_Ire_jewel_sapphire_prefix_3",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Diluted_Liquid_Ire_jewel_sapphire_prefix_能量护盾_上限提高",
+          "name": "稀释的液化愤怒",
+          "template": "能量护盾 上限提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "defences",
+            "energy_shield"
+          ],
+          "rolls": [
+            {
+              "min": 10,
+              "max": 20,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "能量护盾 上限提高 (10 — 20) %"
+        },
+        {
+          "id": "poe2db_liquid_Diluted_Liquid_Ire_jewel_emerald_prefix_4",
+          "baseId": "Liquid_Emotions_Diluted_Liquid_Ire_jewel_emerald_prefix_4",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Diluted_Liquid_Ire_jewel_emerald_prefix_该装备的_闪避值_提高",
+          "name": "稀释的液化愤怒",
+          "template": "该装备的 闪避值 提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "defences",
+            "evasion"
+          ],
+          "rolls": [
+            {
+              "min": 10,
+              "max": 20,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "该装备的 闪避值 提高 (10 — 20) %"
+        }
+      ]
+    },
+    {
+      "id": "Diluted_Liquid_Guilt",
+      "slug": "Diluted_Liquid_Guilt",
+      "name": "稀释的液化内疚",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Diluted_Liquid_Guilt_jewel_ruby_prefix_2",
+          "baseId": "Liquid_Emotions_Diluted_Liquid_Guilt_jewel_ruby_prefix_2",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Diluted_Liquid_Guilt_jewel_ruby_prefix_火焰_伤害提高",
+          "name": "稀释的液化内疚",
+          "template": "火焰 伤害提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "damage",
+            "elemental",
+            "fire"
+          ],
+          "rolls": [
+            {
+              "min": 5,
+              "max": 15,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "火焰 伤害提高 (5 — 15) %"
+        },
+        {
+          "id": "poe2db_liquid_Diluted_Liquid_Guilt_jewel_sapphire_prefix_3",
+          "baseId": "Liquid_Emotions_Diluted_Liquid_Guilt_jewel_sapphire_prefix_3",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Diluted_Liquid_Guilt_jewel_sapphire_prefix_冰霜_伤害提高",
+          "name": "稀释的液化内疚",
+          "template": "冰霜 伤害提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "cold",
+            "damage",
+            "elemental"
+          ],
+          "rolls": [
+            {
+              "min": 5,
+              "max": 15,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "冰霜 伤害提高 (5 — 15) %"
+        },
+        {
+          "id": "poe2db_liquid_Diluted_Liquid_Guilt_jewel_emerald_prefix_4",
+          "baseId": "Liquid_Emotions_Diluted_Liquid_Guilt_jewel_emerald_prefix_4",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Diluted_Liquid_Guilt_jewel_emerald_prefix_闪电_伤害提高",
+          "name": "稀释的液化内疚",
+          "template": "闪电 伤害提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "damage",
+            "elemental",
+            "lightning"
+          ],
+          "rolls": [
+            {
+              "min": 5,
+              "max": 15,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "闪电 伤害提高 (5 — 15) %"
+        }
+      ]
+    },
+    {
+      "id": "Diluted_Liquid_Greed",
+      "slug": "Diluted_Liquid_Greed",
+      "name": "稀释的液化贪婪",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Diluted_Liquid_Greed_jewel_ruby_prefix_2",
+          "baseId": "Liquid_Emotions_Diluted_Liquid_Greed_jewel_ruby_prefix_2",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Diluted_Liquid_Greed_jewel_ruby_prefix_全局_物理_伤害提高",
+          "name": "稀释的液化贪婪",
+          "template": "全局 物理 伤害提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "damage",
+            "physical"
+          ],
+          "rolls": [
+            {
+              "min": 5,
+              "max": 15,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "全局 物理 伤害提高 (5 — 15) %"
+        },
+        {
+          "id": "poe2db_liquid_Diluted_Liquid_Greed_jewel_sapphire_prefix_3",
+          "baseId": "Liquid_Emotions_Diluted_Liquid_Greed_jewel_sapphire_prefix_3",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Diluted_Liquid_Greed_jewel_sapphire_prefix_混沌_伤害提高",
+          "name": "稀释的液化贪婪",
+          "template": "混沌 伤害提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "chaos",
+            "damage"
+          ],
+          "rolls": [
+            {
+              "min": 7,
+              "max": 13,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "混沌 伤害提高 (7 — 13) %"
+        },
+        {
+          "id": "poe2db_liquid_Diluted_Liquid_Greed_jewel_emerald_prefix_4",
+          "baseId": "Liquid_Emotions_Diluted_Liquid_Greed_jewel_emerald_prefix_4",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Diluted_Liquid_Greed_jewel_emerald_prefix_元素伤害_提高",
+          "name": "稀释的液化贪婪",
+          "template": "元素伤害 提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "damage",
+            "elemental"
+          ],
+          "rolls": [
+            {
+              "min": 5,
+              "max": 15,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "元素伤害 提高 (5 — 15) %"
+        }
+      ]
+    },
+    {
+      "id": "Liquid_Paranoia",
+      "slug": "Liquid_Paranoia",
+      "name": "液化偏执",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Liquid_Paranoia_jewel_ruby_prefix_2",
+          "baseId": "Liquid_Emotions_Liquid_Paranoia_jewel_ruby_prefix_2",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Liquid_Paranoia_jewel_ruby_prefix_攻击_伤害提高",
+          "name": "液化偏执",
+          "template": "攻击 伤害提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "attack",
+            "damage"
+          ],
+          "rolls": [
+            {
+              "min": 5,
+              "max": 15,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "攻击 伤害提高 (5 — 15) %"
+        },
+        {
+          "id": "poe2db_liquid_Liquid_Paranoia_jewel_sapphire_suffix_3",
+          "baseId": "Liquid_Emotions_Liquid_Paranoia_jewel_sapphire_suffix_3",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Liquid_Paranoia_jewel_sapphire_suffix_施法速度提高",
+          "name": "液化偏执",
+          "template": "施法速度提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "speed"
+          ],
+          "rolls": [
+            {
+              "min": 2,
+              "max": 4,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "施法速度提高 (2 — 4) %"
+        },
+        {
+          "id": "poe2db_liquid_Liquid_Paranoia_jewel_emerald_suffix_4",
+          "baseId": "Liquid_Emotions_Liquid_Paranoia_jewel_emerald_suffix_4",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Liquid_Paranoia_jewel_emerald_suffix_攻击_速度提高",
+          "name": "液化偏执",
+          "template": "攻击 速度提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "attack",
+            "speed"
+          ],
+          "rolls": [
+            {
+              "min": 2,
+              "max": 4,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "攻击 速度提高 (2 — 4) %"
+        }
+      ]
+    },
+    {
+      "id": "Liquid_Envy",
+      "slug": "Liquid_Envy",
+      "name": "液化嫉妒",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Liquid_Envy_jewel_ruby_suffix_2",
+          "baseId": "Liquid_Emotions_Liquid_Envy_jewel_ruby_suffix_2",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Liquid_Envy_jewel_ruby_suffix_技能的魔力消耗的_转化_为生命消耗",
+          "name": "液化嫉妒",
+          "template": "技能的魔力消耗的 #% 转化 为生命消耗",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "life",
+            "mana"
+          ],
+          "rolls": [
+            {
+              "min": 4,
+              "max": 6,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "技能的魔力消耗的 (4 — 6) % 转化 为生命消耗"
+        },
+        {
+          "id": "poe2db_liquid_Liquid_Envy_jewel_sapphire_prefix_3",
+          "baseId": "Liquid_Emotions_Liquid_Envy_jewel_sapphire_prefix_3",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Liquid_Envy_jewel_sapphire_prefix_法术_伤害提高",
+          "name": "液化嫉妒",
+          "template": "法术 伤害提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "caster",
+            "damage"
+          ],
+          "rolls": [
+            {
+              "min": 5,
+              "max": 15,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "法术 伤害提高 (5 — 15) %"
+        },
+        {
+          "id": "poe2db_liquid_Liquid_Envy_jewel_emerald_suffix_4",
+          "baseId": "Liquid_Emotions_Liquid_Envy_jewel_emerald_suffix_4",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Liquid_Envy_jewel_emerald_suffix_冷却回复速度_提高",
+          "name": "液化嫉妒",
+          "template": "冷却回复速度 提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "speed"
+          ],
+          "rolls": [
+            {
+              "min": 3,
+              "max": 5,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "冷却回复速度 提高 (3 — 5) %"
+        }
+      ]
+    },
+    {
+      "id": "Liquid_Disgust",
+      "slug": "Liquid_Disgust",
+      "name": "液化憎恶",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Liquid_Disgust_jewel_ruby_suffix_2",
+          "baseId": "Liquid_Emotions_Liquid_Disgust_jewel_ruby_suffix_2",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Liquid_Disgust_jewel_ruby_suffix_生命再生率提高",
+          "name": "液化憎恶",
+          "template": "生命再生率提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "life"
+          ],
+          "rolls": [
+            {
+              "min": 5,
+              "max": 10,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "生命再生率提高 (5 — 10) %"
+        },
+        {
+          "id": "poe2db_liquid_Liquid_Disgust_jewel_sapphire_suffix_3",
+          "baseId": "Liquid_Emotions_Liquid_Disgust_jewel_sapphire_suffix_3",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Liquid_Disgust_jewel_sapphire_suffix_魔力在击败敌人时恢复",
+          "name": "液化憎恶",
+          "template": "魔力在击败敌人时恢复 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "mana"
+          ],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 2,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "魔力在击败敌人时恢复 (1 — 2) %"
+        },
+        {
+          "id": "poe2db_liquid_Liquid_Disgust_jewel_emerald_suffix_4",
+          "baseId": "Liquid_Emotions_Liquid_Disgust_jewel_emerald_suffix_4",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Liquid_Disgust_jewel_emerald_suffix_生命在击败敌人时恢复",
+          "name": "液化憎恶",
+          "template": "生命在击败敌人时恢复 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "life"
+          ],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 2,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "生命在击败敌人时恢复 (1 — 2) %"
+        }
+      ]
+    },
+    {
+      "id": "Liquid_Despair",
+      "slug": "Liquid_Despair",
+      "name": "液化绝望",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Liquid_Despair_jewel_ruby_suffix_2",
+          "baseId": "Liquid_Emotions_Liquid_Despair_jewel_ruby_suffix_2",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Liquid_Despair_jewel_ruby_suffix_近战_击中_时获得_怒火",
+          "name": "液化绝望",
+          "template": "近战 击中 时获得 # 怒火",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "近战 击中 时获得 1 怒火"
+        },
+        {
+          "id": "poe2db_liquid_Liquid_Despair_jewel_sapphire_suffix_3",
+          "baseId": "Liquid_Emotions_Liquid_Despair_jewel_sapphire_suffix_3",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Liquid_Despair_jewel_sapphire_suffix_法术_暴击率_提高",
+          "name": "液化绝望",
+          "template": "法术 暴击率 提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "caster",
+            "critical"
+          ],
+          "rolls": [
+            {
+              "min": 5,
+              "max": 15,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "法术 暴击率 提高 (5 — 15) %"
+        },
+        {
+          "id": "poe2db_liquid_Liquid_Despair_jewel_emerald_suffix_4",
+          "baseId": "Liquid_Emotions_Liquid_Despair_jewel_emerald_suffix_4",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Liquid_Despair_jewel_emerald_suffix_攻击_暴击率_提高",
+          "name": "液化绝望",
+          "template": "攻击 暴击率 提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "attack",
+            "critical"
+          ],
+          "rolls": [
+            {
+              "min": 6,
+              "max": 16,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "攻击 暴击率 提高 (6 — 16) %"
+        }
+      ]
+    },
+    {
+      "id": "Concentrated_Liquid_Fear",
+      "slug": "Concentrated_Liquid_Fear",
+      "name": "浓缩的液化恐惧",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Concentrated_Liquid_Fear_jewel_ruby_suffix_2",
+          "baseId": "Liquid_Emotions_Concentrated_Liquid_Fear_jewel_ruby_suffix_2",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Concentrated_Liquid_Fear_jewel_ruby_suffix_战吼_速度提高",
+          "name": "浓缩的液化恐惧",
+          "template": "战吼 速度提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "speed"
+          ],
+          "rolls": [
+            {
+              "min": 10,
+              "max": 20,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "战吼 速度提高 (10 — 20) %"
+        },
+        {
+          "id": "poe2db_liquid_Concentrated_Liquid_Fear_jewel_sapphire_suffix_3",
+          "baseId": "Liquid_Emotions_Concentrated_Liquid_Fear_jewel_sapphire_suffix_3",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Concentrated_Liquid_Fear_jewel_sapphire_suffix_法术暴击伤害加成_提高",
+          "name": "浓缩的液化恐惧",
+          "template": "法术暴击伤害加成 提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "caster",
+            "critical",
+            "damage"
+          ],
+          "rolls": [
+            {
+              "min": 10,
+              "max": 20,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "法术暴击伤害加成 提高 (10 — 20) %"
+        },
+        {
+          "id": "poe2db_liquid_Concentrated_Liquid_Fear_jewel_emerald_suffix_4",
+          "baseId": "Liquid_Emotions_Concentrated_Liquid_Fear_jewel_emerald_suffix_4",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Concentrated_Liquid_Fear_jewel_emerald_suffix_攻击_伤害的_暴击伤害加成",
+          "name": "浓缩的液化恐惧",
+          "template": "攻击 伤害的 暴击伤害加成 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "attack",
+            "critical",
+            "damage"
+          ],
+          "rolls": [
+            {
+              "min": 10,
+              "max": 20,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "攻击 伤害的 暴击伤害加成 (10 — 20) %"
+        }
+      ]
+    },
+    {
+      "id": "Concentrated_Liquid_Suffering",
+      "slug": "Concentrated_Liquid_Suffering",
+      "name": "浓缩的液化痛苦",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Concentrated_Liquid_Suffering_jewel_ruby_prefix_2",
+          "baseId": "Liquid_Emotions_Concentrated_Liquid_Suffering_jewel_ruby_prefix_2",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Concentrated_Liquid_Suffering_jewel_ruby_prefix_怒火_上限",
+          "name": "浓缩的液化痛苦",
+          "template": "# 怒火 上限",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 2,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "+(1 — 2) 怒火 上限"
+        },
+        {
+          "id": "poe2db_liquid_Concentrated_Liquid_Suffering_jewel_sapphire_prefix_3",
+          "baseId": "Liquid_Emotions_Concentrated_Liquid_Suffering_jewel_sapphire_prefix_3",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Concentrated_Liquid_Suffering_jewel_sapphire_prefix_效果区域提高",
+          "name": "浓缩的液化痛苦",
+          "template": "效果区域提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 4,
+              "max": 6,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "效果区域提高 (4 — 6) %"
+        },
+        {
+          "id": "poe2db_liquid_Concentrated_Liquid_Suffering_jewel_emerald_suffix_4",
+          "baseId": "Liquid_Emotions_Concentrated_Liquid_Suffering_jewel_emerald_suffix_4",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Concentrated_Liquid_Suffering_jewel_emerald_suffix_移动速度提高",
+          "name": "浓缩的液化痛苦",
+          "template": "移动速度提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "speed"
+          ],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 2,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "移动速度提高 (1 — 2) %"
+        }
+      ]
+    },
+    {
+      "id": "Concentrated_Liquid_Isolation",
+      "slug": "Concentrated_Liquid_Isolation",
+      "name": "浓缩的液化孤独",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Concentrated_Liquid_Isolation_jewel_ruby_suffix_2",
+          "baseId": "Liquid_Emotions_Concentrated_Liquid_Isolation_jewel_ruby_suffix_2",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Concentrated_Liquid_Isolation_jewel_ruby_suffix_火焰抗性上限",
+          "name": "浓缩的液化孤独",
+          "template": "#% 火焰抗性上限",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "fire",
+            "resistance"
+          ],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "+1 % 火焰抗性上限"
+        },
+        {
+          "id": "poe2db_liquid_Concentrated_Liquid_Isolation_jewel_sapphire_suffix_3",
+          "baseId": "Liquid_Emotions_Concentrated_Liquid_Isolation_jewel_sapphire_suffix_3",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Concentrated_Liquid_Isolation_jewel_sapphire_suffix_冰霜抗性上限",
+          "name": "浓缩的液化孤独",
+          "template": "#% 冰霜抗性上限",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "cold",
+            "resistance"
+          ],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "+1 % 冰霜抗性上限"
+        },
+        {
+          "id": "poe2db_liquid_Concentrated_Liquid_Isolation_jewel_emerald_suffix_4",
+          "baseId": "Liquid_Emotions_Concentrated_Liquid_Isolation_jewel_emerald_suffix_4",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Concentrated_Liquid_Isolation_jewel_emerald_suffix_闪电抗性上限",
+          "name": "浓缩的液化孤独",
+          "template": "#% 闪电抗性上限",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "lightning",
+            "resistance"
+          ],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "+1 % 闪电抗性上限"
+        },
+        {
+          "id": "poe2db_liquid_Concentrated_Liquid_Isolation_jewel_diamond_suffix_5",
+          "baseId": "Liquid_Emotions_Concentrated_Liquid_Isolation_jewel_diamond_suffix_5",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [],
+          "allowedBaseIds": [
+            "jewel_diamond"
+          ],
+          "group": "liquid_Concentrated_Liquid_Isolation_jewel_diamond_suffix_混沌抗性上限",
+          "name": "浓缩的液化孤独",
+          "template": "#% 混沌抗性上限",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "chaos",
+            "resistance"
+          ],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "+1 % 混沌抗性上限"
+        }
+      ]
+    },
+    {
+      "id": "Potent_Liquid_Melancholy",
+      "slug": "Potent_Liquid_Melancholy",
+      "name": "强效的液化悲哀",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Melancholy_jewel_ruby_suffix_2",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Melancholy_jewel_ruby_suffix_2",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Potent_Liquid_Melancholy_jewel_ruby_suffix_当你镶嵌有一颗翡翠和一颗蓝玉时_击中_会使敌人_疲惫",
+          "name": "强效的液化悲哀",
+          "template": "当你镶嵌有一颗翡翠和一颗蓝玉时， 击中 会使敌人 疲惫",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "当你镶嵌有一颗翡翠和一颗蓝玉时， 击中 会使敌人 疲惫"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Melancholy_jewel_sapphire_suffix_3",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Melancholy_jewel_sapphire_suffix_3",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Potent_Liquid_Melancholy_jewel_sapphire_suffix_当你镶嵌有一颗红玉和一颗翡翠时_击中_会施加_元素_曝露",
+          "name": "强效的液化悲哀",
+          "template": "当你镶嵌有一颗红玉和一颗翡翠时， 击中 会施加 元素 曝露",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [
+            "elemental"
+          ],
+          "rolls": [],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "当你镶嵌有一颗红玉和一颗翡翠时， 击中 会施加 元素 曝露"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Melancholy_jewel_emerald_suffix_4",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Melancholy_jewel_emerald_suffix_4",
+          "type": "suffix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Potent_Liquid_Melancholy_jewel_emerald_suffix_当你镶嵌有一颗红玉和一颗蓝玉时_击中_会使敌人_致盲",
+          "name": "强效的液化悲哀",
+          "template": "当你镶嵌有一颗红玉和一颗蓝玉时， 击中 会使敌人 致盲",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "当你镶嵌有一颗红玉和一颗蓝玉时， 击中 会使敌人 致盲"
+        }
+      ]
+    },
+    {
+      "id": "Potent_Liquid_Ferocity",
+      "slug": "Potent_Liquid_Ferocity",
+      "name": "强效的液化凶残",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Ferocity_jewel_ruby_prefix_2",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Ferocity_jewel_ruby_prefix_2",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Potent_Liquid_Ferocity_jewel_ruby_prefix_后缀效果提高",
+          "name": "强效的液化凶残",
+          "template": "后缀效果提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 40,
+              "max": 60,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "后缀效果提高 (40 — 60) %"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Ferocity_jewel_ruby_prefix_3",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Ferocity_jewel_ruby_prefix_3",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Potent_Liquid_Ferocity_jewel_ruby_prefix_前缀效果提高",
+          "name": "强效的液化凶残",
+          "template": "前缀效果提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 40,
+              "max": 60,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "前缀效果提高 (40 — 60) %"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Ferocity_jewel_sapphire_prefix_4",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Ferocity_jewel_sapphire_prefix_4",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Potent_Liquid_Ferocity_jewel_sapphire_prefix_后缀效果提高",
+          "name": "强效的液化凶残",
+          "template": "后缀效果提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 40,
+              "max": 60,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "后缀效果提高 (40 — 60) %"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Ferocity_jewel_sapphire_prefix_5",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Ferocity_jewel_sapphire_prefix_5",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Potent_Liquid_Ferocity_jewel_sapphire_prefix_前缀效果提高",
+          "name": "强效的液化凶残",
+          "template": "前缀效果提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 40,
+              "max": 60,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "前缀效果提高 (40 — 60) %"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Ferocity_jewel_emerald_prefix_6",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Ferocity_jewel_emerald_prefix_6",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Potent_Liquid_Ferocity_jewel_emerald_prefix_后缀效果提高",
+          "name": "强效的液化凶残",
+          "template": "后缀效果提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 40,
+              "max": 60,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "后缀效果提高 (40 — 60) %"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Ferocity_jewel_emerald_prefix_7",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Ferocity_jewel_emerald_prefix_7",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Potent_Liquid_Ferocity_jewel_emerald_prefix_前缀效果提高",
+          "name": "强效的液化凶残",
+          "template": "前缀效果提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 40,
+              "max": 60,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "前缀效果提高 (40 — 60) %"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Ferocity_jewel_diamond_prefix_8",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Ferocity_jewel_diamond_prefix_8",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [],
+          "allowedBaseIds": [
+            "jewel_diamond"
+          ],
+          "group": "liquid_Potent_Liquid_Ferocity_jewel_diamond_prefix_后缀效果提高",
+          "name": "强效的液化凶残",
+          "template": "后缀效果提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 40,
+              "max": 60,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "后缀效果提高 (40 — 60) %"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Ferocity_jewel_diamond_prefix_9",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Ferocity_jewel_diamond_prefix_9",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [],
+          "allowedBaseIds": [
+            "jewel_diamond"
+          ],
+          "group": "liquid_Potent_Liquid_Ferocity_jewel_diamond_prefix_前缀效果提高",
+          "name": "强效的液化凶残",
+          "template": "前缀效果提高 #%",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 40,
+              "max": 60,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "前缀效果提高 (40 — 60) %"
+        }
+      ]
+    },
+    {
+      "id": "Potent_Liquid_Contempt",
+      "slug": "Potent_Liquid_Contempt",
+      "name": "强效的液化轻蔑",
+      "effect": "移除一条随机词缀，并为一件 稀有 基本珠宝 添加一条新的必定出现的 工艺 词缀。",
+      "operation": "rare_replace",
+      "sourcePage": "Liquid_Emotions",
+      "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+      "mods": [
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_ruby_prefix_2",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_ruby_prefix_2",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Potent_Liquid_Contempt_jewel_ruby_prefix_允许的后缀",
+          "name": "强效的液化轻蔑",
+          "template": "允许的后缀 #",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "允许的后缀 +1"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_ruby_prefix_3",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_ruby_prefix_3",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "strjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_ruby"
+          ],
+          "group": "liquid_Potent_Liquid_Contempt_jewel_ruby_prefix_允许的前缀",
+          "name": "强效的液化轻蔑",
+          "template": "允许的前缀 #",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "允许的前缀 +1"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_sapphire_prefix_4",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_sapphire_prefix_4",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Potent_Liquid_Contempt_jewel_sapphire_prefix_允许的后缀",
+          "name": "强效的液化轻蔑",
+          "template": "允许的后缀 #",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "允许的后缀 +1"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_sapphire_prefix_5",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_sapphire_prefix_5",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "intjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_sapphire"
+          ],
+          "group": "liquid_Potent_Liquid_Contempt_jewel_sapphire_prefix_允许的前缀",
+          "name": "强效的液化轻蔑",
+          "template": "允许的前缀 #",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "允许的前缀 +1"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_emerald_prefix_6",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_emerald_prefix_6",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Potent_Liquid_Contempt_jewel_emerald_prefix_允许的后缀",
+          "name": "强效的液化轻蔑",
+          "template": "允许的后缀 #",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "允许的后缀 +1"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_emerald_prefix_7",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_emerald_prefix_7",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [
+            "dexjewel"
+          ],
+          "allowedBaseIds": [
+            "jewel_emerald"
+          ],
+          "group": "liquid_Potent_Liquid_Contempt_jewel_emerald_prefix_允许的前缀",
+          "name": "强效的液化轻蔑",
+          "template": "允许的前缀 #",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "允许的前缀 +1"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_diamond_prefix_8",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_diamond_prefix_8",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [],
+          "allowedBaseIds": [
+            "jewel_diamond"
+          ],
+          "group": "liquid_Potent_Liquid_Contempt_jewel_diamond_prefix_允许的后缀",
+          "name": "强效的液化轻蔑",
+          "template": "允许的后缀 #",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "允许的后缀 +1"
+        },
+        {
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_diamond_prefix_9",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_diamond_prefix_9",
+          "type": "prefix",
+          "classes": [
+            "jewel"
+          ],
+          "requiredBaseTags": [],
+          "requiredAnyBaseTags": [],
+          "allowedBaseIds": [
+            "jewel_diamond"
+          ],
+          "group": "liquid_Potent_Liquid_Contempt_jewel_diamond_prefix_允许的前缀",
+          "name": "强效的液化轻蔑",
+          "template": "允许的前缀 #",
+          "level": 1,
+          "weight": 1,
+          "tier": "L",
+          "tags": [],
+          "rolls": [
+            {
+              "min": 1,
+              "max": 1,
+              "scale": 1
+            }
+          ],
+          "sourcePage": "Liquid_Emotions",
+          "sourceUrl": "https://poe2db.tw/cn/Liquid_Emotions",
+          "sourceText": "允许的前缀 +1"
+        }
+      ]
+    },
     {
       "id": "Ancient_Diluted_Liquid_Ire",
       "slug": "Ancient_Diluted_Liquid_Ire",
@@ -49038,6 +50837,17 @@
     }
   ],
   "liquidEmotionSources": [
+    {
+      "page": "Liquid_Emotions",
+      "baseIds": [
+        "jewel_ruby",
+        "jewel_sapphire",
+        "jewel_emerald",
+        "jewel_diamond"
+      ],
+      "cards": 13,
+      "imported": 50
+    },
     {
       "page": "Time-Lost_Ruby",
       "baseId": "jewel_time_lost_ruby",

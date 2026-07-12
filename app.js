@@ -1259,21 +1259,39 @@
       renderRangeText(mod) + (state.lang === "en" ? " (chance " + chance + ")" : uiText("（出现 ") + chance + uiText("）")),
       mod.tier,
       (state.lang === "en" ? "Level " : uiText("等级 ")) + mod.level,
-      (state.lang === "en" ? "Weight " : uiText("权重 ")) + mod.weight,
+      modWeightLabel(mod),
       (state.lang === "en" ? "Group " + englishFromId(mod.group) : uiText("组 ") + uiText(mod.group)),
     ].join(" · ");
   }
 
+  function modWeightValue(mod) {
+    const weight = mod && mod.effectiveWeight != null ? mod.effectiveWeight : mod && mod.weight;
+    return Number(weight) || 0;
+  }
+
+  function formatWeight(value) {
+    const numeric = Number(value) || 0;
+    return Number.isInteger(numeric) ? String(numeric) : numeric.toFixed(3).replace(/\.?0+$/, "");
+  }
+
+  function modWeightLabel(mod) {
+    const label = state.lang === "en" ? "Weight " : uiText("权重 ");
+    if (mod && mod.effectiveWeight != null && Number(mod.effectiveWeight) !== Number(mod.weight)) {
+      return label + formatWeight(mod.weight) + " -> " + formatWeight(mod.effectiveWeight);
+    }
+    return label + formatWeight(mod && mod.weight);
+  }
+
   function totalModWeight(mods) {
     return mods.reduce(function (sum, mod) {
-      return sum + (Number(mod.weight) || 0);
+      return sum + modWeightValue(mod);
     }, 0);
   }
 
   function modWeightTotalsByType(mods) {
     return mods.reduce(function (totals, mod) {
       const key = mod.type === "prefix" ? "prefix" : "suffix";
-      totals[key] += Number(mod.weight) || 0;
+      totals[key] += modWeightValue(mod);
       return totals;
     }, { prefix: 0, suffix: 0 });
   }
@@ -1285,7 +1303,7 @@
 
   function modChanceTextFromTotal(mod, typeTotal) {
     if (!typeTotal) return "0%";
-    const percent = ((Number(mod.weight) || 0) / typeTotal) * 100;
+    const percent = (modWeightValue(mod) / typeTotal) * 100;
     if (percent > 0 && percent < 0.001) return "<0.001%";
     return percent.toFixed(3).replace(/\.?0+$/, "") + "%";
   }
@@ -1791,7 +1809,7 @@
         '<span class="pool-text">' + escapeHtml(renderRangeText(mod)) + "</span>",
         '<span class="pool-chance">' + escapeHtml((state.lang === "en" ? "Chance " : uiText("出现 ")) + chance) + "</span>",
         "</div>",
-        '<div class="pool-meta">' + escapeHtml(mod.tier + " · " + (state.lang === "en" ? "Level " : uiText("等级 ")) + mod.level + " · " + (state.lang === "en" ? "Weight " : uiText("权重 ")) + mod.weight + " · " + (state.lang === "en" ? "Group " + englishFromId(mod.group) : uiText("组 ") + uiText(mod.group))) + "</div>",
+        '<div class="pool-meta">' + escapeHtml(mod.tier + " · " + (state.lang === "en" ? "Level " : uiText("等级 ")) + mod.level + " · " + modWeightLabel(mod) + " · " + (state.lang === "en" ? "Group " + englishFromId(mod.group) : uiText("组 ") + uiText(mod.group))) + "</div>",
       ].join("");
       els.poolList.appendChild(row);
     });
