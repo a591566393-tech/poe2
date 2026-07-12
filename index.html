@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PoE2 做装模拟器</title>
+    <link rel="stylesheet" href="./styles.css?v=20260712-i18n1">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-row">
+        <img src="./assets/crafting-mark.svg" alt="" aria-hidden="true">
+        <div>
+          <h1>PoE2 做装模拟器</h1>
+          <p>编年史字段对齐样例数据 · <span id="dataVersion"></span></p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <label class="language-switch" for="languageSelect">
+          <span data-i18n="language">语言</span>
+          <select id="languageSelect" aria-label="Language">
+            <option value="zh-Hans">简体</option>
+            <option value="zh-Hant">繁體</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <div id="toast" class="toast is-empty" aria-live="polite"></div>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="cost-panel" aria-label="制作消耗统计">
+        <div id="historyStats" class="cost-summary"></div>
+      </section>
+
+      <section class="control-panel" aria-label="底材">
+        <div class="field-row">
+          <label for="baseSelect" data-i18n="base">底材</label>
+          <input id="baseSearch" type="search" aria-label="搜索底材" placeholder="搜索底材、类型、英文名">
+          <select id="baseSelect"></select>
+          <div id="baseStats" class="field-hint" aria-live="polite"></div>
+        </div>
+        <div class="field-grid">
+          <label>
+            <span data-i18n="itemLevel">物品等级</span>
+            <input id="itemLevel" type="number" min="1" max="100" value="82">
+          </label>
+          <label>
+            <span data-i18n="seed">随机种子</span>
+            <input id="seedInput" type="text" spellcheck="false">
+          </label>
+        </div>
+        <label class="check-row">
+          <input id="seedLock" type="checkbox">
+          <span data-i18n="seedLock">锁定种子，用于复现同一条做装路线</span>
+        </label>
+        <div class="field-grid">
+          <label>
+            <span data-i18n="tier">通货等阶</span>
+            <select id="tierSelect">
+              <option value="normal" data-i18n="normalTier">普通</option>
+              <option value="greater" data-i18n="greaterTier">高级</option>
+              <option value="perfect" data-i18n="perfectTier">完美</option>
+            </select>
+          </label>
+          <div class="button-row">
+            <button id="resetButton" type="button" data-i18n="reset">重置底材</button>
+            <button id="undoButton" type="button" data-i18n="undo">撤销</button>
+            <button id="copyButton" type="button" data-i18n="copy">复制 JSON</button>
+          </div>
+        </div>
+        <section class="custom-start-panel" aria-label="自定义开局">
+          <div class="mini-heading">
+            <h2 data-i18n="customStart">自定义开局</h2>
+            <span id="customStats" class="field-hint"></span>
+          </div>
+          <div class="field-row">
+            <label for="customRarity" data-i18n="rarity">稀有度</label>
+            <select id="customRarity">
+              <option value="normal" data-i18n="normalRarity">普通</option>
+              <option value="magic" data-i18n="magicRarity">魔法</option>
+              <option value="rare" data-i18n="rareRarity">稀有</option>
+            </select>
+          </div>
+          <div class="field-row">
+            <label for="customModSearch" data-i18n="customSearch">筛选词缀</label>
+            <input id="customModSearch" type="search" placeholder="火焰伤害、T1、抗性、group">
+          </div>
+          <div class="custom-mod-grid">
+            <label>
+              <span data-i18n="prefix1">前缀 1</span>
+              <select id="customPrefix1" class="custom-mod-select" data-type="prefix"></select>
+            </label>
+            <label>
+              <span data-i18n="suffix1">后缀 1</span>
+              <select id="customSuffix1" class="custom-mod-select" data-type="suffix"></select>
+            </label>
+            <label>
+              <span data-i18n="prefix2">前缀 2</span>
+              <select id="customPrefix2" class="custom-mod-select" data-type="prefix"></select>
+            </label>
+            <label>
+              <span data-i18n="suffix2">后缀 2</span>
+              <select id="customSuffix2" class="custom-mod-select" data-type="suffix"></select>
+            </label>
+            <label>
+              <span data-i18n="prefix3">前缀 3</span>
+              <select id="customPrefix3" class="custom-mod-select" data-type="prefix"></select>
+            </label>
+            <label>
+              <span data-i18n="suffix3">后缀 3</span>
+              <select id="customSuffix3" class="custom-mod-select" data-type="suffix"></select>
+            </label>
+            <label>
+              <span data-i18n="prefix4">前缀 4</span>
+              <select id="customPrefix4" class="custom-mod-select" data-type="prefix"></select>
+            </label>
+            <label>
+              <span data-i18n="suffix4">后缀 4</span>
+              <select id="customSuffix4" class="custom-mod-select" data-type="suffix"></select>
+            </label>
+          </div>
+          <div class="custom-button-row">
+            <button id="applyCustomButton" type="button" data-i18n="applyCustom">应用自定义开局</button>
+            <button id="clearCustomButton" type="button" data-i18n="clearCustom">清空选择</button>
+          </div>
+        </section>
+      </section>
+
+      <section id="itemPanel" class="item-panel" aria-label="当前物品"></section>
+
+      <section class="currency-panel" aria-label="通货">
+        <div class="panel-heading">
+          <h2 data-i18n="currency">通货</h2>
+          <span id="currencyStats" class="pool-stats"></span>
+        </div>
+        <div class="currency-tools" aria-label="通货筛选">
+          <input id="currencySearch" type="search" placeholder="搜索通货、预兆、规则">
+          <select id="currencyCategory" aria-label="通货分类">
+            <option value="all" data-i18n="all">全部</option>
+            <option value="currency" data-i18n="currency">通货</option>
+            <option value="omen" data-i18n="omen">预兆</option>
+            <option value="essence" data-i18n="essence">精髓</option>
+            <option value="alloy" data-i18n="alloy">合金</option>
+            <option value="liquid_emotion" data-i18n="liquidEmotion">液化情感</option>
+            <option value="catalyst" data-i18n="catalyst">催化剂</option>
+            <option value="desecration" data-i18n="desecration">亵渎</option>
+            <option value="soul_core">Soul Core</option>
+            <option value="rune" data-i18n="rune">符文</option>
+          </select>
+          <label class="omen-lock-row">
+            <input id="lockOmen" type="checkbox">
+            <span data-i18n="lockOmen">锁定预兆</span>
+          </label>
+          <label class="usable-filter-row">
+            <input id="usableOnly" type="checkbox">
+            <span data-i18n="usableOnly">只看可用</span>
+          </label>
+          <div id="lockedOmenStatus" class="locked-omen-status" data-i18n="unlockedOmen">未锁定预兆</div>
+        </div>
+        <div id="currencyGrid" class="currency-grid"></div>
+      </section>
+
+      <section class="history-panel" aria-label="历史">
+        <div class="panel-heading">
+          <h2 data-i18n="history">操作历史</h2>
+        </div>
+        <ol id="historyList" class="history-list"></ol>
+      </section>
+
+      <section class="pool-panel" aria-label="词缀池">
+        <div class="panel-heading">
+          <h2 data-i18n="pool">当前词缀池</h2>
+          <span id="poolStats" class="pool-stats"></span>
+        </div>
+        <div class="pool-tools">
+          <select id="poolAction"></select>
+          <input id="poolSearch" type="search" placeholder="搜索生命、移速、抗性、group">
+        </div>
+        <div id="poolList" class="pool-list"></div>
+      </section>
+    </main>
+
+    <script src="./data/poe2db-base-data.js?v=20260711-jewels1"></script>
+    <script src="./data/poe2db-mod-data.js?v=20260711-jewels1"></script>
+    <script src="./data/poe2db-crafting-data.js?v=20260710-crafting5"></script>
+    <script src="./data/poe2db-i18n-data.js?v=20260712-i18n-data1"></script>
+    <script src="./crafting-core.js?v=20260711-jewels1"></script>
+    <script src="./app.js?v=20260712-i18n1"></script>
+  </body>
+</html>

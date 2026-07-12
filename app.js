@@ -1,0 +1,1895 @@
+(function () {
+  const Core = window.CraftingCore;
+  const I18N = window.POE2DB_I18N_DATA || { bases: {}, actions: {}, modifiers: {} };
+
+  const state = {
+    item: null,
+    undoStack: [],
+    lastMessage: "",
+    lockedOmenId: null,
+    lang: readStoredLanguage(),
+  };
+
+  const els = {};
+
+  function readStoredLanguage() {
+    try {
+      return localStorage.getItem("poe2CraftLang") || "zh-Hans";
+    } catch (error) {
+      return "zh-Hans";
+    }
+  }
+
+  const SEARCH_FOLD_MAP = {
+    藍: "蓝",
+    紅: "红",
+    寶: "宝",
+    鑽: "钻",
+    時: "时",
+    空: "空",
+    珠: "珠",
+    劑: "剂",
+    質: "质",
+    預: "预",
+    徵: "征",
+    褻: "亵",
+    瀆: "渎",
+    緒: "绪",
+    華: "华",
+    髓: "髓",
+    詞: "词",
+    前: "前",
+    後: "后",
+    綴: "缀",
+    閃: "闪",
+    電: "电",
+    冰: "冰",
+    火: "火",
+    燄: "焰",
+    傷: "伤",
+    害: "害",
+    稀: "稀",
+    有: "有",
+    魔: "魔",
+    法: "法",
+    普: "普",
+    通: "通",
+    攻: "攻",
+    击: "擊",
+    基: "基",
+    础: "礎",
+    增: "增",
+    减: "減",
+    额: "額",
+    暴: "暴",
+    范: "範",
+    围: "圍",
+    敌: "敵",
+    攻: "攻",
+    击: "擊",
+    基: "基",
+    础: "礎",
+    增: "增",
+    减: "減",
+    额: "額",
+    外: "外",
+    暴: "暴",
+    移: "移",
+    速: "速",
+    效: "效",
+    果: "果",
+    范: "範",
+    围: "圍",
+    对: "對",
+    敌: "敵",
+    人: "人",
+    造: "造",
+    成: "成",
+    更: "更",
+    少: "少",
+    多: "多",
+    吸: "吸",
+    取: "取",
+    击中: "擊中",
+    命中: "命中",
+    速度: "速度",
+  };
+
+  const TRADITIONAL_MAP = {
+    攻: "攻",
+    击: "擊",
+    基: "基",
+    础: "礎",
+    增: "增",
+    减: "減",
+    额: "額",
+    暴: "暴",
+    范: "範",
+    围: "圍",
+    敌: "敵",
+    蓝: "藍",
+    红: "紅",
+    宝: "寶",
+    钻: "鑽",
+    时: "時",
+    语: "語",
+    言: "言",
+    做: "做",
+    装: "裝",
+    模: "模",
+    拟: "擬",
+    器: "器",
+    编: "編",
+    年: "年",
+    史: "史",
+    字: "字",
+    段: "段",
+    对: "對",
+    齐: "齊",
+    样: "樣",
+    例: "例",
+    数: "數",
+    据: "據",
+    词: "詞",
+    缀: "綴",
+    底: "底",
+    材: "材",
+    搜: "搜",
+    索: "索",
+    类: "類",
+    型: "型",
+    英: "英",
+    文: "文",
+    名: "名",
+    物: "物",
+    品: "品",
+    等: "等",
+    级: "級",
+    随: "隨",
+    机: "機",
+    种: "種",
+    子: "子",
+    锁: "鎖",
+    定: "定",
+    用: "用",
+    于: "於",
+    复: "複",
+    现: "現",
+    同: "同",
+    一: "一",
+    条: "條",
+    路: "路",
+    线: "線",
+    货: "貨",
+    阶: "階",
+    普: "普",
+    高: "高",
+    完: "完",
+    美: "美",
+    重: "重",
+    置: "置",
+    撤: "撤",
+    销: "銷",
+    复制: "複製",
+    自: "自",
+    定: "定",
+    义: "義",
+    开: "開",
+    局: "局",
+    稀: "稀",
+    有: "有",
+    度: "度",
+    筛: "篩",
+    选: "選",
+    缀: "綴",
+    后: "後",
+    应: "應",
+    清: "清",
+    空: "空",
+    当前: "當前",
+    全部: "全部",
+    合: "合",
+    金: "金",
+    符: "符",
+    只: "只",
+    看: "看",
+    可: "可",
+    未: "未",
+    操: "操",
+    作: "作",
+    历: "歷",
+    深: "深",
+    渊: "淵",
+    回: "回",
+    响: "響",
+    选: "選",
+    择: "擇",
+    揭: "揭",
+    露: "露",
+    移: "移",
+    除: "除",
+    添: "添",
+    加: "加",
+    概: "概",
+    率: "率",
+    插: "插",
+    槽: "槽",
+    镜: "鏡",
+    像: "像",
+    腐: "腐",
+    化: "化",
+    破: "破",
+    溃: "潰",
+    预: "預",
+    兆: "兆",
+    亵: "褻",
+    渎: "瀆",
+    精: "精",
+    髓: "髓",
+    液: "液",
+    情: "情",
+    感: "感",
+    催: "催",
+    剂: "劑",
+    质: "質",
+    伤: "傷",
+    焰: "焰",
+    抗: "抗",
+    性: "性",
+    冰: "冰",
+    霜: "霜",
+    闪: "閃",
+    电: "電",
+    生: "生",
+    命: "命",
+    护: "護",
+    甲: "甲",
+    能: "能",
+    量: "量",
+    盾: "盾",
+    闪避: "閃避",
+  };
+
+  const TEXT = {
+    "zh-Hans": {
+      language: "语言",
+      appTitle: "PoE2 做装模拟器",
+      subtitle: "编年史字段对齐样例数据 · ",
+      base: "底材",
+      baseSearchPlaceholder: "搜索底材、类型、英文名",
+      itemLevel: "物品等级",
+      seed: "随机种子",
+      seedLock: "锁定种子，用于复现同一条做装路线",
+      tier: "通货等阶",
+      normalTier: "普通",
+      greaterTier: "高级",
+      perfectTier: "完美",
+      reset: "重置底材",
+      undo: "撤销",
+      copy: "复制 JSON",
+      customStart: "自定义开局",
+      rarity: "稀有度",
+      normalRarity: "普通",
+      magicRarity: "魔法",
+      rareRarity: "稀有",
+      customSearch: "筛选词缀",
+      customSearchPlaceholder: "火焰伤害、T1、抗性、group",
+      prefix: "前缀",
+      suffix: "后缀",
+      prefix1: "前缀 1",
+      prefix2: "前缀 2",
+      prefix3: "前缀 3",
+      prefix4: "前缀 4",
+      suffix1: "后缀 1",
+      suffix2: "后缀 2",
+      suffix3: "后缀 3",
+      suffix4: "后缀 4",
+      applyCustom: "应用自定义开局",
+      clearCustom: "清空选择",
+      currency: "通货",
+      currencySearchPlaceholder: "搜索通货、预兆、规则",
+      all: "全部",
+      omen: "预兆",
+      essence: "精髓",
+      alloy: "合金",
+      liquidEmotion: "液化情感",
+      catalyst: "催化剂",
+      desecration: "亵渎",
+      rune: "符文",
+      lockOmen: "锁定预兆",
+      usableOnly: "只看可用",
+      unlockedOmen: "未锁定预兆",
+      history: "操作历史",
+      pool: "当前词缀池",
+      poolSearchPlaceholder: "搜索生命、移速、抗性、group",
+    },
+    en: {
+      language: "Language",
+      appTitle: "PoE2 Crafting Simulator",
+      subtitle: "PoE2DB-aligned data · ",
+      base: "Base",
+      baseSearchPlaceholder: "Search base, class, English name",
+      itemLevel: "Item level",
+      seed: "Random seed",
+      seedLock: "Lock seed to reproduce the same craft route",
+      tier: "Currency tier",
+      normalTier: "Normal",
+      greaterTier: "Greater",
+      perfectTier: "Perfect",
+      reset: "Reset base",
+      undo: "Undo",
+      copy: "Copy JSON",
+      customStart: "Custom start",
+      rarity: "Rarity",
+      normalRarity: "Normal",
+      magicRarity: "Magic",
+      rareRarity: "Rare",
+      customSearch: "Filter modifiers",
+      customSearchPlaceholder: "fire damage, T1, resistance, group",
+      prefix: "Prefix",
+      suffix: "Suffix",
+      prefix1: "Prefix 1",
+      prefix2: "Prefix 2",
+      prefix3: "Prefix 3",
+      prefix4: "Prefix 4",
+      suffix1: "Suffix 1",
+      suffix2: "Suffix 2",
+      suffix3: "Suffix 3",
+      suffix4: "Suffix 4",
+      applyCustom: "Apply custom start",
+      clearCustom: "Clear selection",
+      currency: "Currency",
+      currencySearchPlaceholder: "Search currency, omen, rule",
+      all: "All",
+      omen: "Omen",
+      essence: "Essence",
+      alloy: "Alloy",
+      liquidEmotion: "Liquid Emotion",
+      catalyst: "Catalyst",
+      desecration: "Desecration",
+      rune: "Rune",
+      lockOmen: "Lock omen",
+      usableOnly: "Usable only",
+      unlockedOmen: "No omen locked",
+      history: "History",
+      pool: "Current mod pool",
+      poolSearchPlaceholder: "Search life, speed, resistance, group",
+    },
+  };
+
+  TEXT["zh-Hant"] = Object.keys(TEXT["zh-Hans"]).reduce(function (map, key) {
+    map[key] = toTraditional(TEXT["zh-Hans"][key]);
+    return map;
+  }, {});
+
+  document.addEventListener("DOMContentLoaded", function () {
+    bindElements();
+    localizeDocument();
+    populateBaseSelect();
+    populateActionButtons();
+    populatePoolActionSelect();
+    attachEvents();
+    resetItem();
+  });
+
+  function bindElements() {
+    [
+      "baseSelect",
+      "baseSearch",
+      "baseStats",
+      "itemLevel",
+      "seedInput",
+      "seedLock",
+      "tierSelect",
+      "customRarity",
+      "customPrefix1",
+      "customPrefix2",
+      "customPrefix3",
+      "customPrefix4",
+      "customSuffix1",
+      "customSuffix2",
+      "customSuffix3",
+      "customSuffix4",
+      "customModSearch",
+      "customStats",
+      "applyCustomButton",
+      "clearCustomButton",
+      "currencySearch",
+      "currencyCategory",
+      "currencyStats",
+      "usableOnly",
+      "lockOmen",
+      "lockedOmenStatus",
+      "poolAction",
+      "poolSearch",
+      "resetButton",
+      "undoButton",
+      "copyButton",
+      "toast",
+      "itemPanel",
+      "currencyGrid",
+      "historyList",
+      "historyStats",
+      "poolStats",
+      "poolList",
+      "dataVersion",
+      "languageSelect",
+    ].forEach(function (id) {
+      els[id] = document.getElementById(id);
+    });
+  }
+
+  function populateBaseSelect() {
+    const defaultBase = Core.getBase("boots_ornate_greaves") ? "boots_ornate_greaves" : (Core.BASES[0] && Core.BASES[0].id);
+    renderBaseOptions(defaultBase);
+    els.itemLevel.value = "82";
+    els.seedInput.value = makeSeed();
+    els.dataVersion.textContent = Core.DATA_VERSION;
+  }
+
+  function renderBaseOptions(preferredValue) {
+    els.baseSelect.innerHTML = "";
+    const previousValue = preferredValue || els.baseSelect.value;
+    const query = normalizeSearchText(els.baseSearch ? els.baseSearch.value : "");
+    const bases = Core.BASES.filter(function (base) {
+      return baseMatchesSearch(base, query);
+    });
+
+    if (bases.length === 0) {
+      const option = document.createElement("option");
+      option.value = "";
+      option.textContent = state.lang === "en" ? "No matching bases" : uiText("没有匹配底材");
+      els.baseSelect.appendChild(option);
+      els.baseSelect.disabled = true;
+      if (els.baseStats) els.baseStats.textContent = "0 / " + Core.BASES.length + (state.lang === "en" ? " bases" : uiText(" 个底材"));
+      return;
+    }
+
+    els.baseSelect.disabled = false;
+    const grouped = bases.reduce(function (map, base) {
+      const label = displayClassLabel(base);
+      if (!map[label]) map[label] = [];
+      map[label].push(base);
+      return map;
+    }, {});
+
+    Object.keys(grouped).forEach(function (label) {
+      const group = document.createElement("optgroup");
+      group.label = label;
+      grouped[label].forEach(function (base) {
+        const option = document.createElement("option");
+        option.value = base.id;
+        option.textContent = displayBaseName(base) + (state.lang === "en" || !base.english ? "" : " / " + base.english);
+        group.appendChild(option);
+      });
+      els.baseSelect.appendChild(group);
+    });
+
+    if (bases.some(function (base) { return base.id === previousValue; })) {
+      els.baseSelect.value = previousValue;
+    } else {
+      els.baseSelect.value = bases[0].id;
+    }
+    if (els.baseStats) {
+      els.baseStats.textContent = bases.length === Core.BASES.length
+        ? Core.BASES.length + (state.lang === "en" ? " bases" : uiText(" 个底材"))
+        : bases.length + " / " + Core.BASES.length + (state.lang === "en" ? " bases" : uiText(" 个底材"));
+    }
+  }
+
+  function normalizeSearchText(value) {
+    return String(value || "")
+      .normalize("NFKC")
+      .replace(/[藍紅寶鑽時劑質預徵褻瀆緒華詞綴後閃電燄傷]/g, function (char) {
+        return SEARCH_FOLD_MAP[char] || char;
+      })
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function toTraditional(value) {
+    const chars = Object.keys(TRADITIONAL_MAP).filter(function (key) { return key.length === 1; }).join("");
+    const pattern = new RegExp("[" + chars.replace(/[\\\]\[\^-]/g, "\\$&") + "]", "g");
+    return String(value || "").replace(pattern, function (char) {
+      return TRADITIONAL_MAP[char] || char;
+    });
+  }
+
+  function t(key) {
+    const langTable = TEXT[state.lang] || TEXT["zh-Hans"];
+    return langTable[key] || TEXT["zh-Hans"][key] || key;
+  }
+
+  function uiText(value) {
+    if (state.lang === "zh-Hant") return toTraditional(value);
+    return String(value || "");
+  }
+
+  function englishFromId(value) {
+    return String(value || "")
+      .replace(/^poe2db_/i, "")
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, function (char) { return char.toUpperCase(); })
+      .trim();
+  }
+
+  function displayBaseName(base) {
+    if (!base) return "";
+    const localized = localizedEntry(I18N.bases, base.id);
+    if (localized && localized.name) return localized.name;
+    if (state.lang === "en") return base.english || englishFromId(base.id);
+    return uiText(base.name);
+  }
+
+  function displayClassLabel(base) {
+    if (!base) return "";
+    if (state.lang === "en") return englishFromId(base.classId);
+    return uiText(base.classLabel);
+  }
+
+  function displayRarity(rarityId) {
+    if (state.lang === "en") {
+      const labels = { normal: "Normal", magic: "Magic", rare: "Rare", unique: "Unique" };
+      return labels[rarityId] || englishFromId(rarityId);
+    }
+    const rarity = Core.RARITIES[rarityId] || {};
+    return uiText(rarity.label || rarityId);
+  }
+
+  function displayActionName(action, tier) {
+    if (!action) return "";
+    const localized = localizedEntry(I18N.actions, action.id);
+    if (localized && localized.name) return localized.name;
+    if (state.lang === "en") return englishFromId(action.id);
+    return uiText(Core.currencyNameFor(action.id, tier || "normal"));
+  }
+
+  function displayActionRule(action, fallback) {
+    if (!action) return uiText(fallback || "");
+    if (fallback && fallback !== action.sourceRule) return displayValidationReason(fallback);
+    if (state.lang === "en") return englishActionRule(action);
+    return uiText(action.sourceRule);
+  }
+
+  function displayValidationReason(reason) {
+    if (state.lang === "en") return "Unavailable for the current item state.";
+    return uiText(reason || "");
+  }
+
+  function englishActionRule(action) {
+    if (!action) return "";
+    const category = categoryLabel(action.category);
+    if (action.category === "catalyst") return "Adds catalyst quality to supported item classes.";
+    if (action.category === "liquid_emotion") return "Removes one modifier and adds the matching crafted modifier.";
+    if (action.category === "desecration") return "Adds a hidden desecrated modifier, then reveal it with Abyssal Echoes.";
+    if (action.category === "essence") return "Upgrades or replaces modifiers with an Essence-guaranteed modifier.";
+    if (action.category === "alloy") return "Removes one modifier and adds an Alloy-guaranteed modifier.";
+    if (action.category === "omen") return "Prepares an omen for the next matching craft action.";
+    if (action.category === "soul_core") return "Applies or rerolls the matching Soul Core modifier.";
+    if (action.category === "rune") return "Socket this rune or soul core into an open socket.";
+    return category + " crafting action.";
+  }
+
+  function renderRangeText(mod) {
+    const localized = localizedEntry(I18N.modifiers, mod.id);
+    if (localized && localized.template) return formatLocalizedTemplate(localized.template, rangeValues(mod));
+    if (state.lang === "en") {
+      return [
+        englishFromId(mod.group || mod.baseId || mod.id),
+        mod.tier,
+        "Lv " + mod.level,
+        rollSummary(mod),
+      ].filter(Boolean).join(" · ");
+    }
+    return uiText(Core.renderRange(mod));
+  }
+
+  function renderModText(mod, item) {
+    const localized = localizedEntry(I18N.modifiers, mod.id);
+    if (localized && localized.template) return [
+      localized.name || "",
+      formatLocalizedTemplate(localized.template, modValues(mod)),
+    ].filter(Boolean).join(" · ");
+    if (state.lang === "en") {
+      return [
+        mod.name ? englishFromId(mod.name) : "",
+        englishFromId(mod.group || mod.baseId || mod.id),
+        mod.tier,
+        rollSummary(mod),
+      ].filter(Boolean).join(" · ");
+    }
+    return uiText(Core.renderMod(mod, item));
+  }
+
+  function currentI18nKey() {
+    if (state.lang === "en") return "en";
+    if (state.lang === "zh-Hant") return "zhHant";
+    return null;
+  }
+
+  function localizedEntry(collection, id) {
+    const key = currentI18nKey();
+    if (!key || !collection || !collection[id]) return null;
+    return collection[id][key] || null;
+  }
+
+  function allLocalizedText(collection, id) {
+    const entry = collection && collection[id];
+    if (!entry) return "";
+    return [
+      entry.en && entry.en.name,
+      entry.en && entry.en.template,
+      entry.zhHant && entry.zhHant.name,
+      entry.zhHant && entry.zhHant.template,
+    ].filter(Boolean).join(" ");
+  }
+
+  function rangeValues(mod) {
+    return (mod.rolls || []).map(function (roll) {
+      return roll.min === roll.max ? String(roll.min) : roll.min + "-" + roll.max;
+    });
+  }
+
+  function modValues(mod) {
+    if (Array.isArray(mod.values) && mod.values.length > 0) return mod.values.map(String);
+    return rangeValues(mod);
+  }
+
+  function formatLocalizedTemplate(template, values) {
+    let index = 0;
+    return String(template || "").replace(/#/g, function () {
+      const value = values[index];
+      index += 1;
+      return value == null ? "#" : String(value);
+    });
+  }
+
+  function rollSummary(mod) {
+    if (!mod || !Array.isArray(mod.rolls) || mod.rolls.length === 0) return "";
+    return mod.rolls.map(function (roll) {
+      return roll.min === roll.max ? String(roll.min) : roll.min + "-" + roll.max;
+    }).join(", ");
+  }
+
+  function localizeDocument() {
+    document.documentElement.lang = state.lang === "en" ? "en" : (state.lang === "zh-Hant" ? "zh-Hant" : "zh-Hans");
+    document.querySelectorAll("[data-i18n]").forEach(function (node) {
+      node.textContent = t(node.dataset.i18n);
+    });
+    const title = document.querySelector(".topbar h1");
+    const subtitle = document.querySelector(".topbar p");
+    if (title) title.textContent = t("appTitle");
+    if (subtitle) subtitle.innerHTML = escapeHtml(t("subtitle")) + '<span id="dataVersion">' + escapeHtml(Core.DATA_VERSION) + "</span>";
+    if (els.dataVersion) els.dataVersion = document.getElementById("dataVersion");
+    if (els.baseSearch) els.baseSearch.placeholder = t("baseSearchPlaceholder");
+    if (els.customModSearch) els.customModSearch.placeholder = t("customSearchPlaceholder");
+    if (els.currencySearch) els.currencySearch.placeholder = t("currencySearchPlaceholder");
+    if (els.poolSearch) els.poolSearch.placeholder = t("poolSearchPlaceholder");
+    if (els.languageSelect) els.languageSelect.value = state.lang;
+  }
+
+  function compactSearchText(value) {
+    return normalizeSearchText(value).replace(/[\s·/|,，、:：;；()（）\[\]【】"'“”‘’\-_]+/g, "");
+  }
+
+  function searchTextMatches(searchText, query) {
+    const normalizedQuery = normalizeSearchText(query);
+    if (!normalizedQuery) return true;
+    const normalizedText = normalizeSearchText(searchText);
+    if (normalizedText.includes(normalizedQuery)) return true;
+    const compactQuery = compactSearchText(normalizedQuery);
+    const compactText = compactSearchText(normalizedText);
+    if (compactQuery && compactText.includes(compactQuery)) return true;
+    const queryParts = normalizedQuery.split(" ").filter(Boolean);
+    if (queryParts.length > 1) {
+      return queryParts.every(function (part) {
+        return normalizedText.includes(part) || compactText.includes(compactSearchText(part));
+      });
+    }
+    return false;
+  }
+
+  function baseMatchesSearch(base, query) {
+    if (!query) return true;
+    const queryIsClass = Core.BASES.some(function (entry) {
+      return normalizeSearchText(entry.classId) === query || normalizeSearchText(entry.classLabel) === query;
+    });
+    if (queryIsClass) {
+      return normalizeSearchText(base.classId) === query || normalizeSearchText(base.classLabel) === query;
+    }
+    const fields = [
+      base.classLabel,
+      base.classId,
+      base.name,
+      base.english,
+      base.id,
+      allLocalizedText(I18N.bases, base.id),
+      baseSearchAliases(base),
+    ].map(normalizeSearchText);
+    if (!/^[a-z0-9_ -]+$/.test(query) || query.includes(" ")) {
+      return fields.some(function (field) { return searchTextMatches(field, query); });
+    }
+    return fields.some(function (field) {
+      return field.split(/[^a-z0-9]+/).some(function (token) {
+        return token.startsWith(query);
+      }) || searchTextMatches(field, query);
+    });
+  }
+
+  function baseSearchAliases(base) {
+    const identityText = [base.id, base.name, base.english, base.classId].join(" ");
+    const aliases = [];
+    const isJewel = base.classId === "jewel";
+    const isSapphire = /sapphire|jewel_sapphire/i.test(identityText);
+    const isRuby = /ruby|jewel_ruby/i.test(identityText);
+    const isEmerald = /emerald|jewel_emerald/i.test(identityText);
+    const isDiamond = /diamond|jewel_diamond/i.test(identityText);
+    const isTimeLost = /time_lost|time-lost/i.test(identityText);
+    if (isSapphire) aliases.push("蓝玉 藍玉 sapphire blue");
+    if (isRuby) aliases.push("红玉 紅玉 ruby red");
+    if (isEmerald) aliases.push("翡翠 emerald green");
+    if (isDiamond) aliases.push("宝钻 寶鑽 diamond");
+    if (isJewel && isSapphire) aliases.push("蓝玉珠宝 藍玉珠寶 sapphire jewel");
+    if (isJewel && isRuby) aliases.push("红玉珠宝 紅玉珠寶 ruby jewel");
+    if (isJewel && isEmerald) aliases.push("翡翠珠宝 翡翠珠寶 emerald jewel");
+    if (isJewel && isDiamond) aliases.push("宝钻珠宝 寶鑽珠寶 diamond jewel");
+    if (isTimeLost) aliases.push("失落时空 失落時空 time lost timelost");
+    if (isJewel) aliases.push("珠宝 珠寶 jewel");
+    if (isTimeLost && isSapphire) aliases.push("失落时空蓝玉珠宝 失落時空藍玉珠寶 time lost sapphire jewel");
+    if (isTimeLost && isRuby) aliases.push("失落时空红玉珠宝 失落時空紅玉珠寶 time lost ruby jewel");
+    if (isTimeLost && isEmerald) aliases.push("失落时空翡翠珠宝 失落時空翡翠珠寶 time lost emerald jewel");
+    if (isTimeLost && isDiamond) aliases.push("失落时空宝钻珠宝 失落時空寶鑽珠寶 time lost diamond jewel");
+    return aliases.join(" ");
+  }
+
+  function populateActionButtons() {
+    els.currencyGrid.innerHTML = "";
+    Core.CURRENCIES.forEach(function (action) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "currency-button category-" + (action.category || "currency");
+      button.dataset.action = action.id;
+      button.dataset.category = action.category || "currency";
+      button.dataset.search = [
+        action.id,
+        action.label,
+        toTraditional(action.label),
+        englishFromId(action.id),
+        action.sourceRule,
+        toTraditional(action.sourceRule),
+        allLocalizedText(I18N.actions, action.id),
+        categoryLabel(action.category),
+        actionSearchAliases(action),
+      ].join(" ");
+
+      const nameLine = document.createElement("span");
+      nameLine.className = "currency-name-line";
+
+      const kind = document.createElement("span");
+      kind.className = "currency-kind";
+      kind.textContent = categoryLabel(action.category);
+
+      const name = document.createElement("span");
+      name.className = "currency-name";
+      name.textContent = displayActionName(action, "normal");
+
+      const rule = document.createElement("span");
+      rule.className = "currency-rule";
+      rule.textContent = displayActionRule(action);
+
+      nameLine.append(kind, name);
+      button.append(nameLine, rule);
+      button.addEventListener("click", function () {
+        useAction(action);
+      });
+      els.currencyGrid.appendChild(button);
+    });
+  }
+
+  function populatePoolActionSelect() {
+    const entries = [
+      ["", state.lang === "en" ? "Show next action" : uiText("按下一步显示")],
+      ["transmutation", state.lang === "en" ? "Transmutation add" : uiText("蜕变新增")],
+      ["augmentation", state.lang === "en" ? "Augmentation add" : uiText("增幅新增")],
+      ["alchemy", state.lang === "en" ? "Alchemy add" : uiText("点金新增")],
+      ["regal", state.lang === "en" ? "Regal add" : uiText("富豪新增")],
+      ["exalted", state.lang === "en" ? "Exalted add" : uiText("崇高新增")],
+      ["chaos", state.lang === "en" ? "Chaos add" : uiText("混沌新增")],
+      ["preserved_lockbone", state.lang === "en" ? "Lockbone desecration" : uiText("锁骨亵渎")],
+      ["preserved_rib", state.lang === "en" ? "Rib desecration" : uiText("肋骨亵渎")],
+      ["preserved_jawbone", state.lang === "en" ? "Jawbone desecration" : uiText("颚骨亵渎")],
+      ["preserved_cranium", state.lang === "en" ? "Cranium desecration" : uiText("头骨亵渎")],
+      ["preserved_vertebrae", state.lang === "en" ? "Vertebrae desecration" : uiText("椎骨亵渎")],
+    ];
+
+    Core.CURRENCIES.forEach(function (action) {
+      if (!["essence", "alloy", "liquid_emotion", "desecration", "soul_core"].includes(action.category)) return;
+      if (entries.some(function (entry) { return entry[0] === action.id; })) return;
+      entries.push([action.id, categoryLabel(action.category) + " / " + displayActionName(action, "normal")]);
+    });
+
+    els.poolAction.innerHTML = "";
+    entries.forEach(function (entry) {
+      const option = document.createElement("option");
+      option.value = entry[0];
+      option.textContent = entry[1];
+      els.poolAction.appendChild(option);
+    });
+  }
+
+  function attachEvents() {
+    els.resetButton.addEventListener("click", resetItem);
+    els.undoButton.addEventListener("click", undo);
+    els.copyButton.addEventListener("click", copyItemJson);
+    els.tierSelect.addEventListener("change", render);
+    els.customRarity.addEventListener("change", renderCustomPanel);
+    els.customModSearch.addEventListener("input", renderCustomPanel);
+    els.applyCustomButton.addEventListener("click", applyCustomStart);
+    els.clearCustomButton.addEventListener("click", clearCustomStart);
+    customModSelects().forEach(function (select) {
+      select.addEventListener("change", renderCustomPanel);
+    });
+    els.baseSearch.addEventListener("input", function () {
+      const previousValue = els.baseSelect.value;
+      renderBaseOptions();
+      if (els.baseSelect.value && els.baseSelect.value !== previousValue) {
+        const base = Core.getBase(els.baseSelect.value);
+        if (base && Number(els.itemLevel.value) < base.requiredLevel) {
+          els.itemLevel.value = String(base.requiredLevel);
+        }
+        resetItem();
+      }
+    });
+    els.currencySearch.addEventListener("input", renderActionButtons);
+    els.currencyCategory.addEventListener("change", renderActionButtons);
+    els.usableOnly.addEventListener("change", renderActionButtons);
+    if (els.languageSelect) {
+      els.languageSelect.addEventListener("change", function () {
+        state.lang = els.languageSelect.value || "zh-Hans";
+        try {
+          localStorage.setItem("poe2CraftLang", state.lang);
+        } catch (error) {
+          // Ignore storage failures; the switch still works for this session.
+        }
+        localizeDocument();
+        renderBaseOptions(els.baseSelect.value);
+        populateActionButtons();
+        populatePoolActionSelect();
+        render();
+      });
+    }
+    els.lockOmen.addEventListener("change", handleOmenLockChange);
+    els.poolAction.addEventListener("change", renderPool);
+    els.poolSearch.addEventListener("input", renderPool);
+    els.itemLevel.addEventListener("change", resetItem);
+    els.baseSelect.addEventListener("change", function () {
+      const base = Core.getBase(els.baseSelect.value);
+      if (base && Number(els.itemLevel.value) < base.requiredLevel) {
+        els.itemLevel.value = String(base.requiredLevel);
+      }
+      resetItem();
+    });
+  }
+
+  function customModSelects() {
+    return [
+      els.customPrefix1,
+      els.customPrefix2,
+      els.customPrefix3,
+      els.customPrefix4,
+      els.customSuffix1,
+      els.customSuffix2,
+      els.customSuffix3,
+      els.customSuffix4,
+    ].filter(Boolean);
+  }
+
+  function resetItem() {
+    const base = Core.getBase(els.baseSelect.value);
+    if (!base) {
+      state.lastMessage = "没有可用底材";
+      render();
+      return;
+    }
+    const itemLevel = Math.max(Number(els.itemLevel.value) || 1, base.requiredLevel);
+    if (!els.seedLock.checked) {
+      els.seedInput.value = makeSeed();
+    }
+    els.itemLevel.value = String(itemLevel);
+    state.item = Core.makeItem(base.id, itemLevel, els.seedInput.value);
+    state.undoStack = [];
+    state.lastMessage = "已生成新的普通底材。";
+    render();
+  }
+
+  function applyCustomStart() {
+    const base = Core.getBase(els.baseSelect.value);
+    if (!base) {
+      state.lastMessage = "没有可用底材";
+      render();
+      return;
+    }
+    const itemLevel = Math.max(Number(els.itemLevel.value) || 1, base.requiredLevel);
+    if (!els.seedLock.checked) {
+      els.seedInput.value = makeSeed();
+    }
+    els.itemLevel.value = String(itemLevel);
+
+    const result = Core.makeCustomItem(base.id, itemLevel, els.seedInput.value, {
+      rarity: els.customRarity.value,
+      explicitModIds: selectedCustomModIds(),
+    });
+
+    if (!result.ok) {
+      state.lastMessage = result.reason;
+      render();
+      return;
+    }
+
+    state.item = result.item;
+    state.undoStack = [];
+    state.lastMessage = state.lang === "en"
+      ? "Custom start generated: " + displayRarity(state.item.rarity) + ", explicit modifiers " + Core.countExplicit(state.item)
+      : uiText("已生成自定义开局：") + displayRarity(state.item.rarity) + uiText("，显式词缀 ") + Core.countExplicit(state.item);
+    render();
+  }
+
+  function clearCustomStart() {
+    els.customRarity.value = "normal";
+    customModSelects().forEach(function (select) {
+      select.value = "";
+    });
+    renderCustomPanel();
+  }
+
+  function selectedCustomModIds() {
+    return customModSelects().map(function (select) {
+      return select.disabled ? "" : select.value;
+    }).filter(Boolean);
+  }
+
+  function undo() {
+    if (state.undoStack.length === 0) return;
+    const currentRngState = state.item && state.item.rngState;
+    const restored = state.undoStack.pop();
+    if (typeof currentRngState === "number") {
+      restored.rngState = currentRngState;
+    }
+    state.item = restored;
+    state.lastMessage = "已撤销上一手。";
+    render();
+  }
+
+  function useAction(action) {
+    const tier = action.supportsTiers ? els.tierSelect.value : "normal";
+    const hinekoraMessage = handleHinekoraPreview(action, tier);
+    if (hinekoraMessage) {
+      state.lastMessage = hinekoraMessage;
+      render();
+      return;
+    }
+
+    const result = Core.applyCurrency(state.item, action.id, tier);
+
+    if (!result.ok) {
+      state.lastMessage = result.reason;
+      render();
+      return;
+    }
+
+    state.undoStack.push(clone(state.item));
+    state.item = result.item;
+    const messages = [summarizeStep(result.step)];
+
+    if (action.category === "omen" && els.lockOmen.checked) {
+      state.lockedOmenId = action.id;
+      messages.push((state.lang === "en" ? "Locked " : uiText("已锁定 ")) + displayActionName(action, "normal"));
+    } else if (action.category !== "omen") {
+      const refreshMessage = reapplyLockedOmen(result.step);
+      if (refreshMessage) messages.push(refreshMessage);
+    }
+
+    state.lastMessage = messages.join("；");
+    render();
+  }
+
+  function handleHinekoraPreview(action, tier) {
+    if (!state.item || !state.item.hinekoraLock) return "";
+    if (action.id === "hinekoras_lock" || action.category === "omen") return "";
+
+    const preview = state.item.hinekoraPreview;
+    if (preview && preview.actionId === action.id && preview.tier === tier) {
+      state.undoStack.push(clone(state.item));
+      state.item = clone(preview.item);
+      state.item.hinekoraLock = false;
+      state.item.hinekoraPreview = null;
+      return "已执行发辫预示结果：" + summarizeStep(preview.step);
+    }
+
+    const result = Core.previewCurrency(state.item, action.id, tier);
+    if (!result.ok) return result.reason;
+    state.item.hinekoraPreview = {
+      actionId: action.id,
+      tier,
+      item: result.item,
+      step: result.step,
+    };
+    return "发辫预示：" + summarizeStep(result.step) + "。再次点击同一通货执行。";
+  }
+
+  function omenComponentIds(omen) {
+    if (!omen) return [];
+    if (Array.isArray(omen.components) && omen.components.length > 0) {
+      return omen.components.map(function (component) { return component.id; }).filter(Boolean);
+    }
+    return omen.id ? [omen.id] : [];
+  }
+
+  function handleOmenLockChange() {
+    if (!els.lockOmen.checked) {
+      state.lockedOmenId = null;
+      state.lastMessage = "已关闭预兆锁定。";
+      render();
+      return;
+    }
+
+    if (state.item && state.item.pendingOmen) {
+      state.lockedOmenId = omenComponentIds(state.item.pendingOmen)[0] || null;
+      state.lastMessage = state.lang === "en"
+        ? "Locked " + uiText(state.item.pendingOmen.label) + "; it will refresh after triggering."
+        : uiText("已锁定 ") + uiText(state.item.pendingOmen.label) + uiText("，触发后会自动续上。");
+    } else {
+      state.lastMessage = state.lang === "en"
+        ? "Lock is on: click an omen and it will refresh after triggering."
+        : uiText("锁定已开启：点击一个预兆后，会在触发后自动续上。");
+    }
+    render();
+  }
+
+  function reapplyLockedOmen(step) {
+    if (!els.lockOmen.checked || !step || !step.omenConsumed) return "";
+
+    const consumedIds = omenComponentIds(step.omenConsumed);
+    const consumedId = consumedIds[0] || step.omenConsumed.id;
+    if (!state.lockedOmenId) state.lockedOmenId = consumedId;
+    if (!consumedIds.includes(state.lockedOmenId)) return "";
+
+    const lockedAction = Core.getAction(state.lockedOmenId);
+    if (!lockedAction || lockedAction.category !== "omen") {
+      state.lockedOmenId = null;
+      return "预兆已触发，但锁定目标不存在，已取消锁定。";
+    }
+
+    const validation = Core.validateCurrency(state.item, lockedAction.id, "normal");
+    if (!validation.ok) {
+      return state.lang === "en"
+        ? "Omen triggered, but could not refresh: " + uiText(validation.reason)
+        : uiText("预兆已触发，但无法自动续上：") + uiText(validation.reason);
+    }
+
+    const omenResult = Core.applyCurrency(state.item, lockedAction.id, "normal");
+    if (!omenResult.ok) {
+      return state.lang === "en"
+        ? "Omen triggered, but could not refresh: " + uiText(omenResult.reason)
+        : uiText("预兆已触发，但无法自动续上：") + uiText(omenResult.reason);
+    }
+
+    const targetValidation = validateLockedOmenTarget(omenResult.item, lockedAction);
+    if (targetValidation && !targetValidation.ok) {
+      return state.lang === "en"
+        ? "Omen triggered; the next " + targetLabelForOmen(lockedAction) + " is unavailable, so it was not refreshed."
+        : uiText("预兆已触发；下一次") + targetLabelForOmen(lockedAction) + uiText("暂时不可用，未自动续上。");
+    }
+
+    state.item = omenResult.item;
+    return state.lang === "en"
+      ? "Auto-refreshed " + displayActionName(lockedAction, "normal")
+      : uiText("已自动续上 ") + displayActionName(lockedAction, "normal");
+  }
+
+  function validateLockedOmenTarget(item, omenAction) {
+    const targetId = omenAction && omenAction.omen && omenAction.omen.target;
+    const targetAction = targetId ? Core.getAction(targetId) : null;
+    if (!targetAction) return null;
+    const targetTier = targetAction.supportsTiers ? els.tierSelect.value : "normal";
+    return Core.validateCurrency(item, targetAction.id, targetTier);
+  }
+
+  function targetLabelForOmen(omenAction) {
+    const targetId = omenAction && omenAction.omen && omenAction.omen.target;
+    const targetAction = targetId ? Core.getAction(targetId) : null;
+    return targetAction ? displayActionName(targetAction, "normal") : (state.lang === "en" ? "target material" : uiText("目标材料"));
+  }
+
+  function copyItemJson() {
+    const text = JSON.stringify(state.item, null, 2);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        state.lastMessage = "已复制当前物品 JSON。";
+        render();
+      }).catch(function () {
+        fallbackCopy(text);
+      });
+      return;
+    }
+    fallbackCopy(text);
+  }
+
+  function fallbackCopy(text) {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+    state.lastMessage = "已复制当前物品 JSON。";
+    render();
+  }
+
+  function renderCustomPanel() {
+    if (!els.customRarity) return;
+    const draft = customDraftItem();
+    if (!draft) return;
+
+    const customQuery = normalizeSearchText(els.customModSearch ? els.customModSearch.value : "");
+    const prefixFullPool = customPoolFor(draft, "prefix");
+    const suffixFullPool = customPoolFor(draft, "suffix");
+    const prefixPool = filterCustomPool(prefixFullPool, customQuery);
+    const suffixPool = filterCustomPool(suffixFullPool, customQuery);
+    const prefixCap = Core.capFor(draft, "prefix");
+    const suffixCap = Core.capFor(draft, "suffix");
+
+    updateCustomSelect(els.customPrefix1, prefixPool, prefixFullPool, prefixCap >= 1);
+    updateCustomSelect(els.customPrefix2, prefixPool, prefixFullPool, prefixCap >= 2);
+    updateCustomSelect(els.customPrefix3, prefixPool, prefixFullPool, prefixCap >= 3);
+    updateCustomSelect(els.customPrefix4, prefixPool, prefixFullPool, prefixCap >= 4);
+    updateCustomSelect(els.customSuffix1, suffixPool, suffixFullPool, suffixCap >= 1);
+    updateCustomSelect(els.customSuffix2, suffixPool, suffixFullPool, suffixCap >= 2);
+    updateCustomSelect(els.customSuffix3, suffixPool, suffixFullPool, suffixCap >= 3);
+    updateCustomSelect(els.customSuffix4, suffixPool, suffixFullPool, suffixCap >= 4);
+
+    els.customStats.textContent = [
+      t("prefix") + " " + prefixPool.length + "/" + prefixFullPool.length,
+      t("suffix") + " " + suffixPool.length + "/" + suffixFullPool.length,
+      (state.lang === "en" ? "Slots " : uiText("槽位 ")) + prefixCap + "/" + suffixCap,
+    ].join(" · ");
+  }
+
+  function customDraftItem() {
+    const base = Core.getBase(els.baseSelect.value);
+    if (!base) return null;
+    const itemLevel = Math.max(Number(els.itemLevel.value) || 1, base.requiredLevel);
+    const draft = Core.makeItem(base.id, itemLevel, els.seedInput.value || "custom-preview");
+    draft.rarity = els.customRarity.value;
+    return draft;
+  }
+
+  function customPoolFor(draft, type) {
+    if (Core.capFor(draft, type) === 0) return [];
+    return Core.eligibleMods(draft, { type }).slice().sort(compareCustomMods);
+  }
+
+  function filterCustomPool(pool, query) {
+    if (!query) return pool;
+    return pool.filter(function (mod) {
+      return searchTextMatches(customModSearchText(mod), query);
+    });
+  }
+
+  function customModSearchText(mod) {
+    return [
+      renderRangeText(mod),
+      mod.tier,
+      String(mod.level),
+      mod.name,
+      mod.group,
+      allLocalizedText(I18N.modifiers, mod.id),
+      (mod.tags || []).join(" "),
+    ].join(" ");
+  }
+
+  function updateCustomSelect(select, pool, fullPool, enabled) {
+    if (!select) return;
+    const currentValue = select.value;
+    const fullPoolWeight = totalModWeight(fullPool);
+    select.innerHTML = "";
+    select.disabled = !enabled;
+
+    const empty = document.createElement("option");
+    empty.value = "";
+    empty.textContent = enabled ? (state.lang === "en" ? "None" : uiText("不选择")) : (state.lang === "en" ? "Unavailable" : uiText("不可用"));
+    select.appendChild(empty);
+
+    if (!enabled) {
+      select.value = "";
+      return;
+    }
+
+    const selectedGroups = selectedCustomGroups(select);
+    const optionPool = pool.slice();
+    const selectedMod = currentValue
+      ? fullPool.find(function (mod) { return mod.id === currentValue; })
+      : null;
+    if (selectedMod && !optionPool.some(function (mod) { return mod.id === selectedMod.id; })) {
+      optionPool.unshift(selectedMod);
+    }
+
+    optionPool.forEach(function (mod) {
+      const option = document.createElement("option");
+      option.value = mod.id;
+      option.textContent = customModLabel(mod, fullPoolWeight);
+      if (selectedGroups.has(mod.group) && mod.id !== currentValue) option.disabled = true;
+      select.appendChild(option);
+    });
+
+    const selectedOption = Array.from(select.options).find(function (option) {
+      return option.value === currentValue && !option.disabled;
+    });
+    select.value = selectedOption ? currentValue : "";
+  }
+
+  function selectedCustomGroups(exceptSelect) {
+    const groups = new Set();
+    customModSelects().forEach(function (select) {
+      if (select === exceptSelect || select.disabled || !select.value) return;
+      const mod = Core.MODIFIERS.find(function (entry) { return entry.id === select.value; });
+      if (mod) groups.add(mod.group);
+    });
+    return groups;
+  }
+
+  function compareCustomMods(a, b) {
+    const tierA = tierNumber(a.tier);
+    const tierB = tierNumber(b.tier);
+    if (tierA !== tierB) return tierA - tierB;
+    if (b.level !== a.level) return b.level - a.level;
+    if (a.name !== b.name) return a.name.localeCompare(b.name, "zh-Hans");
+    return renderRangeText(a).localeCompare(renderRangeText(b), state.lang === "en" ? "en" : "zh-Hans");
+  }
+
+  function tierNumber(tier) {
+    const match = String(tier || "").match(/\d+/);
+    return match ? Number(match[0]) : 999;
+  }
+
+  function customModLabel(mod, typeTotalWeight) {
+    const chance = modChanceTextFromTotal(mod, typeTotalWeight);
+    return [
+      renderRangeText(mod) + (state.lang === "en" ? " (chance " + chance + ")" : uiText("（出现 ") + chance + uiText("）")),
+      mod.tier,
+      (state.lang === "en" ? "Level " : uiText("等级 ")) + mod.level,
+      (state.lang === "en" ? "Weight " : uiText("权重 ")) + mod.weight,
+      (state.lang === "en" ? "Group " + englishFromId(mod.group) : uiText("组 ") + uiText(mod.group)),
+    ].join(" · ");
+  }
+
+  function totalModWeight(mods) {
+    return mods.reduce(function (sum, mod) {
+      return sum + (Number(mod.weight) || 0);
+    }, 0);
+  }
+
+  function modWeightTotalsByType(mods) {
+    return mods.reduce(function (totals, mod) {
+      const key = mod.type === "prefix" ? "prefix" : "suffix";
+      totals[key] += Number(mod.weight) || 0;
+      return totals;
+    }, { prefix: 0, suffix: 0 });
+  }
+
+  function modChanceText(mod, typeTotals) {
+    const typeTotal = typeTotals[mod.type === "prefix" ? "prefix" : "suffix"];
+    return modChanceTextFromTotal(mod, typeTotal);
+  }
+
+  function modChanceTextFromTotal(mod, typeTotal) {
+    if (!typeTotal) return "0%";
+    const percent = ((Number(mod.weight) || 0) / typeTotal) * 100;
+    if (percent > 0 && percent < 0.001) return "<0.001%";
+    return percent.toFixed(3).replace(/\.?0+$/, "") + "%";
+  }
+
+  function render() {
+    renderItem();
+    renderCustomPanel();
+    renderActionButtons();
+    renderCostSummary();
+    renderHistory();
+    renderPool();
+    renderLockedOmenStatus();
+    renderToast();
+    els.undoButton.disabled = state.undoStack.length === 0;
+  }
+
+  function currentRemovalPreview(item) {
+    if (!item || !Core.removalPreview) return { keys: [] };
+    const actionId = previewActionForItem(item);
+    if (!actionId) return { keys: [] };
+    return Core.removalPreview(item, actionId, els.tierSelect.value);
+  }
+
+  function previewActionForItem(item) {
+    if (item.pendingOmen && ["chaos", "annulment"].includes(item.pendingOmen.target)) {
+      return item.pendingOmen.target;
+    }
+    if (els.poolAction && els.poolAction.value) return els.poolAction.value;
+    return defaultPoolAction(item);
+  }
+
+  function renderItem() {
+    const item = state.item;
+    const base = Core.getBase(item.baseId);
+    const rarity = Core.RARITIES[item.rarity];
+    const prefixCap = Core.capFor(item, "prefix");
+    const suffixCap = Core.capFor(item, "suffix");
+    const rarityClass = "rarity-" + item.rarity;
+    const removalPreview = currentRemovalPreview(item);
+    const removalPreviewKeys = new Set(removalPreview.keys || []);
+    const prefixMods = item.prefixes.concat((item.desecratedMods || []).filter(function (mod) { return mod.type === "prefix"; }));
+    const suffixMods = item.suffixes.concat((item.desecratedMods || []).filter(function (mod) { return mod.type === "suffix"; }));
+
+    els.itemPanel.innerHTML = "";
+    els.itemPanel.classList.toggle("has-removal-preview", removalPreviewKeys.size > 0);
+
+    const header = document.createElement("div");
+    header.className = "item-header";
+    header.innerHTML = [
+      "<div>",
+      '<div class="item-name ' + rarityClass + '">' + escapeHtml(displayRarity(item.rarity) + " " + displayBaseName(base)) + "</div>",
+      '<div class="item-subtitle">' + escapeHtml(state.lang === "en" ? base.id : base.english) + "</div>",
+      "</div>",
+      '<div class="item-badges">',
+      '<span class="badge">' + escapeHtml(state.lang === "en" ? "Item level " : uiText("物等 ")) + item.itemLevel + "</span>",
+      '<span class="badge">' + escapeHtml(displayClassLabel(base)) + "</span>",
+      item.quality ? '<span class="badge">' + escapeHtml(state.lang === "en" ? "Quality " : uiText("品质 ")) + item.quality + "%</span>" : "",
+      item.catalyst && item.catalyst.quality ? '<span class="badge">' + escapeHtml(t("catalyst") + " " + uiText(item.catalyst.name) + " " + item.catalyst.quality + "%") + "</span>" : "",
+      item.sockets.length ? '<span class="badge">' + escapeHtml(state.lang === "en" ? "Sockets " : uiText("插槽 ")) + item.sockets.length + "</span>" : "",
+      item.pendingOmen ? '<span class="badge badge-omen">' + escapeHtml(t("omen") + ": " + uiText(item.pendingOmen.label)) + "</span>" : "",
+      item.desecratedMods.length ? '<span class="badge badge-desecrated">' + escapeHtml(t("desecration") + " " + item.desecratedMods.length) + "</span>" : "",
+      item.corrupted ? '<span class="badge badge-desecrated">' + escapeHtml(state.lang === "en" ? "Corrupted" : uiText("腐化")) + "</span>" : "",
+      item.mirrored ? '<span class="badge">' + escapeHtml(state.lang === "en" ? "Mirrored" : uiText("镜像")) + "</span>" : "",
+      item.destroyed ? '<span class="badge badge-desecrated">' + escapeHtml(state.lang === "en" ? "Destroyed" : uiText("已摧毁")) + "</span>" : "",
+      "</div>",
+    ].join("");
+    els.itemPanel.appendChild(header);
+
+    if (item.hinekoraLock) {
+      const lines = [state.lang === "en" ? "Hinekora's Lock: waiting to preview the next currency result" : uiText("辛格拉的发辫：等待预示下一次通货结果")];
+      if (item.hinekoraPreview && item.hinekoraPreview.step) {
+        lines.push((state.lang === "en" ? "Preview: " : uiText("预示：")) + summarizeStep(item.hinekoraPreview.step));
+      }
+      els.itemPanel.appendChild(sectionBlock(state.lang === "en" ? "Preview" : uiText("预示"), lines.map(escapeHtml)));
+    }
+
+    const baseStatLines = Core.baseStatLines ? Core.baseStatLines(item) : base.defenses.map(function (line) {
+      return { text: line, original: line, qualityAdjusted: false };
+    });
+    if (baseStatLines.length > 0) {
+      els.itemPanel.appendChild(sectionBlock(state.lang === "en" ? "Base stats" : uiText("基础数值"), baseStatLines.map(function (line) {
+        const suffix = line.qualityAdjusted ? (state.lang === "en" ? " (quality " + item.quality + "%)" : uiText(" （品质 ") + item.quality + "%）") : "";
+        return escapeHtml(uiText(line.text) + suffix);
+      })));
+    }
+
+    if (false && base.defenses.length > 0) {
+      els.itemPanel.appendChild(sectionBlock("基础防御", base.defenses.map(escapeHtml)));
+    }
+
+    if (item.implicits.length > 0) {
+      els.itemPanel.appendChild(sectionBlock(state.lang === "en" ? "Implicit modifiers" : uiText("固定词缀"), item.implicits.map(function (implicit) {
+        return escapeHtml(state.lang === "en" ? uiText(Core.renderImplicit(implicit)) : uiText(Core.renderImplicit(implicit)));
+      })));
+    }
+
+    if (item.pendingDesecrationChoice) {
+      els.itemPanel.appendChild(renderDesecrationChoicePanel(item.pendingDesecrationChoice));
+    }
+
+    const slotSummary = document.createElement("div");
+    slotSummary.className = "slot-summary";
+    slotSummary.innerHTML = [
+      '<span>' + escapeHtml(t("prefix")) + " " + Core.countByType(item, "prefix") + "/" + prefixCap + "</span>",
+      '<span>' + escapeHtml(t("suffix")) + " " + Core.countByType(item, "suffix") + "/" + suffixCap + "</span>",
+      '<span>' + escapeHtml(state.lang === "en" ? "Explicit modifiers " : uiText("显式词缀 ")) + Core.countExplicit(item) + "</span>",
+    ].join("");
+    els.itemPanel.appendChild(slotSummary);
+
+    const explicitGrid = document.createElement("div");
+    explicitGrid.className = "explicit-grid";
+    explicitGrid.appendChild(renderSlotColumn(t("prefix"), prefixMods, prefixCap, "prefix", removalPreviewKeys));
+    explicitGrid.appendChild(renderSlotColumn(t("suffix"), suffixMods, suffixCap, "suffix", removalPreviewKeys));
+    els.itemPanel.appendChild(explicitGrid);
+
+    if (item.sockets.length > 0) {
+      els.itemPanel.appendChild(sectionBlock(state.lang === "en" ? "Rune sockets" : uiText("符文插槽"), item.sockets.map(function (socket, index) {
+        const socketLabel = (state.lang === "en" ? "Socket " : uiText("插槽 ")) + (index + 1) + (socket.corrupted ? (state.lang === "en" ? " (corrupted extra)" : uiText("（腐化额外）")) : "");
+        if (!socket.rune) return escapeHtml(socketLabel + ": " + (state.lang === "en" ? "Empty" : uiText("空")));
+        return escapeHtml(socketLabel + ": " + uiText(socket.rune.label) + " - " + uiText(socket.rune.effectText));
+      })));
+    }
+
+    if (false && item.sockets.length > 0) {
+      els.itemPanel.appendChild(sectionBlock("符文插槽", item.sockets.map(function (socket, index) {
+        if (!socket.rune) return escapeHtml("插槽 " + (index + 1) + ": 空");
+        return escapeHtml("插槽 " + (index + 1) + ": " + socket.rune.label + " - " + socket.rune.effectText);
+      })));
+    }
+  }
+
+  function sectionBlock(title, lines) {
+    const section = document.createElement("section");
+    section.className = "item-section";
+    const heading = document.createElement("h3");
+    heading.textContent = title;
+    const list = document.createElement("div");
+    list.className = "item-lines";
+    lines.forEach(function (line) {
+      const div = document.createElement("div");
+      div.innerHTML = line;
+      list.appendChild(div);
+    });
+    section.append(heading, list);
+    return section;
+  }
+
+  function renderDesecrationChoicePanel(pending) {
+    const section = document.createElement("section");
+    section.className = "desecration-choice-panel";
+
+    const heading = document.createElement("h3");
+    heading.textContent = state.lang === "en" ? "Abyssal Echoes: choose 1 desecrated modifier" : uiText("深渊回响：选择 1 条亵渎词缀");
+    section.appendChild(heading);
+
+    const list = document.createElement("div");
+    list.className = "desecration-choice-list";
+    (pending.choices || []).forEach(function (choice) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "desecration-choice-button";
+      button.dataset.choiceId = choice.choiceId || choice.id;
+      button.innerHTML = [
+        '<span class="choice-text">' + escapeHtml(renderModText(choice)) + "</span>",
+        '<span class="choice-meta">' + escapeHtml(modMetaText(choice)) + "</span>",
+      ].join("");
+      button.addEventListener("click", function () {
+        chooseDesecration(choice.choiceId || choice.id);
+      });
+      list.appendChild(button);
+    });
+    section.appendChild(list);
+    return section;
+  }
+
+  function chooseDesecration(choiceId) {
+    const result = Core.chooseDesecrationChoice(state.item, choiceId);
+    if (!result.ok) {
+      state.lastMessage = result.reason;
+      render();
+      return;
+    }
+
+    state.undoStack.push(clone(state.item));
+    state.item = result.item;
+    const messages = [summarizeStep(result.step)];
+    const refreshMessage = reapplyLockedOmen(result.step);
+    if (refreshMessage) messages.push(refreshMessage);
+    state.lastMessage = messages.join("；");
+    render();
+  }
+
+  function renderSlotColumn(title, mods, cap, type, removalPreviewKeys) {
+    const column = document.createElement("section");
+    column.className = "slot-column";
+
+    const heading = document.createElement("h3");
+    heading.textContent = title;
+    column.appendChild(heading);
+
+    if (cap === 0) {
+      const empty = document.createElement("div");
+      empty.className = "empty-slot";
+      empty.textContent = state.lang === "en" ? "No " + title.toLowerCase() + " slots at this rarity" : uiText("当前稀有度无") + title;
+      column.appendChild(empty);
+      return column;
+    }
+
+    for (let index = 0; index < cap; index += 1) {
+      const mod = mods[index];
+      const row = document.createElement("div");
+      row.className = mod ? modRowClass(mod, type, removalPreviewKeys) : "empty-slot";
+      if (mod) {
+        row.innerHTML = [
+          '<div class="mod-text">' + escapeHtml(renderModText(mod, state.item)) + "</div>",
+          '<div class="mod-meta">' + escapeHtml(modMetaText(mod)) + "</div>",
+        ].join("");
+      } else {
+        row.textContent = state.lang === "en" ? "Empty slot" : uiText("空槽");
+      }
+      column.appendChild(row);
+    }
+
+    return column;
+  }
+
+  function modRowClass(mod, type, removalPreviewKeys) {
+    const classes = ["mod-row", "mod-" + type];
+    if (mod.desecrated) classes.push("is-desecrated");
+    if (mod.desecrated && mod.revealed === false) classes.push("is-unrevealed");
+    if (mod.fractured) classes.push("is-fractured");
+    if (removalPreviewKeys && removalPreviewKeys.has(Core.modKey(mod))) classes.push("is-removal-candidate");
+    return classes.join(" ");
+  }
+
+  function modMetaText(mod) {
+    if (mod.desecrated && mod.revealed === false) return "亵渎 · 未揭露";
+    return [
+      mod.desecrated ? "亵渎" : "显式",
+      mod.tier,
+      "等级 " + mod.level,
+      mod.name,
+      mod.fractured ? "破溃" : "",
+    ].filter(Boolean).join(" · ");
+  }
+
+  function renderActionButtons() {
+    const tier = els.tierSelect.value;
+    const categoryFilter = els.currencyCategory.value;
+    const query = normalizeSearchText(els.currencySearch.value);
+    const usableOnly = !!(els.usableOnly && els.usableOnly.checked);
+    let matchedCount = 0;
+    let visibleCount = 0;
+    let usableCount = 0;
+
+    els.currencyGrid.querySelectorAll(".currency-button").forEach(function (button) {
+      const action = button.dataset.action;
+      const entry = Core.CURRENCIES.find(function (item) { return item.id === action; });
+      const actionCategory = button.dataset.category || "currency";
+      const dynamicName = entry ? [
+        Core.currencyNameFor(action, entry.supportsTiers ? tier : "normal"),
+        toTraditional(Core.currencyNameFor(action, entry.supportsTiers ? tier : "normal")),
+        displayActionName(entry, entry.supportsTiers ? tier : "normal"),
+      ].join(" ") : "";
+      const searchText = button.dataset.search + " " + dynamicName;
+      const matches = (categoryFilter === "all" || actionCategory === categoryFilter) && searchTextMatches(searchText, query);
+      if (matches) matchedCount += 1;
+      const actualTier = entry && entry.supportsTiers ? tier : "normal";
+      const validation = entry ? Core.validateCurrency(state.item, action, actualTier) : { ok: false, reason: "" };
+      if (matches && validation.ok) usableCount += 1;
+      const visible = matches && (!usableOnly || validation.ok);
+      if (visible) visibleCount += 1;
+
+      button.classList.toggle("is-hidden", !visible);
+      if (!entry) return;
+      const name = button.querySelector(".currency-name");
+      const rule = button.querySelector(".currency-rule");
+      if (name) name.textContent = displayActionName(entry, actualTier);
+      if (rule) rule.textContent = validation.ok ? displayActionRule(entry) : displayValidationReason(validation.reason);
+      button.disabled = !validation.ok;
+      button.classList.toggle("is-unusable", !validation.ok);
+      button.classList.toggle("is-locked-omen", els.lockOmen.checked && state.lockedOmenId === action);
+      button.title = validation.ok ? displayActionRule(entry) : displayValidationReason(validation.reason);
+    });
+
+    if (els.currencyStats) {
+      els.currencyStats.textContent = [
+        (state.lang === "en" ? "Shown " : uiText("显示 ")) + visibleCount + "/" + matchedCount,
+        (state.lang === "en" ? "Usable " : uiText("可用 ")) + usableCount,
+      ].join(" · ");
+    }
+  }
+
+  function renderLockedOmenStatus() {
+    if (!els.lockedOmenStatus) return;
+
+    const enabled = els.lockOmen.checked;
+    const lockedAction = state.lockedOmenId ? Core.getAction(state.lockedOmenId) : null;
+    const pending = state.item && state.item.pendingOmen;
+    els.lockedOmenStatus.classList.toggle("is-active", enabled && Boolean(lockedAction));
+    els.lockedOmenStatus.classList.toggle("is-waiting", enabled && !lockedAction);
+
+    if (!enabled) {
+      els.lockedOmenStatus.textContent = t("unlockedOmen");
+      return;
+    }
+
+    if (!lockedAction) {
+      els.lockedOmenStatus.textContent = state.lang === "en" ? "Click an omen to lock it" : uiText("开启后点击一个预兆即可锁定");
+      return;
+    }
+
+    const readyText = pending && pending.id === lockedAction.id
+      ? (state.lang === "en" ? "Ready" : uiText("已准备"))
+      : pending
+        ? (state.lang === "en" ? "Another omen is ready" : uiText("当前已准备其他预兆"))
+        : (state.lang === "en" ? "Not ready" : uiText("未准备"));
+    els.lockedOmenStatus.textContent = (state.lang === "en" ? "Locked: " : uiText("锁定：")) + displayActionName(lockedAction, "normal") + " / " + readyText;
+  }
+
+  function renderHistory() {
+    els.historyList.innerHTML = "";
+    if (state.item.history.length === 0) {
+      const empty = document.createElement("li");
+      empty.className = "history-empty";
+      empty.textContent = state.lang === "en" ? "No actions yet" : uiText("暂无操作");
+      els.historyList.appendChild(empty);
+      return;
+    }
+
+    state.item.history.slice().reverse().forEach(function (step, reverseIndex) {
+      const realIndex = state.item.history.length - reverseIndex;
+      const item = document.createElement("li");
+      item.className = "history-entry";
+
+      const title = document.createElement("div");
+      title.className = "history-title";
+      title.textContent = realIndex + ". " + (state.lang === "en" ? "Use " : uiText("使用 ")) + displayStepCurrency(step);
+      item.appendChild(title);
+
+      if (step.note) item.appendChild(noteLine(uiText(step.note)));
+      if (step.omenSet) item.appendChild(noteLine((state.lang === "en" ? "Prepare omen: " : uiText("准备预兆: ")) + uiText(step.omenSet.label)));
+      if (step.omenConsumed) item.appendChild(noteLine((state.lang === "en" ? "Trigger omen: " : uiText("触发预兆: ")) + uiText(step.omenConsumed.label)));
+
+      step.removed.forEach(function (mod) {
+        item.appendChild(historyLine(state.lang === "en" ? "Remove" : uiText("移除"), mod));
+      });
+      step.added.forEach(function (mod) {
+        item.appendChild(historyLine(state.lang === "en" ? "Add" : uiText("添加"), mod));
+      });
+      (step.revealed || []).forEach(function (mod) {
+        item.appendChild(historyLine(state.lang === "en" ? "Reveal" : uiText("揭露"), mod));
+      });
+      if (step.rerolled > 0) {
+        item.appendChild(noteLine(state.lang === "en" ? "Rerolled values on " + step.rerolled + " modifiers" : uiText("重置 ") + step.rerolled + uiText(" 条词缀的数值")));
+      }
+
+      els.historyList.appendChild(item);
+    });
+  }
+
+  function costableHistorySteps() {
+    if (!state.item || !Array.isArray(state.item.history)) return [];
+    return state.item.history.filter(function (step) {
+      return step && step.currencyName && step.actionId !== "custom_item" && step.tier !== "custom";
+    });
+  }
+
+  function renderCostSummary() {
+    if (!els.historyStats) return;
+    const steps = costableHistorySteps();
+    if (steps.length === 0) {
+      els.historyStats.innerHTML = [
+        '<div class="cost-total">' + escapeHtml(state.lang === "en" ? "Total cost 0 actions" : uiText("总消耗 0 手")) + "</div>",
+        '<div class="cost-empty">' + escapeHtml(state.lang === "en" ? "No currency spent yet" : uiText("暂无通货消耗")) + "</div>",
+      ].join("");
+      return;
+    }
+
+    const counts = steps.reduce(function (map, step) {
+      const key = step.currencyName;
+      if (!map[key]) {
+        map[key] = {
+          label: displayStepCurrency(step),
+          actionId: step.actionId || "",
+          count: 0,
+        };
+      }
+      map[key].count += 1;
+      return map;
+    }, {});
+
+    const entries = Object.keys(counts).map(function (key) {
+      return counts[key];
+    }).sort(function (a, b) {
+      return b.count - a.count || a.label.localeCompare(b.label, "zh-Hans-CN");
+    });
+
+    els.historyStats.innerHTML = [
+      '<div class="cost-total">' + escapeHtml(state.lang === "en" ? "Total cost " + steps.length + " actions · " + entries.length + " types" : uiText("总消耗 ") + steps.length + uiText(" 手 · ") + entries.length + uiText(" 种")) + "</div>",
+      '<div class="cost-list">',
+      entries.map(function (entry) {
+        return [
+          '<span class="cost-chip" title="' + escapeHtml(entry.label) + '">',
+          '<span class="cost-name">' + escapeHtml(entry.label) + "</span>",
+          '<span class="cost-count">x' + entry.count + "</span>",
+          "</span>",
+        ].join("");
+      }).join(""),
+      "</div>",
+    ].join("");
+  }
+
+  function noteLine(text) {
+    const line = document.createElement("div");
+    line.className = "history-note";
+    line.textContent = text;
+    return line;
+  }
+
+  function displayStepCurrency(step) {
+    const action = step && step.actionId ? Core.getAction(step.actionId) : null;
+    if (action) return displayActionName(action, step.tier || "normal");
+    if (state.lang === "en") return englishFromId(step.currencyName);
+    return uiText(step.currencyName);
+  }
+
+  function historyLine(label, mod) {
+    const line = document.createElement("div");
+    line.className = "history-line";
+    const typeLabel = mod.desecrated
+      ? (state.lang === "en" ? "Desecrated " + mod.type : uiText("亵渎") + (mod.type === "prefix" ? t("prefix") : t("suffix")))
+      : (mod.type === "prefix" ? t("prefix") : t("suffix"));
+    line.innerHTML = [
+      '<span class="history-label">' + label + "</span>",
+      '<span>' + escapeHtml(typeLabel + ": " + renderModText(mod)) + "</span>",
+    ].join("");
+    return line;
+  }
+
+  function renderPool() {
+    const item = state.item;
+    const action = els.poolAction.value || defaultPoolAction(item);
+    const tier = els.tierSelect.value;
+    const actionEntry = Core.getAction(action);
+    const isDesecrationPool = !!(actionEntry && actionEntry.category === "desecration");
+    const actualPool = Core.summarizePool(item, tier, action || null);
+    const pool = isDesecrationPool
+      ? Core.summarizePool(item, tier, action || null, { ignoreItemState: true })
+      : actualPool;
+    const actualModIds = new Set(actualPool.mods.map(function (mod) { return mod.id; }));
+    const query = normalizeSearchText(els.poolSearch.value);
+    const filtered = pool.mods.filter(function (mod) {
+      if (!query) return true;
+      return searchTextMatches([
+        mod.name,
+        mod.tier,
+        mod.group,
+        mod.tags.join(" "),
+        Core.renderRange(mod),
+        toTraditional(Core.renderRange(mod)),
+        renderRangeText(mod),
+        allLocalizedText(I18N.modifiers, mod.id),
+      ].join(" "), query);
+    });
+
+    const minLevelText = pool.minLevel > 0
+      ? (state.lang === "en" ? "Minimum modifier level " + pool.minLevel : uiText("最低词缀等级 ") + pool.minLevel)
+      : (state.lang === "en" ? "No minimum modifier level" : uiText("无最低词缀等级限制"));
+    els.poolStats.textContent = [
+      (state.lang === "en" ? "Available " : uiText("可选 ")) + filtered.length + "/" + pool.mods.length,
+      minLevelText,
+      t("prefix") + " " + pool.prefixCount,
+      t("suffix") + " " + pool.suffixCount,
+      (state.lang === "en" ? "Total weight " : uiText("总权重 ")) + pool.totalWeight,
+    ].join(" · ");
+
+    if (isDesecrationPool) {
+      els.poolStats.textContent = els.poolStats.textContent.replace(minLevelText, (state.lang === "en" ? "Actually rollable " : uiText("当前可抽 ")) + actualPool.mods.length + (state.lang === "en" ? " routes " : uiText(" 路 ")) + minLevelText);
+    }
+
+    const typeTotals = modWeightTotalsByType(pool.mods);
+    els.poolList.innerHTML = "";
+    if (filtered.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "pool-empty";
+      empty.textContent = state.lang === "en" ? "No available modifiers" : uiText("无可用词缀");
+      els.poolList.appendChild(empty);
+      return;
+    }
+
+    filtered.forEach(function (mod) {
+      const row = document.createElement("div");
+      const isActual = !isDesecrationPool || actualModIds.has(mod.id);
+      row.className = "pool-row" + (isActual ? "" : " is-unavailable");
+      const chance = modChanceText(mod, typeTotals);
+      const kindText = mod.desecrated
+        ? (state.lang === "en" ? "Desecrated " + (mod.type === "prefix" ? "prefix" : "suffix") : uiText(mod.type === "prefix" ? "亵渎前" : "亵渎后"))
+        : (mod.type === "prefix" ? t("prefix") : t("suffix"));
+      row.innerHTML = [
+        '<div class="pool-main">',
+        '<span class="pool-kind ' + mod.type + '">' + kindText + "</span>",
+        '<span class="pool-text">' + escapeHtml(renderRangeText(mod)) + "</span>",
+        '<span class="pool-chance">' + escapeHtml((state.lang === "en" ? "Chance " : uiText("出现 ")) + chance) + "</span>",
+        "</div>",
+        '<div class="pool-meta">' + escapeHtml(mod.tier + " · " + (state.lang === "en" ? "Level " : uiText("等级 ")) + mod.level + " · " + (state.lang === "en" ? "Weight " : uiText("权重 ")) + mod.weight + " · " + (state.lang === "en" ? "Group " + englishFromId(mod.group) : uiText("组 ") + uiText(mod.group))) + "</div>",
+      ].join("");
+      els.poolList.appendChild(row);
+    });
+  }
+
+  function defaultPoolAction(item) {
+    const base = Core.getBase(item.baseId);
+    if (item.rarity === "rare" && base && base.classId === "jewel") return "preserved_cranium";
+    if (item.rarity === "rare" && base && base.classId === "waystone") return "preserved_vertebrae";
+    if (item.rarity === "normal") return "transmutation";
+    if (item.rarity === "magic") return "augmentation";
+    if (item.rarity === "rare") return "exalted";
+    return "";
+  }
+
+  function renderToast() {
+    const warning = dataLoadWarning();
+    els.toast.textContent = warning || uiText(state.lastMessage) || "";
+    els.toast.classList.toggle("is-empty", !warning && !state.lastMessage);
+    els.toast.classList.toggle("is-warning", Boolean(warning));
+  }
+
+  function dataLoadWarning() {
+    const status = Core.DATA_STATUS || {};
+    const missing = [];
+    if (!status.modDataLoaded) missing.push(state.lang === "en" ? "modifier data" : uiText("词缀数据"));
+    if (!status.craftingDataLoaded) missing.push(state.lang === "en" ? "currency/desecration data" : uiText("通货/亵渎数据"));
+    if (!status.soulCoreDataLoaded) missing.push("Soul Core 数据");
+    if (missing.length === 0) return "";
+    return state.lang === "en"
+      ? "Data load failed: " + missing.join(", ") + " missing. Fallback sample data is unreliable; re-upload dist/data/*.js."
+      : uiText("数据加载失败：") + missing.join("、") + uiText(" 未载入，当前会使用备用样例数据，做装结果不可信。请重新上传 dist/data/*.js。");
+  }
+
+  function summarizeStep(step) {
+    const parts = [displayStepCurrency(step)];
+    if (step.note) parts.push(uiText(step.note));
+    if (step.omenSet) parts.push((state.lang === "en" ? "Prepare " : uiText("准备 ")) + uiText(step.omenSet.label));
+    if (step.omenConsumed) parts.push((state.lang === "en" ? "Trigger " : uiText("触发 ")) + uiText(step.omenConsumed.label));
+    if (step.removed.length) parts.push((state.lang === "en" ? "Remove " : uiText("移除 ")) + step.removed.map(function (mod) { return renderModText(mod); }).join("、"));
+    if (step.added.length) parts.push((state.lang === "en" ? "Add " : uiText("添加 ")) + step.added.map(function (mod) { return renderModText(mod); }).join("、"));
+    if (step.revealed && step.revealed.length) parts.push((state.lang === "en" ? "Reveal " : uiText("揭露 ")) + step.revealed.map(function (mod) { return renderModText(mod); }).join("、"));
+    if (step.rerolled) parts.push(state.lang === "en" ? "Reroll " + step.rerolled + " values" : uiText("重置 ") + step.rerolled + uiText(" 条数值"));
+    return parts.join("；");
+  }
+
+  function categoryLabel(category) {
+    if (category === "omen") return t("omen");
+    if (category === "desecration") return t("desecration");
+    if (category === "essence") return t("essence");
+    if (category === "alloy") return t("alloy");
+    if (category === "liquid_emotion") return t("liquidEmotion");
+    if (category === "catalyst") return t("catalyst");
+    if (category === "rune") return t("rune");
+    if (category === "soul_core") return "Soul Core";
+    return t("currency");
+  }
+
+  function actionSearchAliases(action) {
+    const aliases = [];
+    const category = action.category || "";
+    if (category === "essence") aliases.push("精华 精髓 精華 精髓 essence");
+    if (category === "liquid_emotion") aliases.push("液化情感 液化情緒 情感 情緒 emotion liquid distilled");
+    if (category === "catalyst") aliases.push("催化剂 催化劑 catalyst quality 品质 品質");
+    if (category === "omen") aliases.push("预兆 預兆 征兆 徵兆 omen");
+    if (category === "desecration") aliases.push("亵渎 褻瀆 desecrated abyssal");
+    if (category === "essence") aliases.push("精华 精髓 essence");
+    if (category === "liquid_emotion") aliases.push("液化情感 液化情緒 情感 emotion liquid distilled");
+    if (category === "catalyst") aliases.push("催化剂 催化劑 catalyst quality 品质 品質");
+    if (category === "omen") aliases.push("预兆 預兆 征兆 徵兆 omen");
+    if (category === "desecration") aliases.push("亵渎 褻瀆 desecrated abyssal");
+    return aliases.join(" ");
+  }
+
+  function makeSeed() {
+    const bytes = new Uint32Array(2);
+    if (window.crypto && window.crypto.getRandomValues) {
+      window.crypto.getRandomValues(bytes);
+    } else {
+      bytes[0] = Math.floor(Math.random() * 0xffffffff);
+      bytes[1] = Date.now() >>> 0;
+    }
+    return "craft-" + Date.now().toString(36) + "-" + bytes[0].toString(36) + bytes[1].toString(36);
+  }
+
+  function clone(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, function (char) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[char];
+    });
+  }
+})();
