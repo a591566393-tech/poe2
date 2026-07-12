@@ -1107,7 +1107,8 @@
   }
 
   function qualityCapFor(item) {
-    return 20 + allMods(item).reduce(function (sum, mod) {
+    const capSources = (item && Array.isArray(item.implicits) ? item.implicits : []).concat(allMods(item));
+    return 20 + capSources.reduce(function (sum, mod) {
       return sum + qualityCapBonusFromMod(mod);
     }, 0);
   }
