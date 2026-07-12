@@ -635,6 +635,9 @@
   function englishActionRule(action) {
     if (!action) return "";
     const category = categoryLabel(action.category);
+    if (/^vaal_(armour_infuser|whetstone|arcanists_etcher|catalysing_infuser)$/.test(action.id)) {
+      return "Improves quality above the current maximum by up to 10%; PoE2DB does not expose the corruption chance.";
+    }
     if (action.category === "catalyst") return "Adds catalyst quality to supported item classes.";
     if (action.category === "liquid_emotion") return "Removes one modifier and adds the matching crafted modifier.";
     if (action.category === "desecration") return "Adds a hidden desecrated modifier, then reveal it with Abyssal Echoes.";
@@ -1440,6 +1443,7 @@
       item.sockets.length ? '<span class="badge">' + escapeHtml(state.lang === "en" ? "Sockets " : uiText("插槽 ")) + item.sockets.length + "</span>" : "",
       item.pendingOmen ? '<span class="badge badge-omen">' + escapeHtml(t("omen") + ": " + uiText(item.pendingOmen.label)) + "</span>" : "",
       item.desecratedMods.length ? '<span class="badge badge-desecrated">' + escapeHtml(t("desecration") + " " + item.desecratedMods.length) + "</span>" : "",
+      item.vaalInfuserCorruptionRisk && !item.corrupted ? '<span class="badge badge-omen">' + escapeHtml(state.lang === "en" ? "Vaal infuser corruption risk" : uiText("瓦尔注能腐化风险")) + "</span>" : "",
       item.corrupted ? '<span class="badge badge-desecrated">' + escapeHtml(state.lang === "en" ? "Corrupted" : uiText("腐化")) + "</span>" : "",
       item.mirrored ? '<span class="badge">' + escapeHtml(state.lang === "en" ? "Mirrored" : uiText("镜像")) + "</span>" : "",
       item.destroyed ? '<span class="badge badge-desecrated">' + escapeHtml(state.lang === "en" ? "Destroyed" : uiText("已摧毁")) + "</span>" : "",
@@ -1949,11 +1953,13 @@
     if (category === "essence") aliases.push("精华 精髓 精華 精髓 essence");
     if (category === "liquid_emotion") aliases.push("液化情感 液化情緒 情感 情緒 emotion liquid distilled");
     if (category === "catalyst") aliases.push("催化剂 催化劑 catalyst quality 品质 品質");
+    if (/^vaal_(armour_infuser|whetstone|arcanists_etcher|catalysing_infuser)$/.test(action.id)) aliases.push("瓦尔 瓦爾 注能装置 注能裝置 催化注能 瓦尔催化 Vaal Infuser Catalysing Quality");
     if (category === "omen") aliases.push("预兆 預兆 征兆 徵兆 omen");
     if (category === "desecration") aliases.push("亵渎 褻瀆 desecrated abyssal");
     if (category === "essence") aliases.push("精华 精髓 essence");
     if (category === "liquid_emotion") aliases.push("液化情感 液化情緒 情感 emotion liquid distilled");
     if (category === "catalyst") aliases.push("催化剂 催化劑 catalyst quality 品质 品質");
+    if (/^vaal_(armour_infuser|whetstone|arcanists_etcher|catalysing_infuser)$/.test(action.id)) aliases.push("瓦尔 瓦爾 注能装置 注能裝置 催化注能 瓦尔催化 Vaal Infuser Catalysing Quality");
     if (category === "omen") aliases.push("预兆 預兆 征兆 徵兆 omen");
     if (category === "desecration") aliases.push("亵渎 褻瀆 desecrated abyssal");
     return aliases.join(" ");

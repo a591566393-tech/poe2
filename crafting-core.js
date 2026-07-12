@@ -5,7 +5,7 @@
   }
   root.CraftingCore = core;
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
-  const DATA_VERSION = "poe2db-weighted-2026-07-10-v15";
+  const DATA_VERSION = "poe2db-weighted-2026-07-10-v16";
 
   const RARITIES = {
     normal: { label: "普通", maxPrefixes: 0, maxSuffixes: 0 },
@@ -52,6 +52,13 @@
   const MACE_CLASSES = ["one_hand_mace", "two_hand_mace"];
   const TWO_HAND_MELEE_CLASSES = ["two_hand_sword", "two_hand_axe", "two_hand_mace", "quarterstaff", "staff", "spear"];
   const DEFENCE_BASE_TAGS = ["def_armour", "def_evasion", "def_energy_shield"];
+  const VAAL_QUALITY_OVERFLOW = 10;
+  const VAAL_QUALITY_INFUSERS = {
+    vaal_armour_infuser: { qualityKind: "armour", target: "护甲类物品" },
+    vaal_whetstone: { qualityKind: "weapon", target: "攻击武器" },
+    vaal_arcanists_etcher: { qualityKind: "caster", target: "法术武器" },
+    vaal_catalysing_infuser: { qualityKind: "catalyst", target: "戒指或项链", classes: ["ring", "amulet"] },
+  };
   const FALLBACK_CURRENCY_TIER_MIN_LEVELS = {
     greater: { transmutation: 44, augmentation: 44, regal: 35, exalted: 35, chaos: 35 },
     perfect: { transmutation: 70, augmentation: 70, regal: 50, exalted: 50, chaos: 50 },
@@ -77,6 +84,10 @@
     currency("armour_scrap", "护甲片", "提高护甲类物品品质", false),
     currency("whetstone", "磨刀石", "提高武器品质", false),
     currency("arcanist_etcher", "奥术蚀刻石", "提高法术武器品质", false),
+    currency("vaal_armour_infuser", "瓦尔护甲注能装置", "提升护甲类物品品质；可超过当前最大品质 10%，并有几率腐化", false),
+    currency("vaal_whetstone", "瓦尔磨刀石", "提升攻击武器品质；可超过当前最大品质 10%，并有几率腐化", false),
+    currency("vaal_arcanists_etcher", "瓦尔奥术师的蚀刻石", "提升法术武器品质；可超过当前最大品质 10%，并有几率腐化", false),
+    currency("vaal_catalysing_infuser", "瓦尔催化注能装置", "提升戒指或项链的催化剂品质；可超过当前最大品质 10%，并有几率腐化", false),
     currency("mirror", "卡兰德的魔镜", "复制物品，复制品带有镜像标签且不能继续修改", false),
 
     essence("essence_body", "精髓：躯体", "普通物品 -> 魔法，并保证 1 个生命词缀", "normal", "生命"),
@@ -1113,6 +1124,10 @@
     }, 0);
   }
 
+  function vaalQualityCapFor(item) {
+    return qualityCapFor(item) + VAAL_QUALITY_OVERFLOW;
+  }
+
   function countExplicit(item) {
     return item.prefixes.length + item.suffixes.length;
   }
@@ -1319,6 +1334,7 @@
       desecratedMods: [],
       implicits: [],
       corrupted: false,
+      vaalInfuserCorruptionRisk: false,
       mirrored: false,
       destroyed: false,
       quality: 0,
@@ -1754,6 +1770,12 @@
     });
   }
 
+  function qualityCurrencyAmount(item) {
+    if (item.rarity === "normal") return 5;
+    if (item.rarity === "magic") return 2;
+    return 1;
+  }
+
   function catalystDefinition(action) {
     const importedId = action && action.catalyst ? action.catalyst.importedId : action;
     return importedId ? importedCatalystById(importedId) : null;
@@ -1761,9 +1783,7 @@
 
   function catalystAmount(item, omenEntry) {
     if (omenEntry && omenEntry.effect && omenEntry.effect.maxCatalystQuality) return 20;
-    if (item.rarity === "normal") return 5;
-    if (item.rarity === "magic") return 2;
-    return 1;
+    return qualityCurrencyAmount(item);
   }
 
   function canUseCatalyst(item, action) {
@@ -1773,6 +1793,37 @@
     const classes = definition.classes || [];
     if (!classes.includes(base.classId)) return { ok: false, reason: "该催化剂不能用于当前底材。" };
     if (item.catalyst && item.catalyst.id === definition.id && item.catalyst.quality >= qualityCapFor(item)) return { ok: false, reason: "该催化剂品质已经达到当前品质上限。" };
+    return { ok: true, definition };
+  }
+
+  function vaalQualityInfuserDefinition(actionId) {
+    return VAAL_QUALITY_INFUSERS[actionId] || null;
+  }
+
+  function validateVaalQualityInfuser(item, actionId) {
+    const definition = vaalQualityInfuserDefinition(actionId);
+    const base = getBase(item.baseId);
+    if (!definition || !base) return { ok: false, reason: "未知瓦尔注能装置。" };
+    if (item.destroyed) return { ok: false, reason: "物品已经被摧毁，不能使用瓦尔注能装置。" };
+    if (item.mirrored) return { ok: false, reason: "镜像物品不能使用瓦尔注能装置。" };
+    if (item.corrupted) return { ok: false, reason: "物品已经腐化，不能继续使用瓦尔注能装置。" };
+
+    const currentCap = qualityCapFor(item);
+    const vaalCap = vaalQualityCapFor(item);
+
+    if (definition.qualityKind === "catalyst") {
+      if (!definition.classes.includes(base.classId)) return { ok: false, reason: "瓦尔催化注能装置只能用于戒指或项链。" };
+      const current = item.catalyst ? Math.max(0, Number(item.catalyst.quality) || 0) : 0;
+      if (!item.catalyst || current <= 0) return { ok: false, reason: "需要先为戒指或项链添加催化剂品质。" };
+      if (current < currentCap) return { ok: false, reason: "瓦尔催化注能装置只能用于已经达到当前最大品质的物品。" };
+      if (current >= vaalCap) return { ok: false, reason: "瓦尔催化注能装置已经达到可超过的 10% 品质上限。" };
+      return { ok: true, definition };
+    }
+
+    if (!canHaveQuality(item, definition.qualityKind)) return { ok: false, reason: "该瓦尔注能装置不能用于当前底材。" };
+    const current = Math.max(0, Number(item.quality) || 0);
+    if (current < currentCap) return { ok: false, reason: "瓦尔注能装置只能用于已经达到当前最大品质的物品。" };
+    if (current >= vaalCap) return { ok: false, reason: "瓦尔注能装置已经达到可超过的 10% 品质上限。" };
     return { ok: true, definition };
   }
 
@@ -2154,6 +2205,10 @@
       return validateRune(item, action);
     }
 
+    if (vaalQualityInfuserDefinition(actionId)) {
+      return validateVaalQualityInfuser(item, actionId);
+    }
+
     if (!isMutable(item) && actionId !== "mirror") {
       return { ok: false, reason: "腐化或镜像物品不能继续使用普通做装通货。" };
     }
@@ -2385,6 +2440,31 @@
     return { ok: true };
   }
 
+  function applyVaalQualityInfuser(item, action, step) {
+    const definition = vaalQualityInfuserDefinition(action.id);
+    const currentCap = qualityCapFor(item);
+    const vaalCap = vaalQualityCapFor(item);
+    const amount = qualityCurrencyAmount(item);
+    let before = 0;
+    let after = 0;
+    let label = "品质";
+
+    if (definition.qualityKind === "catalyst") {
+      before = Math.max(0, Number(item.catalyst.quality) || 0);
+      after = Math.min(vaalCap, before + amount);
+      item.catalyst.quality = after;
+      label = "催化剂品质";
+    } else {
+      before = Math.max(0, Number(item.quality) || 0);
+      after = Math.min(vaalCap, before + amount);
+      item.quality = after;
+    }
+
+    item.vaalInfuserCorruptionRisk = true;
+    step.note = action.label + "：" + label + " " + before + "% -> " + after + "%（当前最大品质 " + currentCap + "%，瓦尔注能最多 " + vaalCap + "%；有几率腐化，PoE2DB 未公开概率）";
+    return { ok: true };
+  }
+
   function applyCurrency(inputItem, actionId, tierId) {
     const original = clone(inputItem);
     const item = clone(inputItem);
@@ -2509,6 +2589,13 @@
       return { ok: true, item, step };
     }
 
+    if (vaalQualityInfuserDefinition(actionId)) {
+      applyVaalQualityInfuser(item, action, step);
+      step.afterRarity = item.rarity;
+      item.history.push(step);
+      return { ok: true, item, step };
+    }
+
     const omenEntry = activeOmen(item, action.category === "desecration" ? "desecration" : actionId);
     const minLevel = tierMinLevel(actionId, tier);
     const addType = omenEntry && (omenEntry.effect.addType || (omenEntry.effect.addSameType ? sameKindType(item) : null));
@@ -2595,7 +2682,7 @@
 
     if (actionId === "armour_scrap" || actionId === "whetstone" || actionId === "arcanist_etcher") {
       const before = item.quality;
-      const amount = item.rarity === "normal" ? 5 : item.rarity === "magic" ? 2 : 1;
+      const amount = qualityCurrencyAmount(item);
       item.quality = Math.min(qualityCapFor(item), item.quality + amount);
       step.note = "品质 " + before + "% -> " + item.quality + "%";
     }
