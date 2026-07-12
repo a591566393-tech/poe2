@@ -95,6 +95,75 @@
     速度: "速度",
   };
 
+  const TRADITIONAL_PHRASE_MAP = {
+    "液化情感": "液化情緒",
+    "稀释的": "稀釋的",
+    "浓缩的": "濃縮的",
+    "强效的": "強效的",
+    "远古": "遠古",
+    "愤怒": "憤怒",
+    "内疚": "內疚",
+    "贪婪": "貪婪",
+    "偏执": "偏執",
+    "憎恶": "憎惡",
+    "绝望": "絕望",
+    "恐惧": "恐懼",
+    "孤独": "孤獨",
+    "凶残": "兇殘",
+    "轻蔑": "輕蔑",
+    "闪电": "閃電",
+    "伤害": "傷害",
+    "能量护盾": "能量護盾",
+    "闪避": "閃避",
+    "护甲": "護甲",
+    "显示": "顯示",
+    "可用": "可用",
+    "数据加载失败": "數據載入失敗",
+    "数据": "數據",
+    "加载": "載入",
+    "载入": "載入",
+    "词缀": "詞綴",
+    "当前": "當前",
+    "随机": "隨機",
+    "品质": "品質",
+    "通货": "通貨",
+    "底材": "底材",
+    "物品": "物品",
+    "等级": "等級",
+    "前缀": "前綴",
+    "后缀": "後綴",
+    "亵渎": "褻瀆",
+    "深渊": "深淵",
+    "回响": "回響",
+    "预兆": "預兆",
+    "符文": "符文",
+    "插槽": "插槽",
+    "腐化": "腐化",
+    "破溃": "破潰",
+    "锁定": "鎖定",
+    "自定义": "自訂",
+    "开局": "開局",
+    "筛选": "篩選",
+    "清空": "清空",
+    "应用": "套用",
+    "撤销": "復原",
+    "复制": "複製",
+    "搜索": "搜尋",
+    "生命": "生命",
+    "魔力": "魔力",
+    "火焰": "火焰",
+    "冰霜": "冰霜",
+    "抗性": "抗性",
+    "速度": "速度",
+    "暴击": "暴擊",
+    "命中": "命中",
+    "攻击": "攻擊",
+    "法术": "法術",
+    "近战": "近戰",
+    "施法": "施法",
+    "提高": "提高"
+  };
+
   const TRADITIONAL_MAP = {
     攻: "攻",
     击: "擊",
@@ -489,9 +558,15 @@
   }
 
   function toTraditional(value) {
+    let text = String(value || "");
+    Object.keys(TRADITIONAL_PHRASE_MAP)
+      .sort(function (a, b) { return b.length - a.length; })
+      .forEach(function (phrase) {
+        text = text.split(phrase).join(TRADITIONAL_PHRASE_MAP[phrase]);
+      });
     const chars = Object.keys(TRADITIONAL_MAP).filter(function (key) { return key.length === 1; }).join("");
     const pattern = new RegExp("[" + chars.replace(/[\\\]\[\^-]/g, "\\$&") + "]", "g");
-    return String(value || "").replace(pattern, function (char) {
+    return text.replace(pattern, function (char) {
       return TRADITIONAL_MAP[char] || char;
     });
   }
