@@ -1,7 +1,7 @@
 (function (root) {
   root.POE2DB_CRAFTING_DATA = 
 {
-  "version": "poe2db-crafting-2026-07-13-sovereign-alloy",
+  "version": "poe2db-crafting-2026-07-13-liquid-contempt",
   "generatedAt": "2026-07-12T13:07:44.688Z",
   "source": "PoE2DB Essence, Catalyst, Desecrated Modifiers, Jewel Liquid Emotion, and Soul Core pages cached under .cache/",
   "notes": [
@@ -8643,7 +8643,7 @@
         {
           "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_ruby_prefix_3",
           "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_ruby_prefix_3",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
             "jewel"
           ],
@@ -8707,7 +8707,7 @@
         {
           "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_sapphire_prefix_5",
           "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_sapphire_prefix_5",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
             "jewel"
           ],
@@ -8771,7 +8771,7 @@
         {
           "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_emerald_prefix_7",
           "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_emerald_prefix_7",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
             "jewel"
           ],
@@ -8833,7 +8833,7 @@
         {
           "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_diamond_prefix_9",
           "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_diamond_prefix_9",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
             "jewel"
           ],

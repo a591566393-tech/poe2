@@ -1278,10 +1278,44 @@
 
   function catalystMatchesMod(item, mod) {
     if (!item || !item.catalyst || !mod) return false;
-    const catalystTags = item.catalyst.tags || [];
+    const catalystTags = expandCatalystTags(item.catalyst.tags || []);
     if (catalystTags.length === 0) return false;
-    const modTags = mod.tags || [];
+    const modTags = expandModTags(mod.tags || []);
     return catalystTags.some(function (tag) { return modTags.includes(tag); });
+  }
+
+  function normalizeTag(tag) {
+    return String(tag || "").trim().toLowerCase();
+  }
+
+  function expandTagAliases(tag) {
+    const normalized = normalizeTag(tag);
+    if (!normalized) return [];
+    const aliases = {
+      caster: ["caster", "spell", "spells", "施法", "法术", "法術", "caster_speed"],
+      speed: ["speed", "attack_speed", "caster_speed", "movement_speed", "cast_speed", "速度"],
+      chaos: ["chaos", "混沌"],
+    };
+    for (const key of Object.keys(aliases)) {
+      if (aliases[key].includes(normalized)) return aliases[key];
+    }
+    return [normalized];
+  }
+
+  function expandTags(tags) {
+    const expanded = new Set();
+    (tags || []).forEach(function (tag) {
+      expandTagAliases(tag).forEach(function (alias) { expanded.add(alias); });
+    });
+    return Array.from(expanded);
+  }
+
+  function expandCatalystTags(tags) {
+    return expandTags(tags);
+  }
+
+  function expandModTags(tags) {
+    return expandTags(tags);
   }
 
   function catalysingExaltMultiplier(item, mod, omenEntry) {
@@ -1435,7 +1469,10 @@
 
   function mergeOmens(existing, next) {
     if (!existing) return clone(next);
-    const components = omenParts(existing).concat(omenParts(next));
+    const nextEffect = next && next.effect ? next.effect : {};
+    const components = omenParts(existing).filter(function (component) {
+      return !omenEffectsConflict(component && component.effect, nextEffect);
+    }).concat(omenParts(next));
     const seen = new Set();
     const uniqueComponents = [];
     components.forEach(function (component) {
@@ -1450,6 +1487,16 @@
       effect: Object.assign.apply(null, [{}].concat(uniqueComponents.map(function (component) { return component.effect || {}; }))),
       components: uniqueComponents,
     };
+  }
+
+  function omenEffectsConflict(existingEffect, nextEffect) {
+    const conflictKeys = ["addType", "removeType", "alchemyMaxType", "forceDesecratedTag"];
+    return conflictKeys.some(function (key) {
+      return existingEffect && nextEffect
+        && existingEffect[key] != null
+        && nextEffect[key] != null
+        && existingEffect[key] !== nextEffect[key];
+    });
   }
 
   function occupiedGroups(item) {
@@ -1747,8 +1794,25 @@
   }
 
   function eligibleLiquidEmotionMods(item, action, options) {
+    if (hasLiquidEmotionMod(item)) return [];
     const definition = action && action.liquidEmotion ? importedLiquidEmotionById(action.liquidEmotion.importedId) : null;
     return importedGuaranteeMods(item, definition, options || {});
+  }
+
+  function isLiquidEmotionMod(mod) {
+    if (!mod) return false;
+    const ownerSlug = String(mod.ownerSlug || "");
+    const group = String(mod.group || "");
+    const baseId = String(mod.baseId || "");
+    const sourcePage = String(mod.sourcePage || "");
+    return ownerSlug.includes("Liquid")
+      || group.indexOf("liquid_") === 0
+      || baseId.includes("_liquid_")
+      || sourcePage === "Liquid_Emotions";
+  }
+
+  function hasLiquidEmotionMod(item) {
+    return allMods(item).some(isLiquidEmotionMod);
   }
 
   function addLiquidEmotionMod(item, action) {
@@ -2394,6 +2458,7 @@
     if (!isMutable(item)) return { ok: false, reason: "腐化或镜像物品不能使用液化情感。" };
     if (item.rarity !== "rare") return { ok: false, reason: "液化情感只能用于稀有物品。" };
     if (base.classId !== "jewel") return { ok: false, reason: "液化情感只能用于珠宝。" };
+    if (hasLiquidEmotionMod(item)) return { ok: false, reason: "物品已经有液化情感工艺词缀，不能再次使用液化情感。" };
     if (liquidEmotionRemovalCandidates(item, action).length === 0) {
       return { ok: false, reason: "没有可在移除后成功加入该液化情感词缀的候选词缀。" };
     }

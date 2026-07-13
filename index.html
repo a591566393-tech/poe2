@@ -33,6 +33,14 @@
         <div id="historyStats" class="cost-summary"></div>
       </section>
 
+      <section class="market-panel" aria-label="Market exchange rates">
+        <div class="panel-heading compact-heading">
+          <h2 data-i18n="marketRates">市场汇率</h2>
+          <button id="refreshMarketButton" type="button" class="small-action-button" data-i18n="refreshMarket">刷新</button>
+        </div>
+        <div id="marketRates" class="market-rates" aria-live="polite"></div>
+      </section>
+
       <section class="control-panel" aria-label="底材">
         <div class="field-row">
           <label for="baseSelect" data-i18n="base">底材</label>
@@ -156,6 +164,7 @@
             <input id="usableOnly" type="checkbox">
             <span data-i18n="usableOnly">只看可用</span>
           </label>
+          <button id="clearOmenButton" type="button" class="small-action-button" data-i18n="clearOmen">清除预兆</button>
           <div id="lockedOmenStatus" class="locked-omen-status" data-i18n="unlockedOmen">未锁定预兆</div>
         </div>
         <div id="currencyGrid" class="currency-grid"></div>
@@ -183,9 +192,9 @@
 
     <script src="./data/poe2db-base-data.js?v=20260711-jewels1"></script>
     <script src="./data/poe2db-mod-data.js?v=20260711-jewels1"></script>
-    <script src="./data/poe2db-crafting-data.js?v=20260713-sovereign-alloy"></script>
+    <script src="./data/poe2db-crafting-data.js?v=20260713-liquid-contempt1"></script>
     <script src="./data/poe2db-i18n-data.js?v=20260712-i18n-data1"></script>
-    <script src="./crafting-core.js?v=20260713-guarantee-level1"></script>
-    <script src="./app.js?v=20260712-vaal-infusers1"></script>
+    <script src="./crafting-core.js?v=20260713-omen-liquid-catalyst1"></script>
+    <script src="./app.js?v=20260713-market-omen1"></script>
   </body>
 </html>

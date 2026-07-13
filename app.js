@@ -8,6 +8,13 @@
     lastMessage: "",
     lockedOmenId: null,
     lang: readStoredLanguage(),
+    market: {
+      loading: false,
+      error: "",
+      league: null,
+      rates: [],
+      updatedAt: null,
+    },
   };
 
   const els = {};
@@ -319,6 +326,8 @@
     闪避: "閃避",
   };
 
+  const MARKET_CACHE_URL = "./data/market-rates.json?v=20260713-market1";
+
   const TEXT = {
     "zh-Hans": {
       language: "语言",
@@ -366,8 +375,11 @@
       desecration: "亵渎",
       rune: "符文",
       lockOmen: "锁定预兆",
+      clearOmen: "清除预兆",
       usableOnly: "只看可用",
       unlockedOmen: "未锁定预兆",
+      marketRates: "市场汇率",
+      refreshMarket: "刷新",
       history: "操作历史",
       pool: "当前词缀池",
       poolSearchPlaceholder: "搜索生命、移速、抗性、group",
@@ -418,8 +430,11 @@
       desecration: "Desecration",
       rune: "Rune",
       lockOmen: "Lock omen",
+      clearOmen: "Clear omen",
       usableOnly: "Usable only",
       unlockedOmen: "No omen locked",
+      marketRates: "Market Rates",
+      refreshMarket: "Refresh",
       history: "History",
       pool: "Current mod pool",
       poolSearchPlaceholder: "Search life, speed, resistance, group",
@@ -439,6 +454,8 @@
     populatePoolActionSelect();
     attachEvents();
     resetItem();
+    renderMarketRates();
+    loadMarketRates(false);
   });
 
   function bindElements() {
@@ -468,7 +485,10 @@
       "currencyStats",
       "usableOnly",
       "lockOmen",
+      "clearOmenButton",
       "lockedOmenStatus",
+      "marketRates",
+      "refreshMarketButton",
       "poolAction",
       "poolSearch",
       "resetButton",
@@ -922,6 +942,10 @@
     els.currencySearch.addEventListener("input", renderActionButtons);
     els.currencyCategory.addEventListener("change", renderActionButtons);
     els.usableOnly.addEventListener("change", renderActionButtons);
+    if (els.clearOmenButton) els.clearOmenButton.addEventListener("click", clearCurrentOmen);
+    if (els.refreshMarketButton) els.refreshMarketButton.addEventListener("click", function () {
+      loadMarketRates(true);
+    });
     if (els.languageSelect) {
       els.languageSelect.addEventListener("change", function () {
         state.lang = els.languageSelect.value || "zh-Hans";
@@ -934,6 +958,7 @@
         renderBaseOptions(els.baseSelect.value);
         populateActionButtons();
         populatePoolActionSelect();
+        renderMarketRates();
         render();
       });
     }
@@ -1122,6 +1147,18 @@
         ? "Lock is on: click an omen and it will refresh after triggering."
         : uiText("锁定已开启：点击一个预兆后，会在触发后自动续上。");
     }
+    render();
+  }
+
+  function clearCurrentOmen() {
+    if (!state.item) return;
+    const hadOmen = Boolean(state.item.pendingOmen || state.lockedOmenId || (els.lockOmen && els.lockOmen.checked));
+    state.item.pendingOmen = null;
+    state.lockedOmenId = null;
+    if (els.lockOmen) els.lockOmen.checked = false;
+    state.lastMessage = hadOmen
+      ? (state.lang === "en" ? "Cleared current omen." : "已清除当前预兆。")
+      : (state.lang === "en" ? "No omen to clear." : "当前没有预兆。");
     render();
   }
 
@@ -1794,6 +1831,116 @@
       }).join(""),
       "</div>",
     ].join("");
+  }
+
+  async function loadMarketRates(force) {
+    if (!els.marketRates || !window.fetch) return;
+    if (state.market.loading && !force) return;
+    state.market.loading = true;
+    state.market.error = "";
+    renderMarketRates();
+
+    try {
+      const cache = await fetchJson(MARKET_CACHE_URL);
+      const league = cache && cache.league;
+      const rates = cache && cache.rates;
+      if (!league || !Array.isArray(rates) || rates.length === 0) throw new Error("Market cache is incomplete.");
+      state.market = {
+        loading: false,
+        error: "",
+        league,
+        rates,
+        updatedAt: cache.generatedAt ? new Date(cache.generatedAt) : new Date(),
+      };
+    } catch (error) {
+      state.market.loading = false;
+      state.market.error = error && error.message ? error.message : "Market source unavailable.";
+    }
+    renderMarketRates();
+  }
+
+  function fetchJson(url) {
+    return fetch(url, {
+      headers: { "Accept": "application/json" },
+      cache: "no-store",
+    }).then(function (response) {
+      const contentType = response.headers.get("content-type") || "";
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      if (!contentType.includes("application/json")) throw new Error("Response is not JSON.");
+      return response.json();
+    });
+  }
+
+  function renderMarketRates() {
+    if (!els.marketRates) return;
+    if (state.market.loading) {
+      els.marketRates.classList.add("is-loading");
+      els.marketRates.classList.remove("is-error");
+      els.marketRates.textContent = state.lang === "en" ? "Loading POE2 Scout market rates..." : "正在读取 POE2 Scout 今日市场汇率...";
+      return;
+    }
+
+    if (state.market.error) {
+      els.marketRates.classList.remove("is-loading");
+      els.marketRates.classList.add("is-error");
+      els.marketRates.innerHTML = '<span class="market-source">' + escapeHtml(state.lang === "en"
+        ? "POE2 Scout market source is unavailable."
+        : "POE2 Scout 市场数据暂不可用。") + "</span>";
+      return;
+    }
+
+    const chaos = marketCurrency("chaos");
+    const exalted = marketCurrency("exalted");
+    const divine = marketCurrency("divine");
+    if (!chaos || !exalted || !divine) {
+      els.marketRates.classList.remove("is-loading");
+      els.marketRates.classList.add("is-error");
+      els.marketRates.textContent = state.lang === "en" ? "Market rates missing chaos/exalted/divine." : "市场数据缺少混沌/崇高/神圣汇率。";
+      return;
+    }
+
+    els.marketRates.classList.remove("is-loading", "is-error");
+    const oneChaosInExalted = relativeExchange(chaos, exalted);
+    const oneChaosInDivine = relativeExchange(chaos, divine);
+    const oneDivineInChaos = relativeExchange(divine, chaos);
+    const leagueName = state.market.league && (state.market.league.Value || state.market.league.ShortName) || "";
+    const updated = state.market.updatedAt ? formatMarketTime(state.market.updatedAt) : "";
+    els.marketRates.innerHTML = [
+      '<span class="market-source">' + escapeHtml("POE2 Scout · " + leagueName + (updated ? " · " + updated : "")) + "</span>",
+      '<span class="market-chip">1 Chaos = ' + escapeHtml(formatMarketNumber(oneChaosInExalted)) + " Exalted</span>",
+      '<span class="market-chip">1 Chaos = ' + escapeHtml(formatMarketNumber(oneChaosInDivine)) + " Divine</span>",
+      '<span class="market-chip">1 Divine = ' + escapeHtml(formatMarketNumber(oneDivineInChaos)) + " Chaos</span>",
+    ].join("");
+  }
+
+  function marketCurrency(apiId) {
+    const normalized = String(apiId || "").toLowerCase();
+    return (state.market.rates || []).find(function (entry) {
+      return String(entry.ApiId || "").toLowerCase() === normalized;
+    });
+  }
+
+  function relativeExchange(from, to) {
+    const fromPrice = Number(from && from.RelativePrice);
+    const toPrice = Number(to && to.RelativePrice);
+    if (!Number.isFinite(fromPrice) || !Number.isFinite(toPrice) || toPrice <= 0) return NaN;
+    return fromPrice / toPrice;
+  }
+
+  function formatMarketNumber(value) {
+    if (!Number.isFinite(value)) return "-";
+    if (value >= 100) return value.toFixed(1);
+    if (value >= 10) return value.toFixed(2);
+    if (value >= 1) return value.toFixed(3);
+    return value.toFixed(5);
+  }
+
+  function formatMarketTime(date) {
+    try {
+      return date.toLocaleTimeString(state.lang === "en" ? "en-US" : "zh-CN", { hour: "2-digit", minute: "2-digit" });
+    } catch (error) {
+      return "";
+    }
   }
 
   function noteLine(text) {

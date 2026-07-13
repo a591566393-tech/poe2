@@ -1,0 +1,47 @@
+{
+  "source": "https://poe2scout.com",
+  "sourceApi": "https://poe2scout.com/api/poe2/Leagues/runes/ReferenceCurrencies",
+  "generatedAt": "2026-07-13T07:43:48.184Z",
+  "league": {
+    "Value": "Runes of Aldur",
+    "ShortName": "runes",
+    "IsCurrent": true,
+    "DivinePrice": 514.0594200745846,
+    "ChaosDivinePrice": 8.064386766823509,
+    "BaseCurrencyApiId": "exalted",
+    "BaseCurrencyText": "Exalted Orb",
+    "BaseCurrencyIconUrl": "https://web.poecdn.com//gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lBZGRNb2RUb1JhcmUiLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/ad7c366789/CurrencyAddModToRare.png",
+    "ExaltedCurrencyText": "Exalted Orb",
+    "ExaltedCurrencyIconUrl": "https://web.poecdn.com//gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lBZGRNb2RUb1JhcmUiLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/ad7c366789/CurrencyAddModToRare.png",
+    "DivineCurrencyText": "Divine Orb",
+    "DivineCurrencyIconUrl": "https://web.poecdn.com//gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lNb2RWYWx1ZXMiLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/2986e220b3/CurrencyModValues.png",
+    "ChaosCurrencyText": "Chaos Orb",
+    "ChaosCurrencyIconUrl": "https://web.poecdn.com//gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjEsInJlYWxtIjoicG9lMiJ9XQ/c0ca392a78/CurrencyRerollRare.png",
+    "DefaultCurrency": {
+      "ApiId": "exalted",
+      "Text": "Exalted Orb",
+      "IconUrl": "https://web.poecdn.com//gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lBZGRNb2RUb1JhcmUiLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/ad7c366789/CurrencyAddModToRare.png",
+      "RelativePrice": 1
+    }
+  },
+  "rates": [
+    {
+      "ApiId": "exalted",
+      "Text": "Exalted Orb",
+      "IconUrl": "https://web.poecdn.com//gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lBZGRNb2RUb1JhcmUiLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/ad7c366789/CurrencyAddModToRare.png",
+      "RelativePrice": 1
+    },
+    {
+      "ApiId": "chaos",
+      "Text": "Chaos Orb",
+      "IconUrl": "https://web.poecdn.com//gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjEsInJlYWxtIjoicG9lMiJ9XQ/c0ca392a78/CurrencyRerollRare.png",
+      "RelativePrice": 63.744390607528885
+    },
+    {
+      "ApiId": "divine",
+      "Text": "Divine Orb",
+      "IconUrl": "https://web.poecdn.com//gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lNb2RWYWx1ZXMiLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/2986e220b3/CurrencyModValues.png",
+      "RelativePrice": 514.0594200745846
+    }
+  ]
+}
