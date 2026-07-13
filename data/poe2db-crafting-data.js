@@ -1,7 +1,7 @@
 (function (root) {
   root.POE2DB_CRAFTING_DATA = 
 {
-  "version": "poe2db-crafting-2026-07-12-liquid-basic-catalyst2",
+  "version": "poe2db-crafting-2026-07-13-sovereign-alloy",
   "generatedAt": "2026-07-12T13:07:44.688Z",
   "source": "PoE2DB Essence, Catalyst, Desecrated Modifiers, Jewel Liquid Emotion, and Soul Core pages cached under .cache/",
   "notes": [
@@ -6442,7 +6442,7 @@
           "id": "Sovereign_Alloy_0",
           "baseId": "Sovereign_Alloy_0",
           "ownerSlug": "Sovereign_Alloy",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
             "claw",
             "dagger",
@@ -6465,7 +6465,7 @@
           "group": "Sovereign_Alloy_武器_镶嵌的_增幅器_物品效果提高_20_30",
           "name": "君王合金",
           "template": "镶嵌的 增幅器 物品效果提高 #%",
-          "level": 1,
+          "level": 52,
           "weight": 1,
           "tier": "G",
           "tags": [],
@@ -6495,7 +6495,7 @@
           "group": "rune_ward",
           "name": "君王合金",
           "template": "符文结界 提高 #%",
-          "level": 1,
+          "level": 20,
           "weight": 1,
           "tier": "G",
           "tags": [
@@ -6514,7 +6514,7 @@
           "id": "Sovereign_Alloy_2",
           "baseId": "Sovereign_Alloy_2",
           "ownerSlug": "Sovereign_Alloy",
-          "type": "suffix",
+          "type": "prefix",
           "classes": [
             "ring",
             "amulet",
@@ -6524,7 +6524,7 @@
           "group": "Sovereign_Alloy_饰品_或腰带_外延抗性词缀增幅提高_20_30",
           "name": "君王合金",
           "template": "外延抗性词缀增幅提高 #%",
-          "level": 1,
+          "level": 52,
           "weight": 1,
           "tier": "G",
           "tags": [

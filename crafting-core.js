@@ -1685,6 +1685,7 @@
     }).filter(function (mod) {
       if (!mod) return false;
       if (forceType && mod.type !== forceType) return false;
+      if (item.itemLevel < mod.level) return false;
       if (!mod.classes.includes(base.classId)) return false;
       if (!modMatchesBaseTags(mod, base)) return false;
       if (groups.has(mod.group)) return false;
