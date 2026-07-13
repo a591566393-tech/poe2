@@ -1963,7 +1963,7 @@
     const oneChaosInDivine = relativeExchange(chaos, divine);
     const oneDivineInChaos = relativeExchange(divine, chaos);
     const leagueName = state.market.league && (state.market.league.Value || state.market.league.ShortName) || "";
-    const updated = state.market.updatedAt ? formatMarketTime(state.market.updatedAt) : "";
+    const updated = state.market.updatedAt ? marketReferenceTimeText(state.market.updatedAt) : "";
     els.marketRates.innerHTML = [
       '<span class="market-source">' + escapeHtml("POE2 Scout · " + leagueName + (updated ? " · " + updated : "")) + "</span>",
       '<span class="market-chip">1 Chaos = ' + escapeHtml(formatMarketNumber(oneChaosInExalted)) + " Exalted</span>",
@@ -2012,10 +2012,18 @@
 
   function formatMarketTime(date) {
     try {
-      return date.toLocaleTimeString(state.lang === "en" ? "en-US" : "zh-CN", { hour: "2-digit", minute: "2-digit" });
+      if (!(date instanceof Date) || !Number.isFinite(date.getTime())) return "";
+      const pad = function (value) { return String(value).padStart(2, "0"); };
+      return date.getFullYear() + "." + (date.getMonth() + 1) + "." + date.getDate() + "." + pad(date.getHours()) + ":" + pad(date.getMinutes());
     } catch (error) {
       return "";
     }
+  }
+
+  function marketReferenceTimeText(date) {
+    const value = formatMarketTime(date);
+    if (!value) return "";
+    return state.lang === "en" ? "Market reference " + value : uiText("市场价格参考时间 ") + value;
   }
 
   function noteLine(text) {

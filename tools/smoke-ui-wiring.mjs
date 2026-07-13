@@ -33,6 +33,8 @@ assert(app.includes("POE2DB_I18N_DATA"), "UI should read imported PoE2DB i18n da
 assert(app.includes("MARKET_COST_ACTION_API_IDS"), "cost summary should map spent currency to market API ids");
 assert(app.includes("costMarketSummaryText"), "cost summary should render market-valued total cost");
 assert(app.includes("renderCostSummary();") && app.includes("renderMarketRates();"), "market rate loading should refresh cost summary as well as rate chips");
+assert(app.includes("marketReferenceTimeText"), "market rates should show an explicit reference timestamp");
+assert(app.includes("市场价格参考时间"), "Chinese market reference timestamp label is missing");
 assert(app.includes("SEARCH_FOLD_MAP"), "UI search should include a Simplified/Traditional folding table");
 assert(app.includes("TRADITIONAL_PHRASE_MAP"), "UI should include phrase-level Traditional Chinese fallback text");
 assert(app.includes('"液化情感": "液化情緒"'), "Traditional fallback should render Liquid Emotion as 液化情緒");
