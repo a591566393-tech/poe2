@@ -327,6 +327,11 @@
   };
 
   const MARKET_CACHE_URL = "./data/market-rates.json?v=20260713-market1";
+  const MARKET_COST_ACTION_API_IDS = {
+    chaos: "chaos",
+    exalted: "exalted",
+    divine: "divine",
+  };
 
   const TEXT = {
     "zh-Hans": {
@@ -1800,11 +1805,12 @@
     }
 
     const counts = steps.reduce(function (map, step) {
-      const key = step.currencyName;
+      const key = [step.actionId || "", step.tier || "normal", step.currencyName || ""].join("|");
       if (!map[key]) {
         map[key] = {
           label: displayStepCurrency(step),
           actionId: step.actionId || "",
+          tier: step.tier || "normal",
           count: 0,
         };
       }
@@ -1818,19 +1824,71 @@
       return b.count - a.count || a.label.localeCompare(b.label, "zh-Hans-CN");
     });
 
+    entries.forEach(function (entry) {
+      entry.market = costMarketValue(entry);
+    });
+
+    const pricedEntries = entries.filter(function (entry) { return entry.market; });
+    const unpricedCount = entries.length - pricedEntries.length;
+    const totalRelativePrice = pricedEntries.reduce(function (sum, entry) {
+      return sum + entry.market.relativePrice;
+    }, 0);
+    const marketSummary = costMarketSummaryText(totalRelativePrice, pricedEntries.length, unpricedCount);
+
     els.historyStats.innerHTML = [
-      '<div class="cost-total">' + escapeHtml(state.lang === "en" ? "Total cost " + steps.length + " actions · " + entries.length + " types" : uiText("总消耗 ") + steps.length + uiText(" 手 · ") + entries.length + uiText(" 种")) + "</div>",
+      '<div class="cost-total">' + escapeHtml((state.lang === "en" ? "Total cost " + steps.length + " actions · " + entries.length + " types" : uiText("总消耗 ") + steps.length + uiText(" 手 · ") + entries.length + uiText(" 种")) + (marketSummary ? " · " + marketSummary : "")) + "</div>",
       '<div class="cost-list">',
       entries.map(function (entry) {
+        const marketText = entry.market ? costMarketEntryText(entry.market.relativePrice) : "";
         return [
           '<span class="cost-chip" title="' + escapeHtml(entry.label) + '">',
           '<span class="cost-name">' + escapeHtml(entry.label) + "</span>",
           '<span class="cost-count">x' + entry.count + "</span>",
+          marketText ? '<span class="cost-price">' + escapeHtml(marketText) + "</span>" : "",
           "</span>",
         ].join("");
       }).join(""),
       "</div>",
     ].join("");
+  }
+
+  function costMarketValue(entry) {
+    const apiId = costMarketApiId(entry);
+    if (!apiId) return null;
+    const rate = marketCurrency(apiId);
+    const relativePrice = Number(rate && rate.RelativePrice);
+    if (!Number.isFinite(relativePrice) || relativePrice <= 0) return null;
+    return {
+      apiId,
+      relativePrice: relativePrice * entry.count,
+    };
+  }
+
+  function costMarketApiId(entry) {
+    if (!entry || entry.tier !== "normal") return "";
+    const directApiId = MARKET_COST_ACTION_API_IDS[entry.actionId];
+    if (directApiId) return directApiId;
+    return "";
+  }
+
+  function costMarketSummaryText(totalRelativePrice, pricedTypes, unpricedTypes) {
+    if (!pricedTypes || !Number.isFinite(totalRelativePrice) || totalRelativePrice <= 0) return "";
+    const parts = ["chaos", "exalted", "divine"].map(function (apiId) {
+      const amount = marketAmountFromRelative(totalRelativePrice, apiId);
+      if (!Number.isFinite(amount)) return "";
+      return formatMarketNumber(amount) + " " + marketUnitName(apiId);
+    }).filter(Boolean);
+    if (parts.length === 0) return "";
+    const unpriced = unpricedTypes > 0
+      ? (state.lang === "en" ? " · " + unpricedTypes + " unpriced" : uiText(" · ") + unpricedTypes + uiText(" 种未估价"))
+      : "";
+    return (state.lang === "en" ? "market value " : uiText("折合 ")) + parts.join(" / ") + unpriced;
+  }
+
+  function costMarketEntryText(relativePrice) {
+    const amount = marketAmountFromRelative(relativePrice, "chaos");
+    if (!Number.isFinite(amount)) return "";
+    return "≈ " + formatMarketNumber(amount) + " " + marketUnitName("chaos");
   }
 
   async function loadMarketRates(force) {
@@ -1857,6 +1915,7 @@
       state.market.error = error && error.message ? error.message : "Market source unavailable.";
     }
     renderMarketRates();
+    renderCostSummary();
   }
 
   function fetchJson(url) {
@@ -1925,6 +1984,22 @@
     const toPrice = Number(to && to.RelativePrice);
     if (!Number.isFinite(fromPrice) || !Number.isFinite(toPrice) || toPrice <= 0) return NaN;
     return fromPrice / toPrice;
+  }
+
+  function marketAmountFromRelative(relativePrice, apiId) {
+    const unit = marketCurrency(apiId);
+    const unitPrice = Number(unit && unit.RelativePrice);
+    if (!Number.isFinite(relativePrice) || !Number.isFinite(unitPrice) || unitPrice <= 0) return NaN;
+    return relativePrice / unitPrice;
+  }
+
+  function marketUnitName(apiId) {
+    if (state.lang === "en") {
+      const english = { chaos: "Chaos", exalted: "Exalted", divine: "Divine" };
+      return english[apiId] || englishFromId(apiId);
+    }
+    const chinese = { chaos: "混沌", exalted: "崇高", divine: "神圣" };
+    return uiText(chinese[apiId] || apiId);
   }
 
   function formatMarketNumber(value) {
