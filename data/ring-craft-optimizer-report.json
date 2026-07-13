@@ -1,0 +1,1454 @@
+{
+  "generatedAt": "2026-07-09T06:05:24.684Z",
+  "coreVersion": "poe2db-weighted-2026-07-09-v5",
+  "dataVersion": "poe2db-mods-2026-07-09-v1",
+  "target": {
+    "baseId": "ring_ruby",
+    "itemLevel": 82,
+    "prefixes": [
+      "FireDamage",
+      "ColdDamage",
+      "LightningDamage"
+    ],
+    "suffixes": [
+      "FireResistance",
+      "AllResistances",
+      "ItemFoundRarityIncrease"
+    ],
+    "tier": "T1"
+  },
+  "costModel": {
+    "name": "unit material count",
+    "weights": {},
+    "note": "Every consumed currency, omen, essence, and fracturing orb costs 1 by default."
+  },
+  "assumptions": [
+    "PoE2DB explicit modifier level, tier, and DropChance weight data are used for normal explicit modifiers.",
+    "Only mechanics implemented in crafting-core.js are planned here. Crafting bench and meta-crafts are not included until their real PoE2DB data is imported.",
+    "The provided-lightning-rare-desecrate-fracture-essence-postlock strategy assumes the supplied base is already rare with exactly one normal explicit prefix: T1 LightningDamage. Its lock setup cost is reported separately and excluded from meanCost, matching the requested 'cost starts after locking' rule.",
+    "For that desecration setup, Fracturing Orb's minimum requirement counts normal explicit plus desecrated modifiers, but the locked target is chosen from normal explicit modifiers only: T1 LightningDamage plus two Perfect Exalted modifiers, so the lock chance is 1/3.",
+    "Other provided-base fracture strategies assume a clean magic Ruby Ring with a single T1 LightningDamage prefix; they now add enough explicit modifiers before fracturing, so their fracture chance is based on at least four normal explicit candidates.",
+    "Whittling/lowest chaos is used only when every lowest-level removable modifier is a non-target modifier on the side being fixed.",
+    "Perfect suffix chaos/exalt is avoided while ItemFoundRarityIncrease is missing because that T1 modifier is level 40.",
+    "Desecrated modifiers are kept as separate modifiers in the simulator. They do not occupy the normal 3-prefix/3-suffix explicit slots, but their groups still block duplicates."
+  ],
+  "targetMods": [
+    {
+      "group": "FireDamage",
+      "tier": "T1",
+      "type": "prefix",
+      "level": 75,
+      "weight": 200,
+      "fractured": false,
+      "desecrated": false,
+      "name": "火化的",
+      "range": "攻击附加25-29-37-45基础火焰伤害"
+    },
+    {
+      "group": "ColdDamage",
+      "tier": "T1",
+      "type": "prefix",
+      "level": 75,
+      "weight": 200,
+      "fractured": false,
+      "desecrated": false,
+      "name": "埋葬的",
+      "range": "攻击附加21-24-32-37基础冰霜伤害"
+    },
+    {
+      "group": "LightningDamage",
+      "tier": "T1",
+      "type": "prefix",
+      "level": 75,
+      "weight": 200,
+      "fractured": false,
+      "desecrated": false,
+      "name": "电殛的",
+      "range": "攻击附加1-4-60-71基础闪电伤害"
+    },
+    {
+      "group": "FireResistance",
+      "tier": "T1",
+      "type": "suffix",
+      "level": 82,
+      "weight": 1000,
+      "fractured": false,
+      "desecrated": false,
+      "name": "提耶须之",
+      "range": "火焰抗性+41-45%"
+    },
+    {
+      "group": "AllResistances",
+      "tier": "T1",
+      "type": "suffix",
+      "level": 68,
+      "weight": 800,
+      "fractured": false,
+      "desecrated": false,
+      "name": "彩虹之",
+      "range": "所有元素抗性+15-16%"
+    },
+    {
+      "group": "ItemFoundRarityIncrease",
+      "tier": "T1",
+      "type": "suffix",
+      "level": 40,
+      "weight": 1000,
+      "fractured": false,
+      "desecrated": false,
+      "name": "考古之",
+      "range": "物品稀有度提高15-18%"
+    }
+  ],
+  "poolStats": {
+    "perfectTransmutationAnyTargetPrefix": {
+      "minLevel": 70,
+      "candidateCount": 22,
+      "totalWeight": 16250,
+      "targetWeight": 600,
+      "probability": 0.036923,
+      "expectedAttempts": 27.08
+    },
+    "perfectPrefixAddAnyTargetPrefix": {
+      "minLevel": 50,
+      "candidateCount": 35,
+      "totalWeight": 21200,
+      "targetWeight": 600,
+      "probability": 0.028302,
+      "expectedAttempts": 35.33
+    },
+    "greaterSuffixAddAnyTargetSuffix": {
+      "minLevel": 35,
+      "candidateCount": 49,
+      "totalWeight": 41403,
+      "targetWeight": 2800,
+      "probability": 0.067628,
+      "expectedAttempts": 14.79
+    },
+    "perfectSuffixAddFireOrAllResOnly": {
+      "minLevel": 50,
+      "candidateCount": 30,
+      "totalWeight": 24852,
+      "targetWeight": 1800,
+      "probability": 0.072429,
+      "expectedAttempts": 13.81
+    },
+    "normalPrefixAddAnyTargetPrefix": {
+      "minLevel": 0,
+      "candidateCount": 100,
+      "totalWeight": 69500,
+      "targetWeight": 600,
+      "probability": 0.008633,
+      "expectedAttempts": 115.83
+    },
+    "providedRareDesecrateFractureSetup": {
+      "normalExplicitCandidates": 3,
+      "totalModifiersForRequirement": 4,
+      "lockLightningChance": 0.333333,
+      "expectedLockAttempts": 3,
+      "setupCostExcludedFromPostLockMean": true
+    },
+    "essencePrefixSetup": [
+      {
+        "tag": "fire",
+        "candidateCount": 28,
+        "totalWeight": 18900,
+        "targetWeight": 200,
+        "probability": 0.010582,
+        "expectedAttempts": 94.5
+      },
+      {
+        "tag": "cold",
+        "candidateCount": 28,
+        "totalWeight": 18900,
+        "targetWeight": 200,
+        "probability": 0.010582,
+        "expectedAttempts": 94.5
+      },
+      {
+        "tag": "lightning",
+        "candidateCount": 28,
+        "totalWeight": 18900,
+        "targetWeight": 200,
+        "probability": 0.010582,
+        "expectedAttempts": 94.5
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "id": "provided-lightning-rare-desecrate-fracture-essence-postlock",
+      "trials": 120,
+      "successes": 120,
+      "successRate": 1,
+      "meanCost": 4579.28,
+      "medianCost": 3746,
+      "p80Cost": 6836,
+      "p90Cost": 10098,
+      "minCost": 168,
+      "maxCost": 15566,
+      "meanSetupAttempts": 2.82,
+      "averageCounts": {
+        "greater_chaos_lowest": 887.68,
+        "greater_chaos_suffix": 103.68,
+        "greater_exalted_suffix": 1.92,
+        "omen_chaos_lowest": 887.7,
+        "omen_chaos_suffix": 192.69,
+        "omen_essence_prefix": 1206.25,
+        "omen_exalted_prefix": 1.08,
+        "omen_exalted_suffix": 1.92,
+        "perfect_chaos_lowest": 0.03,
+        "perfect_chaos_suffix": 89.01,
+        "perfect_essence_electricity": 3.43,
+        "perfect_essence_flames": 1112.93,
+        "perfect_essence_ice": 89.88,
+        "perfect_exalted_prefix": 1.08
+      },
+      "averageLockSetupCounts": {
+        "fracturing_orb": 2.82,
+        "omen_desecration_prefix": 2.82,
+        "perfect_exalted": 5.63,
+        "preserved_lockbone": 2.82
+      },
+      "meanLockSetupCostExcluded": 14.08,
+      "bestSample": {
+        "cost": 168,
+        "counts": {
+          "omen_exalted_suffix": 3,
+          "greater_exalted_suffix": 3,
+          "omen_essence_prefix": 35,
+          "perfect_essence_flames": 32,
+          "perfect_essence_ice": 3,
+          "omen_chaos_lowest": 34,
+          "greater_chaos_lowest": 34,
+          "omen_chaos_suffix": 12,
+          "greater_chaos_suffix": 1,
+          "perfect_chaos_suffix": 11
+        },
+        "lockSetupCounts": {
+          "omen_desecration_prefix": 5,
+          "preserved_lockbone": 5,
+          "perfect_exalted": 10,
+          "fracturing_orb": 5
+        },
+        "lockSetupCostExcluded": true,
+        "lockFractureChance": 0.3333333333333333,
+        "fractureCandidateCount": 3,
+        "attempts": 5,
+        "prefixes": [
+          {
+            "group": "LightningDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": true,
+            "desecrated": false,
+            "name": "电殛的",
+            "range": "攻击附加1-4-60-71基础闪电伤害"
+          },
+          {
+            "group": "ColdDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "埋葬的",
+            "range": "攻击附加21-24-32-37基础冰霜伤害"
+          },
+          {
+            "group": "FireDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "火化的",
+            "range": "攻击附加25-29-37-45基础火焰伤害"
+          }
+        ],
+        "suffixes": [
+          {
+            "group": "ItemFoundRarityIncrease",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 40,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "考古之",
+            "range": "物品稀有度提高15-18%"
+          },
+          {
+            "group": "FireResistance",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 82,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "提耶须之",
+            "range": "火焰抗性+41-45%"
+          },
+          {
+            "group": "AllResistances",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 68,
+            "weight": 800,
+            "fractured": false,
+            "desecrated": false,
+            "name": "彩虹之",
+            "range": "所有元素抗性+15-16%"
+          }
+        ],
+        "desecratedMods": [
+          {
+            "group": "desecrated_life_on_kill",
+            "tier": "D3",
+            "type": "prefix",
+            "level": 1,
+            "weight": 900,
+            "fractured": false,
+            "desecrated": true,
+            "name": "亵渎生命",
+            "range": "击败敌人时获得 18-28 生命"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provided-lightning-prefix-regal-fracture-essence",
+      "trials": 120,
+      "successes": 120,
+      "successRate": 1,
+      "meanCost": 5895.83,
+      "medianCost": 4773,
+      "p80Cost": 8969,
+      "p90Cost": 11328,
+      "minCost": 466,
+      "maxCost": 18476,
+      "meanSetupAttempts": 4,
+      "averageCounts": {
+        "fracturing_orb": 4,
+        "greater_chaos_lowest": 1036.65,
+        "greater_chaos_suffix": 120.24,
+        "greater_exalted_suffix": 1.69,
+        "omen_chaos_lowest": 1036.65,
+        "omen_chaos_suffix": 222.06,
+        "omen_essence_prefix": 1677.21,
+        "omen_exalted_prefix": 0.31,
+        "omen_exalted_suffix": 1.69,
+        "omen_regal_prefix": 4,
+        "perfect_chaos_suffix": 101.82,
+        "perfect_essence_electricity": 0.34,
+        "perfect_essence_flames": 1593.83,
+        "perfect_essence_ice": 83.04,
+        "perfect_exalted": 8,
+        "perfect_exalted_prefix": 0.31,
+        "perfect_regal_prefix": 4
+      },
+      "averageLockSetupCounts": {},
+      "meanLockSetupCostExcluded": null,
+      "bestSample": {
+        "cost": 466,
+        "counts": {
+          "omen_regal_prefix": 2,
+          "perfect_regal_prefix": 2,
+          "perfect_exalted": 4,
+          "fracturing_orb": 2,
+          "omen_exalted_suffix": 2,
+          "greater_exalted_suffix": 2,
+          "omen_essence_prefix": 83,
+          "perfect_essence_flames": 78,
+          "perfect_essence_ice": 5,
+          "omen_chaos_lowest": 110,
+          "greater_chaos_lowest": 110,
+          "omen_chaos_suffix": 33,
+          "perfect_chaos_suffix": 14,
+          "greater_chaos_suffix": 19
+        },
+        "lockSetupCostExcluded": false,
+        "attempts": 2,
+        "prefixes": [
+          {
+            "group": "LightningDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": true,
+            "desecrated": false,
+            "name": "电殛的",
+            "range": "攻击附加1-4-60-71基础闪电伤害"
+          },
+          {
+            "group": "FireDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "火化的",
+            "range": "攻击附加25-29-37-45基础火焰伤害"
+          },
+          {
+            "group": "ColdDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "埋葬的",
+            "range": "攻击附加21-24-32-37基础冰霜伤害"
+          }
+        ],
+        "suffixes": [
+          {
+            "group": "FireResistance",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 82,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "提耶须之",
+            "range": "火焰抗性+41-45%"
+          },
+          {
+            "group": "AllResistances",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 68,
+            "weight": 800,
+            "fractured": false,
+            "desecrated": false,
+            "name": "彩虹之",
+            "range": "所有元素抗性+15-16%"
+          },
+          {
+            "group": "ItemFoundRarityIncrease",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 40,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "考古之",
+            "range": "物品稀有度提高15-18%"
+          }
+        ],
+        "desecratedMods": []
+      }
+    },
+    {
+      "id": "provided-lightning-fracture-essence",
+      "trials": 120,
+      "successes": 120,
+      "successRate": 1,
+      "meanCost": 5074.01,
+      "medianCost": 4061,
+      "p80Cost": 7297,
+      "p90Cost": 9324,
+      "minCost": 392,
+      "maxCost": 30384,
+      "meanSetupAttempts": 4.14,
+      "averageCounts": {
+        "fracturing_orb": 4.14,
+        "greater_chaos_lowest": 828.81,
+        "greater_chaos_suffix": 97.02,
+        "greater_exalted_suffix": 0.88,
+        "omen_chaos_lowest": 828.83,
+        "omen_chaos_suffix": 177.97,
+        "omen_essence_prefix": 1517.85,
+        "omen_exalted_prefix": 1.13,
+        "omen_exalted_suffix": 0.88,
+        "omen_regal_suffix": 4.14,
+        "perfect_chaos_lowest": 0.03,
+        "perfect_chaos_suffix": 80.95,
+        "perfect_essence_electricity": 3.49,
+        "perfect_essence_flames": 1372.32,
+        "perfect_essence_ice": 142.04,
+        "perfect_exalted": 8.28,
+        "perfect_exalted_prefix": 1.13,
+        "regal": 4.14
+      },
+      "averageLockSetupCounts": {},
+      "meanLockSetupCostExcluded": null,
+      "bestSample": {
+        "cost": 392,
+        "counts": {
+          "omen_regal_suffix": 2,
+          "regal": 2,
+          "perfect_exalted": 4,
+          "fracturing_orb": 2,
+          "omen_exalted_suffix": 1,
+          "greater_exalted_suffix": 1,
+          "omen_exalted_prefix": 1,
+          "perfect_exalted_prefix": 1,
+          "omen_essence_prefix": 27,
+          "perfect_essence_flames": 26,
+          "perfect_essence_ice": 1,
+          "omen_chaos_lowest": 138,
+          "greater_chaos_lowest": 138,
+          "omen_chaos_suffix": 24,
+          "greater_chaos_suffix": 17,
+          "perfect_chaos_suffix": 7
+        },
+        "lockSetupCostExcluded": false,
+        "attempts": 2,
+        "prefixes": [
+          {
+            "group": "LightningDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": true,
+            "desecrated": false,
+            "name": "电殛的",
+            "range": "攻击附加1-4-60-71基础闪电伤害"
+          },
+          {
+            "group": "FireDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "火化的",
+            "range": "攻击附加25-29-37-45基础火焰伤害"
+          },
+          {
+            "group": "ColdDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "埋葬的",
+            "range": "攻击附加21-24-32-37基础冰霜伤害"
+          }
+        ],
+        "suffixes": [
+          {
+            "group": "FireResistance",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 82,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "提耶须之",
+            "range": "火焰抗性+41-45%"
+          },
+          {
+            "group": "ItemFoundRarityIncrease",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 40,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "考古之",
+            "range": "物品稀有度提高15-18%"
+          },
+          {
+            "group": "AllResistances",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 68,
+            "weight": 800,
+            "fractured": false,
+            "desecrated": false,
+            "name": "彩虹之",
+            "range": "所有元素抗性+15-16%"
+          }
+        ],
+        "desecratedMods": []
+      }
+    },
+    {
+      "id": "provided-lightning-fracture-chaos",
+      "trials": 120,
+      "successes": 120,
+      "successRate": 1,
+      "meanCost": 10749.95,
+      "medianCost": 8020,
+      "p80Cost": 17307,
+      "p90Cost": 24900,
+      "minCost": 515,
+      "maxCost": 36370,
+      "meanSetupAttempts": 3.93,
+      "averageCounts": {
+        "fracturing_orb": 3.93,
+        "greater_chaos_lowest": 957.62,
+        "greater_chaos_suffix": 109.35,
+        "greater_exalted_suffix": 0.97,
+        "omen_chaos_lowest": 1041.69,
+        "omen_chaos_prefix": 4115.13,
+        "omen_chaos_suffix": 206.33,
+        "omen_exalted_prefix": 1.03,
+        "omen_exalted_suffix": 0.97,
+        "omen_regal_suffix": 3.93,
+        "perfect_chaos_lowest": 84.08,
+        "perfect_chaos_prefix": 4115.13,
+        "perfect_chaos_suffix": 96.98,
+        "perfect_exalted": 7.87,
+        "perfect_exalted_prefix": 1.03,
+        "regal": 3.93
+      },
+      "averageLockSetupCounts": {},
+      "meanLockSetupCostExcluded": null,
+      "bestSample": {
+        "cost": 515,
+        "counts": {
+          "omen_regal_suffix": 9,
+          "regal": 9,
+          "perfect_exalted": 18,
+          "fracturing_orb": 9,
+          "omen_exalted_suffix": 1,
+          "greater_exalted_suffix": 1,
+          "omen_exalted_prefix": 1,
+          "perfect_exalted_prefix": 1,
+          "omen_chaos_prefix": 190,
+          "perfect_chaos_prefix": 190,
+          "omen_chaos_lowest": 33,
+          "greater_chaos_lowest": 33,
+          "omen_chaos_suffix": 10,
+          "greater_chaos_suffix": 2,
+          "perfect_chaos_suffix": 8
+        },
+        "lockSetupCostExcluded": false,
+        "attempts": 9,
+        "prefixes": [
+          {
+            "group": "LightningDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": true,
+            "desecrated": false,
+            "name": "电殛的",
+            "range": "攻击附加1-4-60-71基础闪电伤害"
+          },
+          {
+            "group": "ColdDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "埋葬的",
+            "range": "攻击附加21-24-32-37基础冰霜伤害"
+          },
+          {
+            "group": "FireDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "火化的",
+            "range": "攻击附加25-29-37-45基础火焰伤害"
+          }
+        ],
+        "suffixes": [
+          {
+            "group": "AllResistances",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 68,
+            "weight": 800,
+            "fractured": false,
+            "desecrated": false,
+            "name": "彩虹之",
+            "range": "所有元素抗性+15-16%"
+          },
+          {
+            "group": "FireResistance",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 82,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "提耶须之",
+            "range": "火焰抗性+41-45%"
+          },
+          {
+            "group": "ItemFoundRarityIncrease",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 40,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "考古之",
+            "range": "物品稀有度提高15-18%"
+          }
+        ],
+        "desecratedMods": []
+      }
+    },
+    {
+      "id": "alchemy-prefix-fracture-chaos",
+      "trials": 120,
+      "successes": 120,
+      "successRate": 1,
+      "meanCost": 10233.44,
+      "medianCost": 7768,
+      "p80Cost": 15545,
+      "p90Cost": 22117,
+      "minCost": 697,
+      "maxCost": 55023,
+      "meanSetupAttempts": 147.74,
+      "averageCounts": {
+        "alchemy": 147.74,
+        "fracturing_orb": 3.94,
+        "greater_chaos_lowest": 1055.61,
+        "greater_chaos_suffix": 121.83,
+        "greater_exalted_suffix": 2,
+        "omen_alchemy_prefixes": 147.74,
+        "omen_chaos_lowest": 1149.64,
+        "omen_chaos_prefix": 3590.96,
+        "omen_chaos_suffix": 224.41,
+        "omen_exalted_suffix": 2,
+        "perfect_chaos_lowest": 94.03,
+        "perfect_chaos_prefix": 3590.96,
+        "perfect_chaos_suffix": 102.58
+      },
+      "averageLockSetupCounts": {},
+      "meanLockSetupCostExcluded": null,
+      "bestSample": {
+        "cost": 697,
+        "counts": {
+          "omen_alchemy_prefixes": 1,
+          "alchemy": 1,
+          "fracturing_orb": 1,
+          "omen_exalted_suffix": 2,
+          "greater_exalted_suffix": 2,
+          "omen_chaos_prefix": 203,
+          "perfect_chaos_prefix": 203,
+          "omen_chaos_lowest": 128,
+          "greater_chaos_lowest": 128,
+          "omen_chaos_suffix": 14,
+          "perfect_chaos_suffix": 8,
+          "greater_chaos_suffix": 6
+        },
+        "lockSetupCostExcluded": false,
+        "attempts": 1,
+        "prefixes": [
+          {
+            "group": "LightningDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": true,
+            "desecrated": false,
+            "name": "电殛的",
+            "range": "攻击附加1-4-60-71基础闪电伤害"
+          },
+          {
+            "group": "FireDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "火化的",
+            "range": "攻击附加25-29-37-45基础火焰伤害"
+          },
+          {
+            "group": "ColdDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "埋葬的",
+            "range": "攻击附加21-24-32-37基础冰霜伤害"
+          }
+        ],
+        "suffixes": [
+          {
+            "group": "FireResistance",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 82,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "提耶须之",
+            "range": "火焰抗性+41-45%"
+          },
+          {
+            "group": "AllResistances",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 68,
+            "weight": 800,
+            "fractured": false,
+            "desecrated": false,
+            "name": "彩虹之",
+            "range": "所有元素抗性+15-16%"
+          },
+          {
+            "group": "ItemFoundRarityIncrease",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 40,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "考古之",
+            "range": "物品稀有度提高15-18%"
+          }
+        ],
+        "desecratedMods": []
+      }
+    },
+    {
+      "id": "transmute-prefix-fracture-chaos",
+      "trials": 120,
+      "successes": 120,
+      "successRate": 1,
+      "meanCost": 9756.28,
+      "medianCost": 7385,
+      "p80Cost": 15657,
+      "p90Cost": 18994,
+      "minCost": 1060,
+      "maxCost": 35087,
+      "meanSetupAttempts": 104.53,
+      "averageCounts": {
+        "fracturing_orb": 3.51,
+        "greater_chaos_lowest": 906.04,
+        "greater_chaos_suffix": 105,
+        "greater_exalted_suffix": 0.98,
+        "omen_chaos_lowest": 1004.89,
+        "omen_chaos_prefix": 3615.42,
+        "omen_chaos_suffix": 194.79,
+        "omen_exalted_prefix": 1.02,
+        "omen_exalted_suffix": 0.98,
+        "omen_regal_suffix": 3.51,
+        "perfect_chaos_lowest": 98.85,
+        "perfect_chaos_prefix": 3615.42,
+        "perfect_chaos_suffix": 89.79,
+        "perfect_exalted": 7.02,
+        "perfect_exalted_prefix": 1.02,
+        "perfect_transmutation": 104.53,
+        "regal": 3.51
+      },
+      "averageLockSetupCounts": {},
+      "meanLockSetupCostExcluded": null,
+      "bestSample": {
+        "cost": 1060,
+        "counts": {
+          "perfect_transmutation": 115,
+          "omen_regal_suffix": 3,
+          "regal": 3,
+          "perfect_exalted": 6,
+          "fracturing_orb": 3,
+          "omen_exalted_suffix": 1,
+          "greater_exalted_suffix": 1,
+          "omen_exalted_prefix": 1,
+          "perfect_exalted_prefix": 1,
+          "omen_chaos_prefix": 212,
+          "perfect_chaos_prefix": 212,
+          "omen_chaos_lowest": 205,
+          "greater_chaos_lowest": 205,
+          "omen_chaos_suffix": 46,
+          "perfect_chaos_suffix": 24,
+          "greater_chaos_suffix": 22
+        },
+        "lockSetupCostExcluded": false,
+        "attempts": 115,
+        "prefixes": [
+          {
+            "group": "LightningDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": true,
+            "desecrated": false,
+            "name": "电殛的",
+            "range": "攻击附加1-4-60-71基础闪电伤害"
+          },
+          {
+            "group": "ColdDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "埋葬的",
+            "range": "攻击附加21-24-32-37基础冰霜伤害"
+          },
+          {
+            "group": "FireDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "火化的",
+            "range": "攻击附加25-29-37-45基础火焰伤害"
+          }
+        ],
+        "suffixes": [
+          {
+            "group": "FireResistance",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 82,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "提耶须之",
+            "range": "火焰抗性+41-45%"
+          },
+          {
+            "group": "AllResistances",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 68,
+            "weight": 800,
+            "fractured": false,
+            "desecrated": false,
+            "name": "彩虹之",
+            "range": "所有元素抗性+15-16%"
+          },
+          {
+            "group": "ItemFoundRarityIncrease",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 40,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "考古之",
+            "range": "物品稀有度提高15-18%"
+          }
+        ],
+        "desecratedMods": []
+      }
+    },
+    {
+      "id": "transmute-prefix-fracture-annul-exalt",
+      "trials": 30,
+      "successes": 30,
+      "successRate": 1,
+      "meanCost": 40644.43,
+      "medianCost": 34268,
+      "p80Cost": 49736,
+      "p90Cost": 88082,
+      "minCost": 4843,
+      "maxCost": 105317,
+      "meanSetupAttempts": 70.4,
+      "averageCounts": {
+        "annulment": 10138.47,
+        "fracturing_orb": 3.23,
+        "greater_exalted_suffix": 5858.93,
+        "omen_annulment_prefix": 3758.83,
+        "omen_annulment_suffix": 6379.63,
+        "omen_exalted_prefix": 3760,
+        "omen_exalted_suffix": 6380.47,
+        "omen_regal_suffix": 3.23,
+        "perfect_exalted": 6.47,
+        "perfect_exalted_prefix": 3760,
+        "perfect_exalted_suffix": 521.53,
+        "perfect_transmutation": 70.4,
+        "regal": 3.23
+      },
+      "averageLockSetupCounts": {},
+      "meanLockSetupCostExcluded": null,
+      "bestSample": {
+        "cost": 4843,
+        "counts": {
+          "perfect_transmutation": 18,
+          "omen_regal_suffix": 1,
+          "regal": 1,
+          "perfect_exalted": 2,
+          "fracturing_orb": 1,
+          "omen_exalted_prefix": 208,
+          "perfect_exalted_prefix": 208,
+          "omen_annulment_prefix": 206,
+          "annulment": 1204,
+          "omen_annulment_suffix": 998,
+          "omen_exalted_suffix": 998,
+          "greater_exalted_suffix": 903,
+          "perfect_exalted_suffix": 95
+        },
+        "lockSetupCostExcluded": false,
+        "attempts": 18,
+        "prefixes": [
+          {
+            "group": "FireDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": true,
+            "desecrated": false,
+            "name": "火化的",
+            "range": "攻击附加25-29-37-45基础火焰伤害"
+          },
+          {
+            "group": "LightningDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "电殛的",
+            "range": "攻击附加1-4-60-71基础闪电伤害"
+          },
+          {
+            "group": "ColdDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "埋葬的",
+            "range": "攻击附加21-24-32-37基础冰霜伤害"
+          }
+        ],
+        "suffixes": [
+          {
+            "group": "ItemFoundRarityIncrease",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 40,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "考古之",
+            "range": "物品稀有度提高15-18%"
+          },
+          {
+            "group": "AllResistances",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 68,
+            "weight": 800,
+            "fractured": false,
+            "desecrated": false,
+            "name": "彩虹之",
+            "range": "所有元素抗性+15-16%"
+          },
+          {
+            "group": "FireResistance",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 82,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "提耶须之",
+            "range": "火焰抗性+41-45%"
+          }
+        ],
+        "desecratedMods": []
+      }
+    },
+    {
+      "id": "alchemy-suffix-fracture-chaos",
+      "trials": 15,
+      "successes": 12,
+      "successRate": 0.8,
+      "meanCost": 167251.75,
+      "medianCost": 108689,
+      "p80Cost": 264807,
+      "p90Cost": 321833,
+      "minCost": 22649,
+      "maxCost": 391732,
+      "meanSetupAttempts": 52.33,
+      "averageCounts": {
+        "alchemy": 52.33,
+        "fracturing_orb": 4.75,
+        "greater_chaos_lowest": 91.08,
+        "greater_chaos_suffix": 9.25,
+        "omen_alchemy_suffixes": 52.33,
+        "omen_chaos_lowest": 107.5,
+        "omen_chaos_prefix": 83445.08,
+        "omen_chaos_suffix": 16.58,
+        "omen_exalted_prefix": 2,
+        "perfect_chaos_lowest": 16.42,
+        "perfect_chaos_prefix": 83445.08,
+        "perfect_chaos_suffix": 7.33,
+        "perfect_exalted_prefix": 2
+      },
+      "averageLockSetupCounts": {},
+      "meanLockSetupCostExcluded": null,
+      "bestSample": {
+        "cost": 22649,
+        "counts": {
+          "omen_alchemy_suffixes": 144,
+          "alchemy": 144,
+          "fracturing_orb": 9,
+          "omen_exalted_prefix": 2,
+          "perfect_exalted_prefix": 2,
+          "omen_chaos_prefix": 11102,
+          "perfect_chaos_prefix": 11102,
+          "omen_chaos_lowest": 63,
+          "greater_chaos_lowest": 63,
+          "omen_chaos_suffix": 9,
+          "perfect_chaos_suffix": 7,
+          "greater_chaos_suffix": 2
+        },
+        "lockSetupCostExcluded": false,
+        "attempts": 144,
+        "prefixes": [
+          {
+            "group": "LightningDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "电殛的",
+            "range": "攻击附加1-4-60-71基础闪电伤害"
+          },
+          {
+            "group": "ColdDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "埋葬的",
+            "range": "攻击附加21-24-32-37基础冰霜伤害"
+          },
+          {
+            "group": "FireDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "火化的",
+            "range": "攻击附加25-29-37-45基础火焰伤害"
+          }
+        ],
+        "suffixes": [
+          {
+            "group": "AllResistances",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 68,
+            "weight": 800,
+            "fractured": true,
+            "desecrated": false,
+            "name": "彩虹之",
+            "range": "所有元素抗性+15-16%"
+          },
+          {
+            "group": "ItemFoundRarityIncrease",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 40,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "考古之",
+            "range": "物品稀有度提高15-18%"
+          },
+          {
+            "group": "FireResistance",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 82,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "提耶须之",
+            "range": "火焰抗性+41-45%"
+          }
+        ],
+        "desecratedMods": []
+      }
+    },
+    {
+      "id": "no-fracture-chaos",
+      "trials": 15,
+      "successes": 13,
+      "successRate": 0.8667,
+      "meanCost": 165011.46,
+      "medianCost": 191533,
+      "p80Cost": 227934,
+      "p90Cost": 228635,
+      "minCost": 24611,
+      "maxCost": 351648,
+      "meanSetupAttempts": 29,
+      "averageCounts": {
+        "greater_chaos_lowest": 1160.15,
+        "greater_chaos_suffix": 139.92,
+        "greater_exalted_suffix": 2,
+        "omen_chaos_lowest": 1160.15,
+        "omen_chaos_prefix": 81080.46,
+        "omen_chaos_suffix": 245.62,
+        "omen_exalted_prefix": 2,
+        "omen_exalted_suffix": 2,
+        "omen_regal_suffix": 1,
+        "perfect_chaos_prefix": 81080.46,
+        "perfect_chaos_suffix": 105.69,
+        "perfect_exalted_prefix": 2,
+        "perfect_transmutation": 29,
+        "regal": 1
+      },
+      "averageLockSetupCounts": {},
+      "meanLockSetupCostExcluded": null,
+      "bestSample": {
+        "cost": 24611,
+        "counts": {
+          "perfect_transmutation": 37,
+          "omen_regal_suffix": 1,
+          "regal": 1,
+          "omen_exalted_suffix": 2,
+          "greater_exalted_suffix": 2,
+          "omen_exalted_prefix": 2,
+          "perfect_exalted_prefix": 2,
+          "omen_chaos_prefix": 10851,
+          "perfect_chaos_prefix": 10851,
+          "omen_chaos_lowest": 1165,
+          "greater_chaos_lowest": 1165,
+          "omen_chaos_suffix": 266,
+          "perfect_chaos_suffix": 125,
+          "greater_chaos_suffix": 141
+        },
+        "lockSetupCostExcluded": false,
+        "attempts": 37,
+        "prefixes": [
+          {
+            "group": "LightningDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "电殛的",
+            "range": "攻击附加1-4-60-71基础闪电伤害"
+          },
+          {
+            "group": "ColdDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "埋葬的",
+            "range": "攻击附加21-24-32-37基础冰霜伤害"
+          },
+          {
+            "group": "FireDamage",
+            "tier": "T1",
+            "type": "prefix",
+            "level": 75,
+            "weight": 200,
+            "fractured": false,
+            "desecrated": false,
+            "name": "火化的",
+            "range": "攻击附加25-29-37-45基础火焰伤害"
+          }
+        ],
+        "suffixes": [
+          {
+            "group": "ItemFoundRarityIncrease",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 40,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "考古之",
+            "range": "物品稀有度提高15-18%"
+          },
+          {
+            "group": "AllResistances",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 68,
+            "weight": 800,
+            "fractured": false,
+            "desecrated": false,
+            "name": "彩虹之",
+            "range": "所有元素抗性+15-16%"
+          },
+          {
+            "group": "FireResistance",
+            "tier": "T1",
+            "type": "suffix",
+            "level": 82,
+            "weight": 1000,
+            "fractured": false,
+            "desecrated": false,
+            "name": "提耶须之",
+            "range": "火焰抗性+41-45%"
+          }
+        ],
+        "desecratedMods": []
+      }
+    }
+  ],
+  "recommended": {
+    "strategy": "provided-lightning-rare-desecrate-fracture-essence-postlock",
+    "meanCost": 4579.28,
+    "medianCost": 3746,
+    "p90Cost": 10098,
+    "averageCounts": {
+      "greater_chaos_lowest": 887.68,
+      "greater_chaos_suffix": 103.68,
+      "greater_exalted_suffix": 1.92,
+      "omen_chaos_lowest": 887.7,
+      "omen_chaos_suffix": 192.69,
+      "omen_essence_prefix": 1206.25,
+      "omen_exalted_prefix": 1.08,
+      "omen_exalted_suffix": 1.92,
+      "perfect_chaos_lowest": 0.03,
+      "perfect_chaos_suffix": 89.01,
+      "perfect_essence_electricity": 3.43,
+      "perfect_essence_flames": 1112.93,
+      "perfect_essence_ice": 89.88,
+      "perfect_exalted_prefix": 1.08
+    },
+    "averageLockSetupCounts": {
+      "fracturing_orb": 2.82,
+      "omen_desecration_prefix": 2.82,
+      "perfect_exalted": 5.63,
+      "preserved_lockbone": 2.82
+    },
+    "meanLockSetupCostExcluded": 14.08,
+    "bestSample": {
+      "cost": 168,
+      "counts": {
+        "omen_exalted_suffix": 3,
+        "greater_exalted_suffix": 3,
+        "omen_essence_prefix": 35,
+        "perfect_essence_flames": 32,
+        "perfect_essence_ice": 3,
+        "omen_chaos_lowest": 34,
+        "greater_chaos_lowest": 34,
+        "omen_chaos_suffix": 12,
+        "greater_chaos_suffix": 1,
+        "perfect_chaos_suffix": 11
+      },
+      "lockSetupCounts": {
+        "omen_desecration_prefix": 5,
+        "preserved_lockbone": 5,
+        "perfect_exalted": 10,
+        "fracturing_orb": 5
+      },
+      "lockSetupCostExcluded": true,
+      "lockFractureChance": 0.3333333333333333,
+      "fractureCandidateCount": 3,
+      "attempts": 5,
+      "prefixes": [
+        {
+          "group": "LightningDamage",
+          "tier": "T1",
+          "type": "prefix",
+          "level": 75,
+          "weight": 200,
+          "fractured": true,
+          "desecrated": false,
+          "name": "电殛的",
+          "range": "攻击附加1-4-60-71基础闪电伤害"
+        },
+        {
+          "group": "ColdDamage",
+          "tier": "T1",
+          "type": "prefix",
+          "level": 75,
+          "weight": 200,
+          "fractured": false,
+          "desecrated": false,
+          "name": "埋葬的",
+          "range": "攻击附加21-24-32-37基础冰霜伤害"
+        },
+        {
+          "group": "FireDamage",
+          "tier": "T1",
+          "type": "prefix",
+          "level": 75,
+          "weight": 200,
+          "fractured": false,
+          "desecrated": false,
+          "name": "火化的",
+          "range": "攻击附加25-29-37-45基础火焰伤害"
+        }
+      ],
+      "suffixes": [
+        {
+          "group": "ItemFoundRarityIncrease",
+          "tier": "T1",
+          "type": "suffix",
+          "level": 40,
+          "weight": 1000,
+          "fractured": false,
+          "desecrated": false,
+          "name": "考古之",
+          "range": "物品稀有度提高15-18%"
+        },
+        {
+          "group": "FireResistance",
+          "tier": "T1",
+          "type": "suffix",
+          "level": 82,
+          "weight": 1000,
+          "fractured": false,
+          "desecrated": false,
+          "name": "提耶须之",
+          "range": "火焰抗性+41-45%"
+        },
+        {
+          "group": "AllResistances",
+          "tier": "T1",
+          "type": "suffix",
+          "level": 68,
+          "weight": 800,
+          "fractured": false,
+          "desecrated": false,
+          "name": "彩虹之",
+          "range": "所有元素抗性+15-16%"
+        }
+      ],
+      "desecratedMods": [
+        {
+          "group": "desecrated_life_on_kill",
+          "tier": "D3",
+          "type": "prefix",
+          "level": 1,
+          "weight": 900,
+          "fractured": false,
+          "desecrated": true,
+          "name": "亵渎生命",
+          "range": "击败敌人时获得 18-28 生命"
+        }
+      ]
+    }
+  }
+}
