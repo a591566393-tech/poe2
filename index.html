@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PoE2 做装模拟器</title>
-    <link rel="stylesheet" href="./styles.css?v=20260712-i18n1">
+    <link rel="stylesheet" href="./styles.css?v=20260714-currency-groups1">
   </head>
   <body>
     <header class="topbar">
@@ -144,7 +144,7 @@
         </div>
         <div class="currency-tools" aria-label="通货筛选">
           <input id="currencySearch" type="search" placeholder="搜索通货、预兆、规则">
-          <select id="currencyCategory" aria-label="通货分类">
+          <select id="currencyCategory" class="currency-category-select" aria-label="通货分类">
             <option value="all" data-i18n="all">全部</option>
             <option value="currency" data-i18n="currency">通货</option>
             <option value="omen" data-i18n="omen">预兆</option>
@@ -156,6 +156,7 @@
             <option value="soul_core">Soul Core</option>
             <option value="rune" data-i18n="rune">符文</option>
           </select>
+          <div id="currencyCategoryTabs" class="currency-category-tabs" role="list" aria-label="通货分类"></div>
           <label class="omen-lock-row">
             <input id="lockOmen" type="checkbox">
             <span data-i18n="lockOmen">锁定预兆</span>
@@ -195,6 +196,6 @@
     <script src="./data/poe2db-crafting-data.js?v=20260714-skill-level-suffix1"></script>
     <script src="./data/poe2db-i18n-data.js?v=20260712-i18n-data1"></script>
     <script src="./crafting-core.js?v=20260713-omen-liquid-catalyst1"></script>
-    <script src="./app.js?v=20260713-market-reference1"></script>
+    <script src="./app.js?v=20260714-currency-groups1"></script>
   </body>
 </html>

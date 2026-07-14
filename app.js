@@ -333,6 +333,18 @@
     divine: "divine",
   };
 
+  const ACTION_CATEGORY_ORDER = [
+    "currency",
+    "omen",
+    "essence",
+    "alloy",
+    "liquid_emotion",
+    "catalyst",
+    "desecration",
+    "soul_core",
+    "rune",
+  ];
+
   const TEXT = {
     "zh-Hans": {
       language: "语言",
@@ -487,6 +499,7 @@
       "clearCustomButton",
       "currencySearch",
       "currencyCategory",
+      "currencyCategoryTabs",
       "currencyStats",
       "usableOnly",
       "lockOmen",
@@ -770,6 +783,7 @@
     if (els.currencySearch) els.currencySearch.placeholder = t("currencySearchPlaceholder");
     if (els.poolSearch) els.poolSearch.placeholder = t("poolSearchPlaceholder");
     if (els.languageSelect) els.languageSelect.value = state.lang;
+    renderCurrencyCategoryTabs();
   }
 
   function compactSearchText(value) {
@@ -848,45 +862,182 @@
 
   function populateActionButtons() {
     els.currencyGrid.innerHTML = "";
-    Core.CURRENCIES.forEach(function (action) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "currency-button category-" + (action.category || "currency");
-      button.dataset.action = action.id;
-      button.dataset.category = action.category || "currency";
-      button.dataset.search = [
-        action.id,
-        action.label,
-        toTraditional(action.label),
-        englishFromId(action.id),
-        action.sourceRule,
-        toTraditional(action.sourceRule),
-        allLocalizedText(I18N.actions, action.id),
-        categoryLabel(action.category),
-        actionSearchAliases(action),
-      ].join(" ");
+    const grouped = Core.CURRENCIES.reduce(function (map, action) {
+      const category = actionCategoryId(action);
+      if (!map[category]) map[category] = [];
+      map[category].push(action);
+      return map;
+    }, {});
 
-      const nameLine = document.createElement("span");
-      nameLine.className = "currency-name-line";
+    currencyCategoryOptions().forEach(function (option) {
+      if (option.id === "all") return;
+      const actions = grouped[option.id] || [];
+      if (actions.length === 0) return;
 
-      const kind = document.createElement("span");
-      kind.className = "currency-kind";
-      kind.textContent = categoryLabel(action.category);
+      const section = document.createElement("section");
+      section.className = "currency-category-section category-section-" + option.id;
+      section.dataset.category = option.id;
 
-      const name = document.createElement("span");
-      name.className = "currency-name";
-      name.textContent = displayActionName(action, "normal");
+      const heading = document.createElement("div");
+      heading.className = "currency-category-heading";
 
-      const rule = document.createElement("span");
-      rule.className = "currency-rule";
-      rule.textContent = displayActionRule(action);
+      const title = document.createElement("span");
+      title.className = "currency-category-title";
+      title.textContent = option.label;
 
-      nameLine.append(kind, name);
-      button.append(nameLine, rule);
-      button.addEventListener("click", function () {
-        useAction(action);
+      const count = document.createElement("span");
+      count.className = "currency-category-count";
+      count.textContent = String(actions.length);
+
+      const grid = document.createElement("div");
+      grid.className = "currency-category-grid";
+
+      actions.forEach(function (action) {
+        grid.appendChild(createCurrencyButton(action));
       });
-      els.currencyGrid.appendChild(button);
+
+      heading.append(title, count);
+      section.append(heading, grid);
+      els.currencyGrid.appendChild(section);
+    });
+
+    const empty = document.createElement("div");
+    empty.className = "currency-empty is-hidden";
+    els.currencyGrid.appendChild(empty);
+    renderCurrencyCategoryTabs();
+  }
+
+  function createCurrencyButton(action) {
+    const category = actionCategoryId(action);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "currency-button category-" + category;
+    button.dataset.action = action.id;
+    button.dataset.category = category;
+    button.dataset.search = [
+      action.id,
+      action.label,
+      toTraditional(action.label),
+      englishFromId(action.id),
+      action.sourceRule,
+      toTraditional(action.sourceRule),
+      allLocalizedText(I18N.actions, action.id),
+      categoryLabel(category),
+      actionSearchAliases(action),
+    ].join(" ");
+
+    const nameLine = document.createElement("span");
+    nameLine.className = "currency-name-line";
+
+    const kind = document.createElement("span");
+    kind.className = "currency-kind";
+    kind.textContent = categoryLabel(category);
+
+    const name = document.createElement("span");
+    name.className = "currency-name";
+    name.textContent = displayActionName(action, "normal");
+
+    const rule = document.createElement("span");
+    rule.className = "currency-rule";
+    rule.textContent = displayActionRule(action);
+
+    nameLine.append(kind, name);
+    button.append(nameLine, rule);
+    button.addEventListener("click", function () {
+      useAction(action);
+    });
+    return button;
+  }
+
+  function actionCategoryId(actionOrCategory) {
+    const category = typeof actionOrCategory === "string"
+      ? actionOrCategory
+      : (actionOrCategory && actionOrCategory.category);
+    return category || "currency";
+  }
+
+  function currencyCategoryOptions() {
+    const totals = currencyCategoryTotals();
+    return [{ id: "all", label: t("all") }].concat(ACTION_CATEGORY_ORDER.map(function (category) {
+      return { id: category, label: categoryLabel(category) };
+    }).filter(function (option) {
+      return (totals[option.id] || 0) > 0;
+    }));
+  }
+
+  function currencyCategoryTotals() {
+    return Core.CURRENCIES.reduce(function (map, action) {
+      const category = actionCategoryId(action);
+      map[category] = (map[category] || 0) + 1;
+      map.all = (map.all || 0) + 1;
+      return map;
+    }, { all: 0 });
+  }
+
+  function renderCurrencyCategoryTabs() {
+    if (!els.currencyCategoryTabs) return;
+    const current = els.currencyCategory ? (els.currencyCategory.value || "all") : "all";
+    els.currencyCategoryTabs.innerHTML = "";
+    currencyCategoryOptions().forEach(function (option) {
+      const tab = document.createElement("button");
+      tab.type = "button";
+      tab.className = "currency-category-tab";
+      tab.dataset.category = option.id;
+      tab.setAttribute("aria-pressed", option.id === current ? "true" : "false");
+
+      const label = document.createElement("span");
+      label.className = "currency-category-tab-label";
+      label.textContent = option.label;
+
+      const count = document.createElement("span");
+      count.className = "currency-category-tab-count";
+      count.textContent = String(currencyCategoryTotals()[option.id] || 0);
+
+      tab.append(label, count);
+      tab.addEventListener("click", function () {
+        if (els.currencyCategory) els.currencyCategory.value = option.id;
+        renderActionButtons();
+      });
+      els.currencyCategoryTabs.appendChild(tab);
+    });
+    refreshCurrencyCategoryTabs();
+  }
+
+  function refreshCurrencyCategoryTabs(counts) {
+    if (!els.currencyCategoryTabs) return;
+    const totals = counts && counts.totalByCategory ? counts.totalByCategory : currencyCategoryTotals();
+    const visibleByCategory = counts && counts.visibleByCategory ? counts.visibleByCategory : totals;
+    const visibleAll = counts && counts.visibleByCategory
+      ? Object.keys(visibleByCategory).reduce(function (sum, category) { return sum + (visibleByCategory[category] || 0); }, 0)
+      : (totals.all || 0);
+    const current = els.currencyCategory ? (els.currencyCategory.value || "all") : "all";
+
+    els.currencyCategoryTabs.querySelectorAll(".currency-category-tab").forEach(function (tab) {
+      const category = tab.dataset.category || "all";
+      const isActive = category === current;
+      const count = tab.querySelector(".currency-category-tab-count");
+      tab.classList.toggle("is-active", isActive);
+      tab.setAttribute("aria-pressed", isActive ? "true" : "false");
+      if (count) {
+        const visible = category === "all" ? visibleAll : (visibleByCategory[category] || 0);
+        const total = totals[category] || 0;
+        count.textContent = visible + "/" + total;
+      }
+    });
+  }
+
+  function updateCurrencySections(counts) {
+    const current = els.currencyCategory ? (els.currencyCategory.value || "all") : "all";
+    els.currencyGrid.querySelectorAll(".currency-category-section").forEach(function (section) {
+      const category = section.dataset.category || "currency";
+      const visible = counts.visibleByCategory[category] || 0;
+      const matched = counts.matchedByCategory[category] || 0;
+      const total = counts.totalByCategory[category] || 0;
+      const shouldShow = (current === "all" || current === category) && visible > 0;
+      const count = section.querySelector(".currency-category-count");
+      section.classList.toggle("is-hidden", !shouldShow);
+      section.classList.toggle("is-single-category", current !== "all");
+      if (count) count.textContent = visible + "/" + (matched || total);
     });
   }
 
@@ -1676,6 +1827,15 @@
     const categoryFilter = els.currencyCategory.value;
     const query = normalizeSearchText(els.currencySearch.value);
     const usableOnly = !!(els.usableOnly && els.usableOnly.checked);
+    const counts = {
+      totalByCategory: currencyCategoryTotals(),
+      matchedByCategory: {},
+      visibleByCategory: {},
+      usableByCategory: {},
+      matchedCount: 0,
+      visibleCount: 0,
+      usableCount: 0,
+    };
     let matchedCount = 0;
     let visibleCount = 0;
     let usableCount = 0;
@@ -1690,13 +1850,21 @@
         displayActionName(entry, entry.supportsTiers ? tier : "normal"),
       ].join(" ") : "";
       const searchText = button.dataset.search + " " + dynamicName;
-      const matches = (categoryFilter === "all" || actionCategory === categoryFilter) && searchTextMatches(searchText, query);
-      if (matches) matchedCount += 1;
       const actualTier = entry && entry.supportsTiers ? tier : "normal";
       const validation = entry ? Core.validateCurrency(state.item, action, actualTier) : { ok: false, reason: "" };
+      const categoryMatches = categoryFilter === "all" || actionCategory === categoryFilter;
+      const searchMatches = searchTextMatches(searchText, query);
+      const matches = categoryMatches && searchMatches;
+
+      if (searchMatches) counts.matchedByCategory[actionCategory] = (counts.matchedByCategory[actionCategory] || 0) + 1;
+      if (searchMatches && validation.ok) counts.usableByCategory[actionCategory] = (counts.usableByCategory[actionCategory] || 0) + 1;
+      if (matches) matchedCount += 1;
       if (matches && validation.ok) usableCount += 1;
       const visible = matches && (!usableOnly || validation.ok);
       if (visible) visibleCount += 1;
+      if (searchMatches && (!usableOnly || validation.ok)) {
+        counts.visibleByCategory[actionCategory] = (counts.visibleByCategory[actionCategory] || 0) + 1;
+      }
 
       button.classList.toggle("is-hidden", !visible);
       if (!entry) return;
@@ -1710,8 +1878,22 @@
       button.title = validation.ok ? displayActionRule(entry) : displayValidationReason(validation.reason);
     });
 
+    counts.matchedCount = matchedCount;
+    counts.visibleCount = visibleCount;
+    counts.usableCount = usableCount;
+    updateCurrencySections(counts);
+    refreshCurrencyCategoryTabs(counts);
+
+    const empty = els.currencyGrid.querySelector(".currency-empty");
+    if (empty) {
+      empty.classList.toggle("is-hidden", visibleCount !== 0);
+      empty.textContent = state.lang === "en" ? "No matching currencies" : uiText("没有匹配通货");
+    }
+
     if (els.currencyStats) {
+      const currentCategoryLabel = categoryFilter === "all" ? t("all") : categoryLabel(categoryFilter);
       els.currencyStats.textContent = [
+        currentCategoryLabel,
         (state.lang === "en" ? "Shown " : uiText("显示 ")) + visibleCount + "/" + matchedCount,
         (state.lang === "en" ? "Usable " : uiText("可用 ")) + usableCount,
       ].join(" · ");

@@ -47,6 +47,8 @@ Make the simulator faster to operate during real crafting tests without changing
 ### Acceptance Criteria
 
 - Currency controls stay easy to reach on desktop and mobile, with clear category filtering and usable/unusable state.
+- Currency actions are grouped by crafting material category in both the "All" view and category-filtered views, so global search never presents an unstructured mixed list.
+- The sticky currency panel must render as an opaque isolated scroll layer; scrolling its action list must not reveal or overlap other currency buttons behind it.
 - Users can quickly hide unusable currencies for the current item state, while still being able to inspect every material.
 - The current item, currency panel, history, and modifier pool remain scannable without nested cards or marketing-style layout.
 - Custom starting item modifier selects put the modifier text first and provide a dedicated text filter so entries such as elemental damage prefixes are findable.
