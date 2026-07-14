@@ -1,8 +1,8 @@
 (function (root) {
   root.POE2DB_CRAFTING_DATA = 
 {
-  "version": "poe2db-crafting-2026-07-13-liquid-contempt",
-  "generatedAt": "2026-07-12T13:07:44.688Z",
+  "version": "poe2db-crafting-2026-07-14-skill-level-suffix1",
+  "generatedAt": "2026-07-14T03:41:05.112Z",
   "source": "PoE2DB Essence, Catalyst, Desecrated Modifiers, Jewel Liquid Emotion, and Soul Core pages cached under .cache/",
   "notes": [
     "Essence and alloy guaranteed modifier text is parsed from PoE2DB item cards.",
@@ -195,23 +195,14 @@
           "ownerSlug": "Lesser_Essence_of_Abrasion",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_physical_damage",
           "name": "次级磨蚀精华",
@@ -247,8 +238,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_physical_damage",
@@ -293,23 +282,14 @@
           "ownerSlug": "Lesser_Essence_of_Flames",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_fire_damage",
           "name": "次级烈焰精华",
@@ -346,8 +326,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_fire_damage",
@@ -393,23 +371,14 @@
           "ownerSlug": "Lesser_Essence_of_Ice",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_cold_damage",
           "name": "次级冰霜精华",
@@ -446,8 +415,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_cold_damage",
@@ -493,23 +460,14 @@
           "ownerSlug": "Lesser_Essence_of_Electricity",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_lightning_damage",
           "name": "次级电光精华",
@@ -546,8 +504,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_lightning_damage",
@@ -1106,23 +1062,14 @@
           "ownerSlug": "Essence_of_Abrasion",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_physical_damage",
           "name": "磨蚀精华",
@@ -1158,8 +1105,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_physical_damage",
@@ -1204,23 +1149,14 @@
           "ownerSlug": "Essence_of_Flames",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_fire_damage",
           "name": "烈焰精华",
@@ -1257,8 +1193,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_fire_damage",
@@ -1304,23 +1238,14 @@
           "ownerSlug": "Essence_of_Ice",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_cold_damage",
           "name": "冰霜精华",
@@ -1357,8 +1282,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_cold_damage",
@@ -1404,23 +1327,14 @@
           "ownerSlug": "Essence_of_Electricity",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_lightning_damage",
           "name": "电光精华",
@@ -1457,8 +1371,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_lightning_damage",
@@ -2016,23 +1928,14 @@
           "ownerSlug": "Greater_Essence_of_Abrasion",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_physical_damage",
           "name": "强效磨蚀精华",
@@ -2068,8 +1971,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_physical_damage",
@@ -2114,23 +2015,14 @@
           "ownerSlug": "Greater_Essence_of_Flames",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_fire_damage",
           "name": "强效火焰精华",
@@ -2167,8 +2059,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_fire_damage",
@@ -2214,23 +2104,14 @@
           "ownerSlug": "Greater_Essence_of_Ice",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_cold_damage",
           "name": "强效冰霜精华",
@@ -2267,8 +2148,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_cold_damage",
@@ -2314,23 +2193,14 @@
           "ownerSlug": "Greater_Essence_of_Electricity",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "added_lightning_damage",
           "name": "强效电光精华",
@@ -2367,8 +2237,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "added_lightning_damage",
@@ -2844,23 +2712,14 @@
           "ownerSlug": "Perfect_Essence_of_Abrasion",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "physical_damage",
           "name": "完美磨蚀精华",
@@ -2891,8 +2750,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "physical_damage",
@@ -2932,23 +2789,14 @@
           "ownerSlug": "Perfect_Essence_of_Flames",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "generic_damage",
           "name": "完美烈焰精华",
@@ -2980,8 +2828,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "generic_damage",
@@ -3022,23 +2868,14 @@
           "ownerSlug": "Perfect_Essence_of_Ice",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "generic_damage",
           "name": "完美冰霜精华",
@@ -3070,8 +2907,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "generic_damage",
@@ -3112,23 +2947,14 @@
           "ownerSlug": "Perfect_Essence_of_Electricity",
           "type": "prefix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
           "group": "generic_damage",
           "name": "完美电光精华",
@@ -3160,8 +2986,6 @@
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
           "group": "generic_damage",
@@ -3247,27 +3071,18 @@
           "id": "Perfect_Essence_of_Battle_0",
           "baseId": "Perfect_Essence_of_Battle_0",
           "ownerSlug": "Perfect_Essence_of_Battle",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
-            "bow",
             "claw",
             "dagger",
-            "wand",
             "one_hand_sword",
             "one_hand_axe",
             "one_hand_mace",
-            "sceptre",
             "spear",
             "flail",
-            "staff",
-            "two_hand_sword",
-            "two_hand_axe",
-            "two_hand_mace",
-            "quarterstaff",
-            "crossbow",
-            "trap"
+            "bow"
           ],
-          "group": "Perfect_Essence_of_Battle_单手_近战_武器_或_弓类_所有_攻击_技能等级_2",
+          "group": "IncreaseSocketedGemLevel",
           "name": "完美激战精华",
           "template": "所有 攻击 技能等级 #",
           "level": 1,
@@ -3289,17 +3104,15 @@
           "id": "Perfect_Essence_of_Battle_1",
           "baseId": "Perfect_Essence_of_Battle_1",
           "ownerSlug": "Perfect_Essence_of_Battle",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
             "two_hand_sword",
             "two_hand_axe",
             "two_hand_mace",
             "quarterstaff",
-            "staff",
-            "spear",
             "crossbow"
           ],
-          "group": "Perfect_Essence_of_Battle_双手_近战_武器_或_战弩_所有_攻击_技能等级_3",
+          "group": "IncreaseSocketedGemLevel",
           "name": "完美激战精华",
           "template": "所有 攻击 技能等级 #",
           "level": 1,
@@ -3333,11 +3146,11 @@
           "id": "Perfect_Essence_of_Sorcery_0",
           "baseId": "Perfect_Essence_of_Sorcery_0",
           "ownerSlug": "Perfect_Essence_of_Sorcery",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
             "wand"
           ],
-          "group": "Perfect_Essence_of_Sorcery_法杖_所有_法术_技能等级_3",
+          "group": "IncreaseSocketedGemLevel",
           "name": "完美魔法精华",
           "template": "所有 法术 技能等级 #",
           "level": 1,
@@ -3359,11 +3172,11 @@
           "id": "Perfect_Essence_of_Sorcery_1",
           "baseId": "Perfect_Essence_of_Sorcery_1",
           "ownerSlug": "Perfect_Essence_of_Sorcery",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
             "staff"
           ],
-          "group": "Perfect_Essence_of_Sorcery_长杖_所有_法术_技能等级_5",
+          "group": "IncreaseSocketedGemLevel",
           "name": "完美魔法精华",
           "template": "所有 法术 技能等级 #",
           "level": 1,
@@ -3863,11 +3676,11 @@
           "id": "Essence_of_Hysteria_0",
           "baseId": "Essence_of_Hysteria_0",
           "ownerSlug": "Essence_of_Hysteria",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
             "helmet"
           ],
-          "group": "Essence_of_Hysteria_头盔_所有_召唤生物_技能等级_1",
+          "group": "IncreaseSocketedGemLevel",
           "name": "浮夸精华",
           "template": "所有 召唤生物 技能等级 #",
           "level": 1,
@@ -6442,7 +6255,7 @@
           "id": "Sovereign_Alloy_0",
           "baseId": "Sovereign_Alloy_0",
           "ownerSlug": "Sovereign_Alloy",
-          "type": "suffix",
+          "type": "prefix",
           "classes": [
             "claw",
             "dagger",
@@ -6465,7 +6278,7 @@
           "group": "Sovereign_Alloy_武器_镶嵌的_增幅器_物品效果提高_20_30",
           "name": "君王合金",
           "template": "镶嵌的 增幅器 物品效果提高 #%",
-          "level": 52,
+          "level": 1,
           "weight": 1,
           "tier": "G",
           "tags": [],
@@ -6495,7 +6308,7 @@
           "group": "rune_ward",
           "name": "君王合金",
           "template": "符文结界 提高 #%",
-          "level": 20,
+          "level": 1,
           "weight": 1,
           "tier": "G",
           "tags": [
@@ -6514,7 +6327,7 @@
           "id": "Sovereign_Alloy_2",
           "baseId": "Sovereign_Alloy_2",
           "ownerSlug": "Sovereign_Alloy",
-          "type": "prefix",
+          "type": "suffix",
           "classes": [
             "ring",
             "amulet",
@@ -6524,7 +6337,7 @@
           "group": "Sovereign_Alloy_饰品_或腰带_外延抗性词缀增幅提高_20_30",
           "name": "君王合金",
           "template": "外延抗性词缀增幅提高 #%",
-          "level": 52,
+          "level": 1,
           "weight": 1,
           "tier": "G",
           "tags": [
@@ -8641,8 +8454,8 @@
           "sourceText": "允许的后缀 +1"
         },
         {
-          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_ruby_prefix_3",
-          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_ruby_prefix_3",
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_ruby_suffix_3",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_ruby_suffix_3",
           "type": "suffix",
           "classes": [
             "jewel"
@@ -8654,7 +8467,7 @@
           "allowedBaseIds": [
             "jewel_ruby"
           ],
-          "group": "liquid_Potent_Liquid_Contempt_jewel_ruby_prefix_允许的前缀",
+          "group": "liquid_Potent_Liquid_Contempt_jewel_ruby_suffix_允许的前缀",
           "name": "强效的液化轻蔑",
           "template": "允许的前缀 #",
           "level": 1,
@@ -8705,8 +8518,8 @@
           "sourceText": "允许的后缀 +1"
         },
         {
-          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_sapphire_prefix_5",
-          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_sapphire_prefix_5",
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_sapphire_suffix_5",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_sapphire_suffix_5",
           "type": "suffix",
           "classes": [
             "jewel"
@@ -8718,7 +8531,7 @@
           "allowedBaseIds": [
             "jewel_sapphire"
           ],
-          "group": "liquid_Potent_Liquid_Contempt_jewel_sapphire_prefix_允许的前缀",
+          "group": "liquid_Potent_Liquid_Contempt_jewel_sapphire_suffix_允许的前缀",
           "name": "强效的液化轻蔑",
           "template": "允许的前缀 #",
           "level": 1,
@@ -8769,8 +8582,8 @@
           "sourceText": "允许的后缀 +1"
         },
         {
-          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_emerald_prefix_7",
-          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_emerald_prefix_7",
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_emerald_suffix_7",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_emerald_suffix_7",
           "type": "suffix",
           "classes": [
             "jewel"
@@ -8782,7 +8595,7 @@
           "allowedBaseIds": [
             "jewel_emerald"
           ],
-          "group": "liquid_Potent_Liquid_Contempt_jewel_emerald_prefix_允许的前缀",
+          "group": "liquid_Potent_Liquid_Contempt_jewel_emerald_suffix_允许的前缀",
           "name": "强效的液化轻蔑",
           "template": "允许的前缀 #",
           "level": 1,
@@ -8831,8 +8644,8 @@
           "sourceText": "允许的后缀 +1"
         },
         {
-          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_diamond_prefix_9",
-          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_diamond_prefix_9",
+          "id": "poe2db_liquid_Potent_Liquid_Contempt_jewel_diamond_suffix_9",
+          "baseId": "Liquid_Emotions_Potent_Liquid_Contempt_jewel_diamond_suffix_9",
           "type": "suffix",
           "classes": [
             "jewel"
@@ -8842,7 +8655,7 @@
           "allowedBaseIds": [
             "jewel_diamond"
           ],
-          "group": "liquid_Potent_Liquid_Contempt_jewel_diamond_prefix_允许的前缀",
+          "group": "liquid_Potent_Liquid_Contempt_jewel_diamond_suffix_允许的前缀",
           "name": "强效的液化轻蔑",
           "template": "允许的前缀 #",
           "level": 1,
@@ -17175,7 +16988,7 @@
     },
     {
       "id": "poe2db_desecrated_90",
-      "baseId": "poe2db_desecrated_阿曼娜姆之_desecrated_所有_召唤生物_技能等级_amanamu_召唤生物_宝石",
+      "baseId": "poe2db_desecrated_阿曼娜姆之_increasesocketedgemlevel",
       "type": "suffix",
       "classes": [
         "ring",
@@ -17208,7 +17021,7 @@
         "trap",
         "quiver"
       ],
-      "group": "阿曼娜姆之_desecrated_所有_召唤生物_技能等级_amanamu_召唤生物_宝石",
+      "group": "阿曼娜姆之_IncreaseSocketedGemLevel",
       "name": "阿曼娜姆之",
       "template": "所有 召唤生物 技能等级 # amanamu 召唤生物 宝石",
       "level": 65,
@@ -22354,7 +22167,7 @@
     },
     {
       "id": "poe2db_desecrated_182",
-      "baseId": "poe2db_desecrated_乌拉曼之_desecrated_所有技能等级_ulaman_宝石",
+      "baseId": "poe2db_desecrated_乌拉曼之_increasesocketedgemlevel",
       "type": "suffix",
       "classes": [
         "ring",
@@ -22387,7 +22200,7 @@
         "trap",
         "quiver"
       ],
-      "group": "乌拉曼之_desecrated_所有技能等级_ulaman_宝石",
+      "group": "乌拉曼之_IncreaseSocketedGemLevel",
       "name": "乌拉曼之",
       "template": "所有技能等级 # ulaman 宝石",
       "level": 65,

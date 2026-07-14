@@ -30,6 +30,8 @@ const ARMOUR_CLASSES = ["boots", "body_armour", "gloves", "helmet", "shield", "b
 const JEWELLERY_CLASSES = ["ring", "amulet", "belt", "talisman"];
 const CURRENT_CLASSES = JEWELLERY_CLASSES.concat(ARMOUR_CLASSES, WEAPON_CLASSES, ["quiver"]);
 const MACE_CLASSES = ["one_hand_mace", "two_hand_mace"];
+const ONE_HAND_ATTACK_MELEE_CLASSES = ["claw", "dagger", "one_hand_sword", "one_hand_axe", "one_hand_mace", "spear", "flail"];
+const TWO_HAND_ATTACK_MELEE_CLASSES = ["two_hand_sword", "two_hand_axe", "two_hand_mace", "quarterstaff"];
 const TWO_HAND_MELEE_CLASSES = ["two_hand_sword", "two_hand_axe", "two_hand_mace", "quarterstaff", "staff", "spear"];
 const SOUL_CORE_CATEGORIES = {
   chronomancy: {
@@ -228,8 +230,12 @@ function classesFromClassText(text) {
   const value = String(text);
   let recognized = false;
 
+  if (/\u5355\u624b\s*\u8fd1\u6218\s*\u6b66\u5668\s*\u6216\s*\u5f13\u7c7b/u.test(value)) {
+    addClasses(classes, ONE_HAND_ATTACK_MELEE_CLASSES.concat(["bow"]));
+    return uniqueClasses(Array.from(classes));
+  }
   if (/\u53cc\u624b\s*\u8fd1\u6218\s*\u6b66\u5668\s*\u6216\s*\u6218\u5f29/u.test(value)) {
-    addClasses(classes, TWO_HAND_MELEE_CLASSES.concat(["crossbow"]));
+    addClasses(classes, TWO_HAND_ATTACK_MELEE_CLASSES.concat(["crossbow"]));
     return uniqueClasses(Array.from(classes));
   }
   if (/\u5f13\u7c7b[\s\u6216]*\u6218\u5f29|\u6218\u5f29[\s\u6216]*\u5f13\u7c7b/u.test(value)) {
@@ -405,6 +411,18 @@ function inferType(text) {
   return "prefix";
 }
 
+function isPureSkillLevelGuarantee(text, template) {
+  const value = `${text || ""} ${template || ""}`;
+  const hasSkillLevel = /\u6280\u80fd\s*\u7b49\u7ea7|鎶€鑳界瓑绾/u.test(value);
+  const hasOtherPrimaryStat = /\u9b54\u529b\u4e0a\u9650|榄斿姏涓婇檺|\u547d\u4e2d|鍛戒腑|\u901f\u5ea6|閫熷害/u.test(value);
+  return hasSkillLevel && !hasOtherPrimaryStat;
+}
+
+function inferGuaranteeType(text, template) {
+  if (isPureSkillLevelGuarantee(text, template)) return "suffix";
+  return inferType(text);
+}
+
 function slugify(value) {
   return String(value)
     .toLowerCase()
@@ -415,6 +433,7 @@ function slugify(value) {
 
 function inferGroup(text, slug) {
   const value = String(text);
+  if (isPureSkillLevelGuarantee(value, "")) return "IncreaseSocketedGemLevel";
   if (/所有\s*元素抗性|全元素抗性/.test(value)) return "all_resistance";
   if (/火焰抗性/.test(value)) return "fire_resistance";
   if (/冰霜抗性/.test(value)) return "cold_resistance";
@@ -688,15 +707,16 @@ function parseSoulCoreRows() {
 function parseGuaranteeLine(rawHtml, ownerSlug, ownerName, index) {
   const text = stripHtml(rawHtml);
   const parsed = parseTemplateAndRolls(rawHtml);
+  const template = parsed.template.replace(/^[^:\uFF1A]+[:\uFF1A]\s*/, "");
   return {
     id: `${ownerSlug}_${index}`,
     baseId: `${ownerSlug}_${index}`,
     ownerSlug,
-    type: inferType(text),
+    type: inferGuaranteeType(text, template),
     classes: inferClasses(text),
     group: inferGroup(text, ownerSlug),
     name: ownerName,
-    template: parsed.template.replace(/^[^:：]+[:：]\s*/, ""),
+    template,
     level: 1,
     weight: 1,
     tier: "G",
@@ -1059,7 +1079,7 @@ function importAll() {
 
   mkdirSync(dataDir, { recursive: true });
   const payload = {
-    version: "poe2db-crafting-2026-07-12-liquid-basic-catalyst2",
+    version: "poe2db-crafting-2026-07-14-skill-level-suffix1",
     generatedAt: new Date().toISOString(),
     source: "PoE2DB Essence, Catalyst, Desecrated Modifiers, Jewel Liquid Emotion, and Soul Core pages cached under .cache/",
     notes: [

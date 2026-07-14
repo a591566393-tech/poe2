@@ -5,6 +5,7 @@
 - The user wants realism over convenience: every crafting action should match PoE2DB/编年史 mod pools, tiers, weights, item levels, and currency behavior.
 - The simulator should support starting from real semi-finished items, not only white bases.
 - The user explicitly expects self-verification after each implementation before final reporting.
+- After a fix is verified and intended for the public site, commit and push it to GitHub by default instead of leaving it only in the local workspace.
 - Cache and generated data should stay under the project workspace, not the system drive.
 
 ## Decisions
@@ -83,5 +84,6 @@
 - Liquid Emotion is a one-time crafted-mod action for the item: once a real liquid crafted mod is present, another Liquid Emotion must be rejected instead of removing/replacing it.
 - Same-target omens should replace only when their effect keys conflict, such as left/right Exalted `addType` or left/right Chaos `removeType`. Compatible effects such as left/right Chaos plus Omen of Reduction still merge.
 - POE2 Scout market data can be read without secrets from `https://poe2scout.com/api/poe2/Leagues` and `https://poe2scout.com/api/poe2/Leagues/{ShortName}/ReferenceCurrencies`, but the API currently does not expose browser CORS headers. Static deployments should read generated same-origin cache `data/market-rates.json`; refresh it with `tools/update-market-rates.mjs`. `RelativePrice` is normalized to the league base currency; use ratios between `chaos`, `exalted`, and `divine` instead of hard-coded rates.
+- Essence card imports must not default pure skill-level guarantees to prefixes. PoE2DB ordinary `IncreaseSocketedGemLevel` rows are suffixes, so Perfect Essence of Battle, Perfect Essence of Sorcery, and the Hysteria helmet skill-level guarantee are modeled as suffixes. The Battle essence class parser must keep `one-handed melee weapon or bow` separate from `two-handed melee weapon or crossbow` instead of expanding both to all weapon classes.
 - Crafting consumption statistics must use the loaded market cache for ordinary priced currencies, not only display fixed exchange-rate chips. The UI should convert spent normal Chaos/Exalted/Divine counts into total Chaos/Exalted/Divine estimates and leave tiered/special currencies unpriced unless a reliable market `ApiId` is present.
 - The market panel should show a clear full reference timestamp such as `市场价格参考时间 2026.7.13.20:33`, derived from `data/market-rates.json.generatedAt`, so users know when the cached prices were last updated.
