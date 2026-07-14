@@ -224,7 +224,8 @@ p {
   position: sticky;
   top: 104px;
   z-index: 4;
-  max-height: calc(100vh - 122px);
+  height: calc(100vh - 104px);
+  max-height: calc(100vh - 104px);
   display: flex;
   flex-direction: column;
   isolation: isolate;
@@ -697,6 +698,7 @@ p {
 .currency-grid {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 8px;
   min-height: 0;
   overflow: auto;
@@ -1178,6 +1180,7 @@ p {
 
   .currency-panel {
     position: static;
+    height: auto;
     max-height: none;
   }
 
