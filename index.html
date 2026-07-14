@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PoE2 做装模拟器</title>
-    <link rel="stylesheet" href="./styles.css?v=20260714-currency-height1">
+    <link rel="stylesheet" href="./styles.css?v=20260714-base-groups1">
   </head>
   <body>
     <header class="topbar">
@@ -44,6 +44,7 @@
       <section class="control-panel" aria-label="底材">
         <div class="field-row">
           <label for="baseSelect" data-i18n="base">底材</label>
+          <div id="baseCategoryTabs" class="base-category-tabs" role="list" aria-label="底材分类"></div>
           <input id="baseSearch" type="search" aria-label="搜索底材" placeholder="搜索底材、类型、英文名">
           <select id="baseSelect"></select>
           <div id="baseStats" class="field-hint" aria-live="polite"></div>
@@ -196,6 +197,6 @@
     <script src="./data/poe2db-crafting-data.js?v=20260714-skill-level-suffix1"></script>
     <script src="./data/poe2db-i18n-data.js?v=20260712-i18n-data1"></script>
     <script src="./crafting-core.js?v=20260713-omen-liquid-catalyst1"></script>
-    <script src="./app.js?v=20260714-currency-groups1"></script>
+    <script src="./app.js?v=20260714-base-groups1"></script>
   </body>
 </html>

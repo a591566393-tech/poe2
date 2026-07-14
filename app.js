@@ -7,6 +7,7 @@
     undoStack: [],
     lastMessage: "",
     lockedOmenId: null,
+    baseCategory: "all",
     lang: readStoredLanguage(),
     market: {
       loading: false,
@@ -345,6 +346,58 @@
     "rune",
   ];
 
+  const BASE_CATEGORY_ORDER = [
+    "weapon",
+    "armour",
+    "offhand",
+    "jewellery",
+    "jewel",
+    "other",
+  ];
+
+  const BASE_CATEGORY_CLASSES = {
+    weapon: new Set([
+      "bow",
+      "claw",
+      "crossbow",
+      "dagger",
+      "flail",
+      "one_hand_axe",
+      "one_hand_mace",
+      "one_hand_sword",
+      "quarterstaff",
+      "sceptre",
+      "spear",
+      "staff",
+      "trap",
+      "two_hand_axe",
+      "two_hand_mace",
+      "two_hand_sword",
+      "wand",
+    ]),
+    armour: new Set([
+      "body_armour",
+      "boots",
+      "gloves",
+      "helmet",
+    ]),
+    offhand: new Set([
+      "buckler",
+      "focus",
+      "quiver",
+      "shield",
+    ]),
+    jewellery: new Set([
+      "amulet",
+      "belt",
+      "ring",
+      "talisman",
+    ]),
+    jewel: new Set([
+      "jewel",
+    ]),
+  };
+
   const TEXT = {
     "zh-Hans": {
       language: "语言",
@@ -479,6 +532,7 @@
     [
       "baseSelect",
       "baseSearch",
+      "baseCategoryTabs",
       "baseStats",
       "itemLevel",
       "seedInput",
@@ -528,6 +582,7 @@
 
   function populateBaseSelect() {
     const defaultBase = Core.getBase("boots_ornate_greaves") ? "boots_ornate_greaves" : (Core.BASES[0] && Core.BASES[0].id);
+    renderBaseCategoryTabs();
     renderBaseOptions(defaultBase);
     els.itemLevel.value = "82";
     els.seedInput.value = makeSeed();
@@ -538,9 +593,12 @@
     els.baseSelect.innerHTML = "";
     const previousValue = preferredValue || els.baseSelect.value;
     const query = normalizeSearchText(els.baseSearch ? els.baseSearch.value : "");
+    const categoryFilter = state.baseCategory || "all";
+    const counts = baseCategoryCounts(query);
     const bases = Core.BASES.filter(function (base) {
-      return baseMatchesSearch(base, query);
+      return baseMatchesCategory(base, categoryFilter) && baseMatchesSearch(base, query);
     });
+    refreshBaseCategoryTabs(counts);
 
     if (bases.length === 0) {
       const option = document.createElement("option");
@@ -548,7 +606,10 @@
       option.textContent = state.lang === "en" ? "No matching bases" : uiText("没有匹配底材");
       els.baseSelect.appendChild(option);
       els.baseSelect.disabled = true;
-      if (els.baseStats) els.baseStats.textContent = "0 / " + Core.BASES.length + (state.lang === "en" ? " bases" : uiText(" 个底材"));
+      if (els.baseStats) {
+        const total = categoryFilter === "all" ? Core.BASES.length : (counts.totalByCategory[categoryFilter] || 0);
+        els.baseStats.textContent = baseCategoryLabel(categoryFilter) + " · 0 / " + total + (state.lang === "en" ? " bases" : uiText(" 个底材"));
+      }
       return;
     }
 
@@ -578,10 +639,113 @@
       els.baseSelect.value = bases[0].id;
     }
     if (els.baseStats) {
-      els.baseStats.textContent = bases.length === Core.BASES.length
-        ? Core.BASES.length + (state.lang === "en" ? " bases" : uiText(" 个底材"))
-        : bases.length + " / " + Core.BASES.length + (state.lang === "en" ? " bases" : uiText(" 个底材"));
+      const total = categoryFilter === "all" ? Core.BASES.length : (counts.totalByCategory[categoryFilter] || 0);
+      els.baseStats.textContent = [
+        baseCategoryLabel(categoryFilter),
+        bases.length + " / " + total + (state.lang === "en" ? " bases" : uiText(" 个底材")),
+      ].join(" · ");
     }
+  }
+
+  function baseCategoryOptions() {
+    const counts = baseCategoryCounts("");
+    return [{ id: "all", label: baseCategoryLabel("all") }].concat(BASE_CATEGORY_ORDER.map(function (category) {
+      return { id: category, label: baseCategoryLabel(category) };
+    }).filter(function (option) {
+      return (counts.totalByCategory[option.id] || 0) > 0;
+    }));
+  }
+
+  function renderBaseCategoryTabs() {
+    if (!els.baseCategoryTabs) return;
+    els.baseCategoryTabs.innerHTML = "";
+    baseCategoryOptions().forEach(function (option) {
+      const tab = document.createElement("button");
+      tab.type = "button";
+      tab.className = "base-category-tab";
+      tab.dataset.category = option.id;
+      tab.setAttribute("aria-pressed", option.id === state.baseCategory ? "true" : "false");
+
+      const label = document.createElement("span");
+      label.className = "base-category-tab-label";
+      label.textContent = option.label;
+
+      const count = document.createElement("span");
+      count.className = "base-category-tab-count";
+
+      tab.append(label, count);
+      tab.addEventListener("click", function () {
+        const previousValue = els.baseSelect ? els.baseSelect.value : "";
+        state.baseCategory = option.id;
+        renderBaseOptions(previousValue);
+        resetIfBaseSelectionChanged(previousValue);
+      });
+      els.baseCategoryTabs.appendChild(tab);
+    });
+    refreshBaseCategoryTabs(baseCategoryCounts(els.baseSearch ? els.baseSearch.value : ""));
+  }
+
+  function refreshBaseCategoryTabs(counts) {
+    if (!els.baseCategoryTabs) return;
+    const totalByCategory = counts && counts.totalByCategory ? counts.totalByCategory : baseCategoryCounts("").totalByCategory;
+    const visibleByCategory = counts && counts.visibleByCategory ? counts.visibleByCategory : totalByCategory;
+    els.baseCategoryTabs.querySelectorAll(".base-category-tab").forEach(function (tab) {
+      const category = tab.dataset.category || "all";
+      const isActive = category === (state.baseCategory || "all");
+      const count = tab.querySelector(".base-category-tab-count");
+      tab.classList.toggle("is-active", isActive);
+      tab.setAttribute("aria-pressed", isActive ? "true" : "false");
+      if (count) count.textContent = (visibleByCategory[category] || 0) + "/" + (totalByCategory[category] || 0);
+    });
+  }
+
+  function baseCategoryCounts(queryValue) {
+    const query = normalizeSearchText(queryValue || "");
+    return Core.BASES.reduce(function (counts, base) {
+      const category = baseCategoryId(base);
+      counts.totalByCategory[category] = (counts.totalByCategory[category] || 0) + 1;
+      counts.totalByCategory.all += 1;
+      if (baseMatchesSearch(base, query)) {
+        counts.visibleByCategory[category] = (counts.visibleByCategory[category] || 0) + 1;
+        counts.visibleByCategory.all += 1;
+      }
+      return counts;
+    }, {
+      totalByCategory: { all: 0 },
+      visibleByCategory: { all: 0 },
+    });
+  }
+
+  function baseMatchesCategory(base, category) {
+    return !category || category === "all" || baseCategoryId(base) === category;
+  }
+
+  function baseCategoryId(base) {
+    const classId = base && base.classId;
+    const matched = BASE_CATEGORY_ORDER.find(function (category) {
+      const classes = BASE_CATEGORY_CLASSES[category];
+      return classes && classes.has(classId);
+    });
+    return matched || "other";
+  }
+
+  function baseCategoryLabel(category) {
+    if (category === "weapon") return state.lang === "en" ? "Weapons" : uiText("武器");
+    if (category === "armour") return state.lang === "en" ? "Armour" : uiText("防具");
+    if (category === "offhand") return state.lang === "en" ? "Offhands" : uiText("副手");
+    if (category === "jewellery") return state.lang === "en" ? "Jewellery" : uiText("饰品");
+    if (category === "jewel") return state.lang === "en" ? "Jewels" : uiText("珠宝");
+    if (category === "other") return state.lang === "en" ? "Other" : uiText("其他");
+    return t("all");
+  }
+
+  function resetIfBaseSelectionChanged(previousValue) {
+    if (!els.baseSelect || !els.baseSelect.value || els.baseSelect.value === previousValue) return;
+    const base = Core.getBase(els.baseSelect.value);
+    if (base && Number(els.itemLevel.value) < base.requiredLevel) {
+      els.itemLevel.value = String(base.requiredLevel);
+    }
+    resetItem();
   }
 
   function normalizeSearchText(value) {
@@ -783,6 +947,7 @@
     if (els.currencySearch) els.currencySearch.placeholder = t("currencySearchPlaceholder");
     if (els.poolSearch) els.poolSearch.placeholder = t("poolSearchPlaceholder");
     if (els.languageSelect) els.languageSelect.value = state.lang;
+    renderBaseCategoryTabs();
     renderCurrencyCategoryTabs();
   }
 
@@ -1087,13 +1252,7 @@
     els.baseSearch.addEventListener("input", function () {
       const previousValue = els.baseSelect.value;
       renderBaseOptions();
-      if (els.baseSelect.value && els.baseSelect.value !== previousValue) {
-        const base = Core.getBase(els.baseSelect.value);
-        if (base && Number(els.itemLevel.value) < base.requiredLevel) {
-          els.itemLevel.value = String(base.requiredLevel);
-        }
-        resetItem();
-      }
+      resetIfBaseSelectionChanged(previousValue);
     });
     els.currencySearch.addEventListener("input", renderActionButtons);
     els.currencyCategory.addEventListener("change", renderActionButtons);
