@@ -508,7 +508,7 @@ const suffixPlusOneDefinition = Core.summarizePool(timeLostSapphire, "normal", l
   .find((mod) => mod.group === "liquid_MaxPrefixMaxSuffix" && mod.type === "prefix");
 assert(suffixPlusOneDefinition, "missing suffix +1 liquid emotion prefix definition");
 pushExplicit(timeLostSapphire, suffixPlusOneDefinition);
-assert(Core.capFor(timeLostSapphire, "prefix") === 1, `suffix +1 jewel prefix should consume the spare prefix capacity, got ${JSON.stringify({
+assert(Core.capFor(timeLostSapphire, "prefix") === 2, `suffix +1 jewel prefix should keep the rare jewel prefix cap, got ${JSON.stringify({
   rarity: timeLostSapphire.rarity,
   base: Core.getBase(timeLostSapphire.baseId),
   prefixCap: Core.capFor(timeLostSapphire, "prefix"),
@@ -520,6 +520,9 @@ assert(Core.capFor(timeLostSapphire, "prefix") === 1, `suffix +1 jewel prefix sh
 })}`);
 assert(Core.capFor(timeLostSapphire, "suffix") === 3, "suffix +1 jewel prefix should open a third suffix slot");
 assert(Core.allMods(timeLostSapphire).length === 1, "suffix +1 jewel setup should have one explicit prefix");
+const sapphireSecondPrefix = Core.summarizePool(timeLostSapphire, "normal", "exalted").mods
+  .find((mod) => mod.type === "prefix" && mod.group !== suffixPlusOneDefinition.group);
+assert(sapphireSecondPrefix, "need a second prefix for the full 2-prefix / 3-suffix jewel capacity check");
 
 const sapphireSuffixDefinitions = distinctDefinitions(
   Core.summarizePool(timeLostSapphire, "normal", "exalted").mods.filter((mod) => mod.type === "suffix"),
@@ -527,8 +530,9 @@ const sapphireSuffixDefinitions = distinctDefinitions(
 );
 assert(sapphireSuffixDefinitions.length === 3, "need three sapphire suffix definitions for jewel capacity checks");
 const sapphireDesecrationItem = JSON.parse(JSON.stringify(timeLostSapphire));
+pushExplicit(sapphireDesecrationItem, sapphireSecondPrefix);
 sapphireSuffixDefinitions.slice(0, 2).forEach((definition) => pushExplicit(sapphireDesecrationItem, definition));
-assert(Core.countByType(sapphireDesecrationItem, "prefix") === 1, "sapphire desecration setup should have its prefix slot filled");
+assert(Core.countByType(sapphireDesecrationItem, "prefix") === 2, "sapphire desecration setup should have both prefix slots filled");
 assert(Core.countByType(sapphireDesecrationItem, "suffix") === 2, "sapphire desecration setup should have one suffix slot open");
 const sapphireCraniumPool = Core.summarizePool(sapphireDesecrationItem, "normal", "preserved_cranium");
 assert(sapphireCraniumPool.mods.length > 0, "sapphire jewel with suffix +1 should still have cranium candidates");
@@ -538,8 +542,9 @@ assert(sapphireCranium.ok, `sapphire cranium with suffix +1 failed: ${sapphireCr
 assert(sapphireCranium.step.added[0].type === "suffix", "sapphire cranium should add the hidden desecrated suffix");
 
 const sapphireFullSuffixItem = JSON.parse(JSON.stringify(timeLostSapphire));
+pushExplicit(sapphireFullSuffixItem, sapphireSecondPrefix);
 sapphireSuffixDefinitions.forEach((definition) => pushExplicit(sapphireFullSuffixItem, definition));
-assert(Core.allMods(sapphireFullSuffixItem).length === 4, "sapphire full suffix setup should have four total jewel modifiers");
+assert(Core.allMods(sapphireFullSuffixItem).length === 5, "sapphire full suffix setup should have five total jewel modifiers");
 assert(Core.countByType(sapphireFullSuffixItem, "suffix") === 3, "sapphire full suffix setup should have three suffixes");
 const sapphireChaosPreview = Core.removalPreview(sapphireFullSuffixItem, "chaos", "normal");
 assert(!sapphireChaosPreview.candidates.some((candidate) => candidate.type === "suffix"), "chaos should not randomize the over-base suffix side on a suffix +1 jewel");
@@ -1061,6 +1066,36 @@ const vaalExtraSocket = findVaalResult(
 );
 assert(vaalExtraSocket.item.sockets.length === Number(socketBase.maxSockets) + 1, "Vaal should be able to add one corrupted socket above the normal socket cap");
 
+const liquidContempt = Core.CURRENCIES.find((action) => action.id === "Potent_Liquid_Contempt");
+assert(liquidContempt, "Potent Liquid Contempt action is missing");
+let liquidJewel = Core.makeItem("jewel_ruby", 82, "smoke-liquid-0");
+liquidJewel.rarity = "rare";
+const liquidPool = Core.summarizePool(liquidJewel, "normal", "exalted").mods;
+const liquidPrefixes = distinctDefinitions(liquidPool.filter((mod) => mod.type === "prefix"), 2);
+const liquidSuffixes = distinctDefinitions(liquidPool.filter((mod) => mod.type === "suffix"), 2);
+assert(liquidPrefixes.length === 2 && liquidSuffixes.length === 2, "need a four-affix rare jewel for Liquid Contempt slot transfer check");
+liquidPrefixes.concat(liquidSuffixes).forEach((definition) => pushExplicit(liquidJewel, definition));
+assert(Core.countByType(liquidJewel, "prefix") === 2 && Core.countByType(liquidJewel, "suffix") === 2, "jewel fixture should start at 2 prefixes and 2 suffixes");
+const liquidApplied = Core.applyCurrency(liquidJewel, liquidContempt.id, "normal");
+assert(liquidApplied.ok, `Liquid Contempt should replace one legal affix: ${liquidApplied.reason || "unknown"}`);
+assert(liquidApplied.item.prefixes.some((mod) => /\u540e\u7f00/.test(mod.sourceText || "")), "Liquid Contempt fixture should roll the allowed suffix +1 prefix branch");
+assert(Core.countByType(liquidApplied.item, "prefix") === 2, "Liquid Contempt should keep two prefixes after replacing a prefix");
+assert(Core.countByType(liquidApplied.item, "suffix") === 2, "Liquid Contempt should keep two explicit suffixes");
+assert(Core.capFor(liquidApplied.item, "prefix") === 2, "Liquid Contempt's prefix modifier must not reduce the jewel prefix cap");
+assert(Core.capFor(liquidApplied.item, "suffix") === 3, "Liquid Contempt's allowed suffix +1 must open a third suffix slot");
+const desecrationOmen = Core.applyCurrency(liquidApplied.item, "omen_desecration_suffix", "normal");
+assert(desecrationOmen.ok, `right-hand desecration omen should prepare: ${desecrationOmen.reason || "unknown"}`);
+const desecratedJewel = Core.applyCurrency(desecrationOmen.item, "preserved_cranium", "normal");
+assert(desecratedJewel.ok, `right-hand desecration should add a hidden suffix: ${desecratedJewel.reason || "unknown"}`);
+assert(desecratedJewel.item.desecratedMods.length === 1 && desecratedJewel.item.desecratedMods[0].type === "suffix", "right-hand desecration should add one hidden suffix");
+assert(Core.countByType(desecratedJewel.item, "suffix") === 3, "desecrated suffix should occupy the third suffix slot opened by Liquid Contempt");
+const revealedJewel = Core.applyCurrency(desecratedJewel.item, "abyssal_echoes", "normal");
+assert(revealedJewel.ok, `Abyssal Echoes should offer desecrated choices: ${revealedJewel.reason || "unknown"}`);
+assert(revealedJewel.choices.length === 3, "Abyssal Echoes should offer three desecrated choices");
+const chosenJewel = Core.chooseDesecrationChoice(revealedJewel.item, revealedJewel.choices[0].choiceId);
+assert(chosenJewel.ok, `Abyssal Echoes choice should be selectable: ${chosenJewel.reason || "unknown"}`);
+assert(Core.countByType(chosenJewel.item, "prefix") === 2 && Core.countByType(chosenJewel.item, "suffix") === 3, "Liquid Contempt plus suffix desecration should finish at 2 prefixes and 3 suffixes");
+
 console.log(JSON.stringify({
   ok: true,
   checks: {
@@ -1108,6 +1143,13 @@ console.log(JSON.stringify({
       vaalCatalysingInfuserQuality: vaalCatalystRing.catalyst.quality,
       vaalHighRoll: true,
       vaalExtraSocketCount: vaalExtraSocket.item.sockets.length,
+    },
+    jewelLiquidContemptDesecration: {
+      prefixCap: Core.capFor(liquidApplied.item, "prefix"),
+      suffixCap: Core.capFor(liquidApplied.item, "suffix"),
+      finalPrefixes: Core.countByType(chosenJewel.item, "prefix"),
+      finalSuffixes: Core.countByType(chosenJewel.item, "suffix"),
+      abyssalChoices: revealedJewel.choices.length,
     },
     dataVersion: Core.DATA_VERSION,
     craftingVersion: globalThis.POE2DB_CRAFTING_DATA.version,

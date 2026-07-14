@@ -1013,9 +1013,8 @@
     const adjust = base && base.affixAdjust ? Number(base.affixAdjust[type]) || 0 : 0;
     const socketAdjust = socketAffixAdjust(item, type);
     const modAdjust = modAffixAdjust(item, type);
-    const jewelTransferAdjust = base && base.classId === "jewel" ? jewelSourceAffixAdjust(item, type) : 0;
     const cap = base && base.classId === "jewel" ? jewelBaseCap(item.rarity, type, rarity) : (type === "prefix" ? rarity.maxPrefixes : rarity.maxSuffixes);
-    return Math.max(0, cap + adjust + socketAdjust + modAdjust + jewelTransferAdjust);
+    return Math.max(0, cap + adjust + socketAdjust + modAdjust);
   }
 
   function jewelBaseCap(rarityId, type, fallbackRarity) {
@@ -1036,16 +1035,6 @@
     if (!item) return 0;
     return allMods(item).reduce(function (total, mod) {
       return total + affixAdjustFromText(mod, type);
-    }, 0);
-  }
-
-  function jewelSourceAffixAdjust(item, type) {
-    if (!item) return 0;
-    const oppositeType = type === "prefix" ? "suffix" : "prefix";
-    return allMods(item).reduce(function (total, mod) {
-      if (mod.type !== type) return total;
-      const oppositeGain = Math.max(0, affixAdjustFromText(mod, oppositeType));
-      return total - oppositeGain;
     }, 0);
   }
 
@@ -1142,7 +1131,10 @@
     const base = item && item.baseId ? getBase(item.baseId) : null;
     if (base && base.classId === "jewel") {
       if (item.rarity === "magic") return 2;
-      if (item.rarity === "rare") return 4;
+      if (item.rarity === "rare") {
+        const additionalAffixes = Math.max(0, modAffixAdjust(item, "prefix") + modAffixAdjust(item, "suffix"));
+        return 4 + additionalAffixes;
+      }
       return 0;
     }
     return Infinity;
