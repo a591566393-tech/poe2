@@ -518,6 +518,7 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     bindElements();
+    moveTierControlToCurrencyPanel();
     localizeDocument();
     populateBaseSelect();
     populateActionButtons();
@@ -578,6 +579,20 @@
     ].forEach(function (id) {
       els[id] = document.getElementById(id);
     });
+  }
+
+  function moveTierControlToCurrencyPanel() {
+    const tierSelect = document.getElementById("tierSelect");
+    const currencyTools = document.querySelector(".currency-tools");
+    const tierLabel = tierSelect && tierSelect.closest("label");
+    if (!tierSelect || !currencyTools || !tierLabel || tierLabel.parentElement === currencyTools) return;
+
+    const oldFieldGrid = tierLabel.parentElement;
+    tierLabel.classList.add("currency-tier-control");
+    const omenLockRow = currencyTools.querySelector(".omen-lock-row");
+    if (omenLockRow) currencyTools.insertBefore(tierLabel, omenLockRow);
+    else currencyTools.appendChild(tierLabel);
+    if (oldFieldGrid && oldFieldGrid.children.length === 0) oldFieldGrid.remove();
   }
 
   function populateBaseSelect() {
