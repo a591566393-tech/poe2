@@ -1950,7 +1950,7 @@
     heading.textContent = title;
     column.appendChild(heading);
 
-    if (cap === 0) {
+    if (cap === 0 && mods.length === 0) {
       const empty = document.createElement("div");
       empty.className = "empty-slot";
       empty.textContent = state.lang === "en" ? "No " + title.toLowerCase() + " slots at this rarity" : uiText("当前稀有度无") + title;
@@ -1958,10 +1958,13 @@
       return column;
     }
 
-    for (let index = 0; index < cap; index += 1) {
+    const visibleSlotCount = Math.max(cap, mods.length);
+    for (let index = 0; index < visibleSlotCount; index += 1) {
       const mod = mods[index];
       const row = document.createElement("div");
-      row.className = mod ? modRowClass(mod, type, removalPreviewKeys) : "empty-slot";
+      row.className = mod
+        ? modRowClass(mod, type, removalPreviewKeys) + (index >= cap ? " is-over-cap" : "")
+        : "empty-slot";
       if (mod) {
         row.innerHTML = [
           '<div class="mod-text">' + escapeHtml(renderModText(mod, state.item)) + "</div>",

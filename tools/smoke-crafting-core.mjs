@@ -1094,6 +1094,22 @@ assert(Core.countByType(liquidApplied.item, "prefix") === 2, "Liquid Contempt sh
 assert(Core.countByType(liquidApplied.item, "suffix") === 2, "Liquid Contempt should keep two explicit suffixes");
 assert(Core.capFor(liquidApplied.item, "prefix") === 2, "Liquid Contempt's prefix modifier must not reduce the jewel prefix cap");
 assert(Core.capFor(liquidApplied.item, "suffix") === 3, "Liquid Contempt's allowed suffix +1 must open a third suffix slot");
+const liquidTransferMod = liquidApplied.item.prefixes.find((mod) => /\u540e\u7f00/.test(mod.sourceText || ""));
+const liquidThirdSuffix = distinctDefinitions(liquidPool.filter((mod) => mod.type === "suffix"), 3)[2];
+assert(liquidTransferMod && liquidThirdSuffix, "need a transfer prefix and a third suffix for post-removal capacity check");
+let overCapacityRemoval = null;
+for (let index = 1; index <= 16 && !overCapacityRemoval; index += 1) {
+  const overCapacityItem = JSON.parse(JSON.stringify(liquidApplied.item));
+  pushExplicit(overCapacityItem, liquidThirdSuffix);
+  overCapacityItem.rngState = index * 0x10000000;
+  const prefixOmen = Core.applyCurrency(overCapacityItem, "omen_annulment_prefix", "normal");
+  assert(prefixOmen.ok, `prefix annulment omen should prepare for capacity check: ${prefixOmen.reason || "unknown"}`);
+  const annul = Core.applyCurrency(prefixOmen.item, "annulment", "normal");
+  if (annul.ok && annul.step.removed.some((mod) => mod.id === liquidTransferMod.id)) overCapacityRemoval = annul;
+}
+assert(overCapacityRemoval, "annulment should be able to remove the allowed suffix +1 modifier");
+assert(Core.countByType(overCapacityRemoval.item, "suffix") === 3, "removing the capacity modifier must not delete an existing suffix");
+assert(Core.capFor(overCapacityRemoval.item, "suffix") === 2, "suffix capacity should return to two after removing the capacity modifier");
 const desecrationOmen = Core.applyCurrency(liquidApplied.item, "omen_desecration_suffix", "normal");
 assert(desecrationOmen.ok, `right-hand desecration omen should prepare: ${desecrationOmen.reason || "unknown"}`);
 const desecratedJewel = Core.applyCurrency(desecrationOmen.item, "preserved_cranium", "normal");
