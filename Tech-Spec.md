@@ -155,6 +155,7 @@ PoE2DB currently exposes `DropChance: 1` for ordinary jewel rows on the individu
 - Liquid Emotion actions are generated from the `ModsView.liquid` rows on the Time-Lost jewel pages.
 - Liquid Emotions can only be used on rare Time-Lost jewels.
 - Using a Liquid Emotion removes one removable modifier and adds the colour-specific crafted modifier for that emotion.
+- Liquid Emotion removal and replacement must stay on the same affix side: removing a prefix can only add a prefix crafted modifier, and removing a suffix can only add a suffix crafted modifier.
 - Affix-cap crafted modifiers apply immediately after being added and stop applying immediately after removal.
 - Chaos validation, removal preview, and execution share one candidate function.
 - A Chaos candidate is legal only when removing that exact modifier leaves at least one eligible modifier for the current tier and omen.
@@ -164,6 +165,24 @@ PoE2DB currently exposes `DropChance: 1` for ordinary jewel rows on the individu
 - Smoke tests compare each ordinary jewel colour pool with the corresponding cached PoE2DB `ModsView.normal` payload.
 - Smoke tests verify rare jewel 2/2 caps, `允许的后缀 +1`, suffix-only desecration when prefixes are full, and Chaos candidate filtering.
 - Smoke tests verify a Liquid Emotion on a Time-Lost Sapphire and reject it on a normal Sapphire.
+
+## Desecration Candidate Audit
+
+### Goal
+
+Every imported desecrated modifier must be reachable on the equipment classes and item-level gates stated by PoE2DB, while excluded classes must never see it.
+
+### Acceptance Criteria
+
+- Each imported desecrated row is checked against its source class/base tags, prefix/suffix side, modifier level, and source section.
+- Explicit equipment-only rows do not leak to other equipment classes or generic fallback pools.
+- Each supported equipment class has at least one reachable row when the source data provides one; missing rows are reported with the exact source id and reason.
+- Abyssal Echoes choices use the same filtered candidate pool as the initial desecration action and retain the selected prefix/suffix side.
+
+### Verification
+
+- Run `tools/audit-desecration-routing.mjs` and the core smoke test after any desecrated data or routing change.
+- Include negative checks for known invalid equipment classes and positive checks for rows previously reported as unreachable.
 
 ## Search Localisation
 

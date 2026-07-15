@@ -1807,8 +1807,8 @@
     return allMods(item).some(isLiquidEmotionMod);
   }
 
-  function addLiquidEmotionMod(item, action) {
-    const mods = eligibleLiquidEmotionMods(item, action, {});
+  function addLiquidEmotionMod(item, action, type) {
+    const mods = eligibleLiquidEmotionMods(item, action, type ? { type: type } : {});
     if (mods.length === 0) {
       return { ok: false, reason: "当前底材无法添加该液化情感的工艺词缀。" };
     }
@@ -1823,7 +1823,7 @@
     return removalCandidates(item, {}).filter(function (candidate) {
       const draft = clone(item);
       removeSpecificMod(draft, candidate);
-      return eligibleLiquidEmotionMods(draft, action, {}).length > 0;
+      return eligibleLiquidEmotionMods(draft, action, { type: candidate.type }).length > 0;
     });
   }
 
@@ -2597,7 +2597,7 @@
       if (candidates.length === 0) return { ok: false, item: original, reason: "No liquid emotion candidate can be applied." };
       const removed = removeSpecificMod(item, candidates[randomInt(item, 0, candidates.length - 1)]);
       step.removed.push(removed);
-      const added = addLiquidEmotionMod(item, action);
+      const added = addLiquidEmotionMod(item, action, removed.type);
       if (!added.ok) return { ok: false, item: original, reason: added.reason };
       step.added.push(added.mod);
       step.note = "液化情感移除 1 条词缀，并加入对应工艺词缀。";

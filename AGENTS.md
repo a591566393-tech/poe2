@@ -48,6 +48,7 @@ Use the bundled Node.js runtime when available:
 & 'C:\Users\Administrator\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe' '.\tools\audit-crafting-factors.mjs'
 & 'C:\Users\Administrator\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe' '.\tools\audit-currency-pools.mjs'
 & 'C:\Users\Administrator\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe' '.\tools\verify-essence-guarantee-routing.mjs'
+& 'C:\Users\Administrator\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe' '.\tools\audit-desecration-completeness.mjs'
 ```
 
 Local preview:

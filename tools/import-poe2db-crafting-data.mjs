@@ -375,7 +375,7 @@ function semanticClassDecision(text) {
     restrict = true;
     classes.add("boots");
   }
-  if (/\u6655\u7729\u9608\u503c|\u91cd\u5ea6\u6655\u7729/u.test(value)) {
+  if (/(?:\u6655\u7729\u9608\u503c|\u91cd\u5ea6\u6655\u7729)/u.test(value) && !/\u76fe\u724c\s*\u6280\u80fd/u.test(value)) {
     restrict = true;
     classes.add("belt");
   }
@@ -1079,7 +1079,7 @@ function importAll() {
 
   mkdirSync(dataDir, { recursive: true });
   const payload = {
-    version: "poe2db-crafting-2026-07-14-skill-level-suffix1",
+    version: "poe2db-crafting-2026-07-15-desecration-routing1",
     generatedAt: new Date().toISOString(),
     source: "PoE2DB Essence, Catalyst, Desecrated Modifiers, Jewel Liquid Emotion, and Soul Core pages cached under .cache/",
     notes: [

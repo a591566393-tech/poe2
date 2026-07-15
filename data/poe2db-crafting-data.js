@@ -1,8 +1,8 @@
 (function (root) {
   root.POE2DB_CRAFTING_DATA = 
 {
-  "version": "poe2db-crafting-2026-07-14-skill-level-suffix1",
-  "generatedAt": "2026-07-14T03:41:05.112Z",
+  "version": "poe2db-crafting-2026-07-15-desecration-routing1",
+  "generatedAt": "2026-07-15T03:33:10.507Z",
   "source": "PoE2DB Essence, Catalyst, Desecrated Modifiers, Jewel Liquid Emotion, and Soul Core pages cached under .cache/",
   "notes": [
     "Essence and alloy guaranteed modifier text is parsed from PoE2DB item cards.",
@@ -16875,8 +16875,7 @@
       "type": "suffix",
       "classes": [
         "shield",
-        "buckler",
-        "belt"
+        "buckler"
       ],
       "group": "阿曼娜姆之_desecrated_盾牌_技能_重度晕眩_目标时完全_粉碎护甲_amanamu",
       "name": "阿曼娜姆之",

@@ -238,6 +238,15 @@ for (const action of Core.CURRENCIES) {
 
 assert(badPools.length === 0, `ruby ring pools contain invalid mods: ${JSON.stringify(badPools, null, 2)}`);
 
+const beltDesecration = Core.makeItem("belt_heavy", 82, "smoke-belt-desecration-routing");
+beltDesecration.rarity = "rare";
+const beltDesecrationPool = Core.summarizePool(beltDesecration, "normal", "preserved_lockbone").mods.filter((mod) => mod.sourceKind !== "base");
+assert(!beltDesecrationPool.some((mod) => /\u76fe\u724c\s*\u6280\u80fd/u.test(modText(mod))), "belt desecration should not expose shield-only heavy-stun modifiers");
+/* The following legacy mojibake pattern is superseded by the Unicode check above.
+assert(!beltDesecrationPool.some((mod) => /盾牌\s*技能|重度晕眩/u.test(modText(mod))), "belt desecration should not expose shield-only heavy-stun modifiers");
+
+*/
+
 for (const actionId of ["preserved_rib", "ancient_rib", "gnawing_rib", "preserved_jawbone", "ancient_jawbone", "gnawing_jawbone"]) {
   const pool = Core.summarizePool(ring, "normal", actionId);
   assert(pool.mods.length === 0, `${actionId} should not apply to ruby ring, got ${pool.mods.length} mods`);
@@ -553,15 +562,17 @@ assert(!sapphireChaos.ok || !sapphireChaos.step.removed.some((mod) => mod.type =
 
 const normalSapphire = Core.makeItem("jewel_sapphire", 82, "smoke-liquid-normal-sapphire");
 normalSapphire.rarity = "rare";
-pushExplicit(normalSapphire, sapphireSuffixDefinitions[0]);
-const ancientOnNormalSapphire = Core.applyCurrency(normalSapphire, liquidSuffixPlusOneAction.id, "normal");
-assert(!ancientOnNormalSapphire.ok, "ancient liquid emotions should reject basic sapphire jewels");
 const basicSapphireLiquidAction = Core.CURRENCIES.find((action) => (
   action.category === "liquid_emotion" &&
   !action.id.startsWith("Ancient_") &&
   Core.summarizePool(normalSapphire, "normal", action.id).mods.some((mod) => (mod.allowedBaseIds || []).includes("jewel_sapphire"))
 ));
 assert(basicSapphireLiquidAction, "basic sapphire jewel should expose non-ancient liquid emotion actions");
+const normalSapphirePrefix = Core.summarizePool(normalSapphire, "normal", "exalted").mods.find((mod) => mod.type === "prefix");
+assert(normalSapphirePrefix, "basic sapphire same-side fixture needs an ordinary prefix");
+pushExplicit(normalSapphire, normalSapphirePrefix);
+const ancientOnNormalSapphire = Core.applyCurrency(normalSapphire, liquidSuffixPlusOneAction.id, "normal");
+assert(!ancientOnNormalSapphire.ok, "ancient liquid emotions should reject basic sapphire jewels");
 const normalSapphireLiquid = Core.applyCurrency(normalSapphire, basicSapphireLiquidAction.id, "normal");
 assert(normalSapphireLiquid.ok, `basic liquid emotion should apply to rare Sapphire jewel: ${normalSapphireLiquid.reason || "unknown"}`);
 assert(normalSapphireLiquid.step.removed.length === 1 && normalSapphireLiquid.step.added.length === 1, "basic liquid emotion should replace one jewel modifier");
@@ -1096,6 +1107,22 @@ const chosenJewel = Core.chooseDesecrationChoice(revealedJewel.item, revealedJew
 assert(chosenJewel.ok, `Abyssal Echoes choice should be selectable: ${chosenJewel.reason || "unknown"}`);
 assert(Core.countByType(chosenJewel.item, "prefix") === 2 && Core.countByType(chosenJewel.item, "suffix") === 3, "Liquid Contempt plus suffix desecration should finish at 2 prefixes and 3 suffixes");
 
+const liquidSideCounts = { prefix: 0, suffix: 0 };
+for (let index = 0; index < 256; index += 1) {
+  const sideItem = Core.makeItem("jewel_ruby", 82, `smoke-liquid-side-${index}`);
+  sideItem.rarity = "rare";
+  pushExplicit(sideItem, liquidPrefixes[0]);
+  pushExplicit(sideItem, liquidSuffixes[0]);
+  pushExplicit(sideItem, liquidSuffixes[1]);
+  const sideResult = Core.applyCurrency(sideItem, liquidContempt.id, "normal");
+  assert(sideResult.ok, `Liquid Contempt same-side replacement failed at seed ${index}: ${sideResult.reason || "unknown"}`);
+  const removedSide = sideResult.step.removed[0] && sideResult.step.removed[0].type;
+  const addedSide = sideResult.step.added[0] && sideResult.step.added[0].type;
+  assert(removedSide === addedSide, `Liquid Contempt crossed affix sides at seed ${index}: removed ${removedSide}, added ${addedSide}`);
+  liquidSideCounts[addedSide] += 1;
+}
+assert(liquidSideCounts.prefix > 0 && liquidSideCounts.suffix > 0, `Liquid Contempt should exercise both same-side replacement paths: ${JSON.stringify(liquidSideCounts)}`);
+
 console.log(JSON.stringify({
   ok: true,
   checks: {
@@ -1151,6 +1178,7 @@ console.log(JSON.stringify({
       finalSuffixes: Core.countByType(chosenJewel.item, "suffix"),
       abyssalChoices: revealedJewel.choices.length,
     },
+    liquidEmotionSameSide: liquidSideCounts,
     dataVersion: Core.DATA_VERSION,
     craftingVersion: globalThis.POE2DB_CRAFTING_DATA.version,
   },
