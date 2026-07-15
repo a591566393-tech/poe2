@@ -327,11 +327,111 @@
     闪避: "閃避",
   };
 
-  const MARKET_CACHE_URL = "./data/market-rates.json?v=20260713-market1";
+  const MARKET_CACHE_URL = "./data/market-rates.json?v=20260715-market-items1";
   const MARKET_COST_ACTION_API_IDS = {
+    alchemy: "alch",
+    annulment: "annul",
+    arcanist_etcher: "etcher",
+    artificer: "artificers",
+    armour_scrap: "scrap",
+    augmentation: "aug",
+    chance: "chance",
     chaos: "chaos",
     exalted: "exalted",
     divine: "divine",
+    fracturing: "fracturing-orb",
+    mirror: "mirror",
+    regal: "regal",
+    transmutation: "transmute",
+    vaal: "vaal",
+    vaal_arcanists_etcher: "vaal-arcanists-infuser",
+    vaal_armour_infuser: "vaal-armourers-infuser",
+    vaal_catalysing_infuser: "vaal-catalysing-infuser",
+    vaal_whetstone: "vaal-blacksmiths-infuser",
+    whetstone: "whetstone",
+  };
+
+  const MARKET_COST_TIER_API_IDS = {
+    augmentation: {
+      normal: "aug",
+      greater: "greater-orb-of-augmentation",
+      perfect: "perfect-orb-of-augmentation",
+    },
+    chaos: {
+      normal: "chaos",
+      greater: "greater-chaos-orb",
+      perfect: "perfect-chaos-orb",
+    },
+    exalted: {
+      normal: "exalted",
+      greater: "greater-exalted-orb",
+      perfect: "perfect-exalted-orb",
+    },
+    regal: {
+      normal: "regal",
+      greater: "greater-regal-orb",
+      perfect: "perfect-regal-orb",
+    },
+    transmutation: {
+      normal: "transmute",
+      greater: "greater-orb-of-transmutation",
+      perfect: "perfect-orb-of-transmutation",
+    },
+  };
+
+  const MARKET_COST_OMEN_API_IDS = {
+    omen_alchemy_prefixes: "omen-of-sinistral-alchemy",
+    omen_alchemy_suffixes: "omen-of-dextral-alchemy",
+    omen_annulment_powerful: "omen-of-greater-annulment",
+    omen_annulment_prefix: "omen-of-sinistral-annulment",
+    omen_annulment_suffix: "omen-of-dextral-annulment",
+    omen_bright: "omen-of-light",
+    omen_catalysing_exaltation: "omen-of-catalysing-exaltation",
+    omen_chance_ancient: "omen-of-the-ancients",
+    omen_chance_safe: "omen-of-chance",
+    omen_chaos_lowest: "omen-of-whittling",
+    omen_chaos_prefix: "omen-of-sinistral-erasure",
+    omen_chaos_suffix: "omen-of-dextral-erasure",
+    omen_desecration_amanamu: "omen-of-the-liege",
+    omen_desecration_kurgal: "omen-of-the-blackblooded",
+    omen_desecration_prefix: "omen-of-sinistral-necromancy",
+    omen_desecration_reroll: "omen-of-abyssal-echoes",
+    omen_desecration_rotting: "omen-of-putrefaction",
+    omen_desecration_suffix: "omen-of-dextral-necromancy",
+    omen_desecration_ulaman: "omen-of-the-sovereign",
+    omen_essence_prefix: "omen-of-sinistral-crystallisation",
+    omen_essence_suffix: "omen-of-dextral-crystallisation",
+    omen_exalted_homogenising: "omen-of-homogenising-exaltation",
+    omen_exalted_powerful: "omen-of-greater-exaltation",
+    omen_exalted_prefix: "omen-of-sinistral-exaltation",
+    omen_exalted_suffix: "omen-of-dextral-exaltation",
+    omen_regal_homogenising: "omen-of-homogenising-coronation",
+    omen_regal_prefix: "omen-of-sinistral-coronation",
+    omen_regal_suffix: "omen-of-dextral-coronation",
+  };
+
+  const MARKET_COST_DESECRATION_API_IDS = {
+    abyssal_echoes: "omen-of-abyssal-echoes",
+    altered_lockbone: "altered-collarbone",
+    ancient_jawbone: "ancient-jawbone",
+    ancient_lockbone: "ancient-collarbone",
+    ancient_rib: "ancient-rib",
+    gnawing_jawbone: "gnawed-jawbone",
+    gnawing_lockbone: "gnawed-collarbone",
+    gnawing_rib: "gnawed-rib",
+    preserved_cranium: "preserved-cranium",
+    preserved_jawbone: "preserved-jawbone",
+    preserved_lockbone: "preserved-collarbone",
+    preserved_rib: "preserved-rib",
+    preserved_vertebrae: "preserved-vertebrae",
+  };
+
+  const MARKET_COST_RUNE_API_IDS = {
+    rune_cold: "glacial-rune",
+    rune_fire: "desert-rune",
+    rune_iron: "iron-rune",
+    rune_lightning: "storm-rune",
+    serles_triumph: "serles-triumph",
   };
 
   const ACTION_CATEGORY_ORDER = [
@@ -2224,10 +2324,35 @@
   }
 
   function costMarketApiId(entry) {
-    if (!entry || entry.tier !== "normal") return "";
+    if (!entry) return "";
+    const tierMap = MARKET_COST_TIER_API_IDS[entry.actionId];
+    if (tierMap && tierMap[entry.tier || "normal"]) return tierMap[entry.tier || "normal"];
+
     const directApiId = MARKET_COST_ACTION_API_IDS[entry.actionId];
-    if (directApiId) return directApiId;
+    if (directApiId && (!entry.tier || entry.tier === "normal")) return directApiId;
+
+    const action = Core.getAction(entry.actionId);
+    if (!action) return "";
+    if (action.category === "omen") return MARKET_COST_OMEN_API_IDS[action.id] || "";
+    if (action.category === "desecration") return MARKET_COST_DESECRATION_API_IDS[action.id] || "";
+    if (action.category === "rune") return MARKET_COST_RUNE_API_IDS[action.id] || slugMarketId(action.id);
+    if (action.category === "soul_core") return slugMarketId(action.soulCore && action.soulCore.importedId || action.id.replace(/_modifier$/, ""));
+    if (action.category === "essence") return slugMarketId(action.essence && action.essence.importedId || action.id);
+    if (action.category === "alloy") return slugMarketId(action.alloy && action.alloy.importedId || action.id);
+    if (action.category === "liquid_emotion") return slugMarketId(action.liquidEmotion && action.liquidEmotion.importedId || action.id);
+    if (action.category === "catalyst") return slugMarketId(action.catalyst && action.catalyst.importedId || action.id);
     return "";
+  }
+
+  function slugMarketId(value) {
+    return String(value || "")
+      .replace(/([a-z])([A-Z])/g, "$1-$2")
+      .replace(/['’]/g, "")
+      .replace(/_/g, "-")
+      .replace(/[^a-zA-Z0-9-]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "")
+      .toLowerCase();
   }
 
   function costMarketSummaryText(totalRelativePrice, pricedTypes, unpricedTypes) {
@@ -2394,9 +2519,18 @@
 
   function displayStepCurrency(step) {
     const action = step && step.actionId ? Core.getAction(step.actionId) : null;
-    if (action) return displayActionName(action, step.tier || "normal");
+    if (action) {
+      if (state.lang === "en") return englishStepCurrencyName(action, step.tier || "normal");
+      return displayActionName(action, step.tier || "normal");
+    }
     if (state.lang === "en") return englishFromId(step.currencyName);
     return uiText(step.currencyName);
+  }
+
+  function englishStepCurrencyName(action, tier) {
+    const baseName = displayActionName(action, "normal");
+    const prefix = { greater: "Greater", perfect: "Perfect" }[tier || "normal"];
+    return prefix ? prefix + " " + baseName : baseName;
   }
 
   function historyLine(label, mod) {

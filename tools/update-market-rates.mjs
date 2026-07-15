@@ -34,12 +34,38 @@ assert(Array.isArray(rates) && rates.length > 0, "No reference currency rates re
   assert(rates.some((entry) => String(entry.ApiId || "").toLowerCase() === apiId), `Missing ${apiId} rate`);
 });
 
+const items = await fetchJson(`${apiBase}/Leagues/${encodeURIComponent(league.ShortName)}/Items`);
+assert(Array.isArray(items) && items.length > 0, "No item market rates returned");
+
+function normalizeRate(entry) {
+  const apiId = String(entry.ApiId || "").toLowerCase();
+  const relativePrice = Number(entry.RelativePrice ?? entry.CurrentPrice);
+  if (!apiId || !Number.isFinite(relativePrice)) return null;
+  return {
+    ApiId: apiId,
+    Text: entry.Text || entry.Name || apiId,
+    IconUrl: entry.IconUrl || "",
+    RelativePrice: relativePrice,
+    CategoryApiId: entry.CategoryApiId || "",
+  };
+}
+
+const rateByApiId = new Map();
+rates.concat(items).forEach((entry) => {
+  const normalized = normalizeRate(entry);
+  if (!normalized) return;
+  rateByApiId.set(normalized.ApiId, normalized);
+});
+
 const payload = {
   source,
-  sourceApi: `${apiBase}/Leagues/${league.ShortName}/ReferenceCurrencies`,
+  sourceApi: {
+    referenceCurrencies: `${apiBase}/Leagues/${league.ShortName}/ReferenceCurrencies`,
+    items: `${apiBase}/Leagues/${league.ShortName}/Items`,
+  },
   generatedAt: new Date().toISOString(),
   league,
-  rates,
+  rates: Array.from(rateByApiId.values()).sort((a, b) => a.ApiId.localeCompare(b.ApiId)),
 };
 
 await mkdir(dirname(outputPath), { recursive: true });
@@ -49,4 +75,6 @@ console.log(JSON.stringify({
   outputPath,
   league: league.Value || league.ShortName,
   currencyCount: rates.length,
+  itemCount: items.length,
+  rateCount: payload.rates.length,
 }, null, 2));
