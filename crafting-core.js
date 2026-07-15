@@ -1140,8 +1140,15 @@
     return Infinity;
   }
 
+  function additionTotalCapFor(item, type) {
+    const totalCap = totalCapFor(item);
+    if (!Number.isFinite(totalCap)) return totalCap;
+    const oppositeType = type === "prefix" ? "suffix" : "prefix";
+    return Math.max(totalCap, countByType(item, oppositeType) + capFor(item, type));
+  }
+
   function hasOpenSlot(item, type) {
-    return countByType(item, type) < capFor(item, type) && allMods(item).length < totalCapFor(item);
+    return countByType(item, type) < capFor(item, type) && allMods(item).length < additionTotalCapFor(item, type);
   }
 
   function overBaseJewelAffixTypes(item) {
@@ -1168,7 +1175,14 @@
     if (simulated.desecrated) draft.desecratedMods.push(simulated);
     else if (simulated.type === "prefix") draft.prefixes.push(simulated);
     else draft.suffixes.push(simulated);
-    return itemWithinAffixCaps(draft);
+    return itemWithinAdditionCaps(item, draft, mod.type);
+  }
+
+  function itemWithinAdditionCaps(before, after, addedType) {
+    if (countByType(after, addedType) > capFor(after, addedType)) return false;
+    const oppositeType = addedType === "prefix" ? "suffix" : "prefix";
+    if (countByType(after, oppositeType) > Math.max(countByType(before, oppositeType), capFor(after, oppositeType))) return false;
+    return allMods(after).length <= Math.max(additionTotalCapFor(before, addedType), additionTotalCapFor(after, addedType));
   }
 
   function formatRoll(template, values) {
