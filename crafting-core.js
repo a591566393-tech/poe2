@@ -1256,7 +1256,7 @@
 
   function renderMod(mod, item) {
     if (isUnrevealedDesecrated(mod)) return "未揭露的亵渎词缀";
-    return formatRoll(mod.template, item ? catalystAdjustedValues(item, mod) : mod.values);
+    return formatRoll(mod.template, item ? adjustedModValues(item, mod) : mod.values);
   }
 
   function renderRange(mod) {
@@ -1275,6 +1275,39 @@
       if (!Number.isFinite(Number(value))) return value;
       return formatCatalystValue(Number(value) * multiplier, value);
     });
+  }
+
+  function adjustedModValues(item, mod) {
+    const values = catalystAdjustedValues(item, mod);
+    const effectIncrease = modifierEffectIncrease(item, mod);
+    if (effectIncrease <= 0) return values;
+    const multiplier = 1 + effectIncrease / 100;
+    return (values || []).map(function (value, index) {
+      if (!Number.isFinite(Number(value))) return value;
+      const rawValue = mod && Array.isArray(mod.values) ? mod.values[index] : value;
+      return formatCatalystValue(Number(value) * multiplier, rawValue);
+    });
+  }
+
+  function modifierEffectIncrease(item, mod) {
+    if (!item || !mod || (mod.type !== "prefix" && mod.type !== "suffix")) return 0;
+    return affixEffectIncreaseFor(item, mod.type);
+  }
+
+  function affixEffectIncreaseFor(item, targetType) {
+    if (!item || (targetType !== "prefix" && targetType !== "suffix")) return 0;
+    return allMods(item).reduce(function (total, sourceMod) {
+      return total + affixEffectIncreaseFromMod(sourceMod, targetType);
+    }, 0);
+  }
+
+  function affixEffectIncreaseFromMod(mod, targetType) {
+    if (!mod) return 0;
+    const text = [mod.template, mod.sourceText].filter(Boolean).join(" ");
+    const targetPattern = targetType === "prefix" ? /前缀|前綴|Prefix/i : /后缀|後綴|Suffix/i;
+    if (!targetPattern.test(text) || !/效果|Effect/i.test(text) || !/提高|增加|increased/i.test(text)) return 0;
+    const value = Array.isArray(mod.values) ? Number(mod.values[0]) : NaN;
+    return Number.isFinite(value) ? Math.max(0, value) : 0;
   }
 
   function formatCatalystValue(value, rawValue) {
@@ -3040,6 +3073,9 @@
     baseStatLines,
     explicitMods,
     allMods,
+    adjustedModValues,
+    modifierEffectIncrease,
+    affixEffectIncreaseFor,
     countExplicit,
     countByType,
     capFor,

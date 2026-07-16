@@ -1159,6 +1159,29 @@ const chosenJewel = Core.chooseDesecrationChoice(revealedJewel.item, revealedJew
 assert(chosenJewel.ok, `Abyssal Echoes choice should be selectable: ${chosenJewel.reason || "unknown"}`);
 assert(Core.countByType(chosenJewel.item, "prefix") === 2 && Core.countByType(chosenJewel.item, "suffix") === 3, "Liquid Contempt plus suffix desecration should finish at 2 prefixes and 3 suffixes");
 
+const liquidFerocity = Core.CURRENCIES.find((action) => action.id === "Potent_Liquid_Ferocity");
+assert(liquidFerocity, "Potent Liquid Ferocity action is missing");
+const ferocityJewel = Core.makeItem("jewel_ruby", 82, "smoke-liquid-ferocity-effect");
+ferocityJewel.rarity = "rare";
+const ferocityBasePool = Core.summarizePool(ferocityJewel, "normal", "exalted").mods;
+const ferocityPrefixDefinition = ferocityBasePool.find((mod) => mod.type === "prefix" && (mod.rolls || []).length === 1);
+const ferocitySuffixDefinition = ferocityBasePool.find((mod) => mod.type === "suffix" && (mod.rolls || []).length === 1);
+const ferocityEffectDefinition = Core.summarizePool(ferocityJewel, "normal", liquidFerocity.id).mods.find((mod) => (
+  mod.type === "prefix" && /后缀|Suffix/i.test(mod.sourceText || mod.template || "")
+));
+assert(ferocityPrefixDefinition && ferocitySuffixDefinition && ferocityEffectDefinition, "need prefix, suffix, and suffix-effect definitions for Liquid Ferocity check");
+const ferocityPrefix = pushExplicit(ferocityJewel, ferocityPrefixDefinition);
+const ferocitySuffix = pushExplicit(ferocityJewel, ferocitySuffixDefinition);
+const ferocityEffect = pushExplicit(ferocityJewel, ferocityEffectDefinition);
+ferocityPrefix.values = [25];
+ferocitySuffix.values = [25];
+ferocityEffect.values = [60];
+assert(Core.affixEffectIncreaseFor(ferocityJewel, "suffix") === 60, "Liquid Ferocity should expose 60% increased suffix effect");
+assert(Core.affixEffectIncreaseFor(ferocityJewel, "prefix") === 0, "suffix effect modifier should not affect prefixes");
+assert(Core.adjustedModValues(ferocityJewel, ferocitySuffix)[0] === 40, "60% increased suffix effect should scale 25 to 40");
+assert(Core.adjustedModValues(ferocityJewel, ferocityPrefix)[0] === 25, "suffix effect modifier should leave prefix values unchanged");
+assert(Core.renderMod(ferocitySuffix, ferocityJewel).includes("40"), "rendered suffix should display its final effect-adjusted value");
+
 const liquidSideCounts = { prefix: 0, suffix: 0 };
 for (let index = 0; index < 256; index += 1) {
   const sideItem = Core.makeItem("jewel_ruby", 82, `smoke-liquid-side-${index}`);

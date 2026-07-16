@@ -984,14 +984,14 @@
     const localized = localizedEntry(I18N.modifiers, mod.id);
     if (localized && localized.template) return [
       localized.name || "",
-      formatLocalizedTemplate(localized.template, modValues(mod)),
+      formatLocalizedTemplate(localized.template, modValues(mod, item)),
     ].filter(Boolean).join(" · ");
     if (state.lang === "en") {
       return [
         mod.name ? englishFromId(mod.name) : "",
         englishFromId(mod.group || mod.baseId || mod.id),
         mod.tier,
-        rollSummary(mod),
+        modValues(mod, item).join(", "),
       ].filter(Boolean).join(" · ");
     }
     return uiText(Core.renderMod(mod, item));
@@ -1026,7 +1026,8 @@
     });
   }
 
-  function modValues(mod) {
+  function modValues(mod, item) {
+    if (item && Core.adjustedModValues) return Core.adjustedModValues(item, mod).map(String);
     if (Array.isArray(mod.values) && mod.values.length > 0) return mod.values.map(String);
     return rangeValues(mod);
   }
@@ -1979,6 +1980,8 @@
         return escapeHtml("插槽 " + (index + 1) + ": " + socket.rune.label + " - " + socket.rune.effectText);
       })));
     }
+
+    els.itemPanel.appendChild(renderFinalItemSummary(item, base, baseStatLines, prefixMods, suffixMods));
   }
 
   function sectionBlock(title, lines) {
@@ -1995,6 +1998,91 @@
     });
     section.append(heading, list);
     return section;
+  }
+
+  function renderFinalItemSummary(item, base, baseStatLines, prefixMods, suffixMods) {
+    const details = document.createElement("details");
+    details.className = "final-item-summary";
+
+    const summary = document.createElement("summary");
+    summary.textContent = state.lang === "en" ? "View complete item values" : uiText("查看完整装备数值");
+    details.appendChild(summary);
+
+    const body = document.createElement("div");
+    body.className = "final-item-summary-body";
+
+    const title = document.createElement("div");
+    title.className = "final-item-title";
+    title.textContent = displayRarity(item.rarity) + " " + displayBaseName(base);
+    body.appendChild(title);
+
+    const overview = [
+      (state.lang === "en" ? "Item level " : uiText("物品等级 ")) + item.itemLevel,
+      (state.lang === "en" ? "Quality " : uiText("品质 ")) + item.quality + "% / " + Core.qualityCapFor(item) + "%",
+      (state.lang === "en" ? "Sockets " : uiText("插槽 ")) + item.sockets.length,
+    ];
+    if (item.catalyst && item.catalyst.quality) {
+      overview.push((state.lang === "en" ? "Catalyst " : uiText("催化剂 ")) + uiText(item.catalyst.name) + " " + item.catalyst.quality + "%");
+    }
+    const prefixEffect = Core.affixEffectIncreaseFor ? Core.affixEffectIncreaseFor(item, "prefix") : 0;
+    const suffixEffect = Core.affixEffectIncreaseFor ? Core.affixEffectIncreaseFor(item, "suffix") : 0;
+    if (prefixEffect > 0) overview.push((state.lang === "en" ? "Prefix modifier effect +" : uiText("前缀效果 +")) + prefixEffect + "%");
+    if (suffixEffect > 0) overview.push((state.lang === "en" ? "Suffix modifier effect +" : uiText("后缀效果 +")) + suffixEffect + "%");
+    if (item.corrupted) overview.push(state.lang === "en" ? "Corrupted" : uiText("已腐化"));
+    if (item.mirrored) overview.push(state.lang === "en" ? "Mirrored" : uiText("已镜像"));
+    appendFinalSummaryGroup(body, state.lang === "en" ? "Item" : uiText("装备信息"), overview.map(escapeHtml));
+
+    if (baseStatLines.length > 0) {
+      appendFinalSummaryGroup(body, state.lang === "en" ? "Final base stats" : uiText("最终基础数值"), baseStatLines.map(function (line) {
+        return escapeHtml(uiText(line.text));
+      }));
+    }
+
+    if (item.implicits.length > 0) {
+      appendFinalSummaryGroup(body, state.lang === "en" ? "Implicit modifiers" : uiText("固定词缀"), item.implicits.map(function (implicit) {
+        return escapeHtml(uiText(Core.renderImplicit(implicit)));
+      }));
+    }
+
+    appendFinalSummaryGroup(body, state.lang === "en" ? "Final prefixes" : uiText("最终前缀"), finalModifierLines(prefixMods, item));
+    appendFinalSummaryGroup(body, state.lang === "en" ? "Final suffixes" : uiText("最终后缀"), finalModifierLines(suffixMods, item));
+
+    if (item.sockets.length > 0) {
+      appendFinalSummaryGroup(body, state.lang === "en" ? "Socket effects" : uiText("插槽效果"), item.sockets.map(function (socket, index) {
+        const label = (state.lang === "en" ? "Socket " : uiText("插槽 ")) + (index + 1);
+        if (!socket.rune) return escapeHtml(label + ": " + (state.lang === "en" ? "Empty" : uiText("空")));
+        return escapeHtml(label + ": " + uiText(socket.rune.label) + " - " + uiText(socket.rune.effectText));
+      }));
+    }
+
+    details.appendChild(body);
+    return details;
+  }
+
+  function finalModifierLines(mods, item) {
+    if (!mods.length) return [escapeHtml(state.lang === "en" ? "None" : uiText("无"))];
+    return mods.map(function (mod) {
+      const finalText = renderModText(mod, item);
+      const originalText = renderModText(mod, null);
+      if (finalText === originalText) return escapeHtml(finalText);
+      return escapeHtml(finalText) + '<span class="final-value-source">' + escapeHtml((state.lang === "en" ? "Base " : uiText("基础 ")) + originalText) + "</span>";
+    });
+  }
+
+  function appendFinalSummaryGroup(container, title, lines) {
+    const section = document.createElement("section");
+    section.className = "final-item-group";
+    const heading = document.createElement("h4");
+    heading.textContent = title;
+    const list = document.createElement("div");
+    list.className = "final-item-lines";
+    lines.forEach(function (line) {
+      const row = document.createElement("div");
+      row.innerHTML = line;
+      list.appendChild(row);
+    });
+    section.append(heading, list);
+    container.appendChild(section);
   }
 
   function renderDesecrationChoicePanel(pending) {
@@ -2068,7 +2156,7 @@
       if (mod) {
         row.innerHTML = [
           '<div class="mod-text">' + escapeHtml(renderModText(mod, state.item)) + "</div>",
-          '<div class="mod-meta">' + escapeHtml(modMetaText(mod)) + "</div>",
+          '<div class="mod-meta">' + escapeHtml(modMetaText(mod, state.item)) + "</div>",
         ].join("");
       } else {
         row.textContent = state.lang === "en" ? "Empty slot" : uiText("空槽");
@@ -2088,14 +2176,16 @@
     return classes.join(" ");
   }
 
-  function modMetaText(mod) {
+  function modMetaText(mod, item) {
     if (mod.desecrated && mod.revealed === false) return "亵渎 · 未揭露";
+    const effectIncrease = item && Core.modifierEffectIncrease ? Core.modifierEffectIncrease(item, mod) : 0;
     return [
       mod.desecrated ? "亵渎" : "显式",
       mod.tier,
       "等级 " + mod.level,
       mod.name,
       mod.fractured ? "破溃" : "",
+      effectIncrease > 0 ? (state.lang === "en" ? "Modifier effect +" : uiText("词缀效果 +")) + effectIncrease + "%" : "",
     ].filter(Boolean).join(" · ");
   }
 
