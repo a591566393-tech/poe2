@@ -498,6 +498,25 @@
     ]),
   };
 
+  const GENESIS_CLASSES = new Set(["ring", "amulet", "belt"]);
+  const GENESIS_BLOCK_GROUPS = {
+    ring: {
+      attributes: ["attribute", "strength", "dexterity", "intelligence"],
+      elements: ["elemental", "fire", "cold", "lightning"],
+      resources: ["life", "mana"],
+    },
+    amulet: {
+      caster: ["caster"],
+      critical: ["critical"],
+      attack: ["attack"],
+    },
+    belt: {
+      elements: ["elemental", "fire", "cold", "lightning"],
+      resources: ["life", "mana"],
+      utility: ["flask", "charm"],
+    },
+  };
+
   const TEXT = {
     "zh-Hans": {
       language: "语言",
@@ -611,10 +630,56 @@
     },
   };
 
+  Object.assign(TEXT["zh-Hans"], {
+    none: "无",
+    genesisStart: "起源之树孕育",
+    genesisRoute: "词缀路线",
+    genesisAffixCount: "生成词缀数",
+    genesisMinLevel: "全局最低词缀等级",
+    genesisSpecialMinLevel: "专属词缀最低等级",
+    genesisBlockedTags: "排除词缀类型",
+    genesisLuckyScope: "额外取值 2 次",
+    genesisReserve: "保留空词缀",
+    genesisCraftedMod: "5% 外延工艺词缀节点",
+    genesisMaximumPrefix: "项链前缀数值上限",
+    genesisMaximumSuffix: "项链后缀数值上限",
+    growGenesis: "孕育装备",
+  });
+  Object.assign(TEXT.en, {
+    none: "None",
+    genesisStart: "Genesis Tree",
+    genesisRoute: "Modifier route",
+    genesisAffixCount: "Generated modifiers",
+    genesisMinLevel: "Global minimum mod level",
+    genesisSpecialMinLevel: "Special minimum mod level",
+    genesisBlockedTags: "Excluded modifier type",
+    genesisLuckyScope: "Roll values 2 extra times",
+    genesisReserve: "Reserved empty modifier",
+    genesisCraftedMod: "5% Otherworldly crafted node",
+    genesisMaximumPrefix: "Maximum amulet prefix values",
+    genesisMaximumSuffix: "Maximum amulet suffix values",
+    growGenesis: "Grow item",
+  });
+
   TEXT["zh-Hant"] = Object.keys(TEXT["zh-Hans"]).reduce(function (map, key) {
     map[key] = toTraditional(TEXT["zh-Hans"][key]);
     return map;
   }, {});
+  Object.assign(TEXT["zh-Hant"], {
+    none: "無",
+    genesisStart: "創生之樹孕育",
+    genesisRoute: "詞綴路線",
+    genesisAffixCount: "生成詞綴數",
+    genesisMinLevel: "全域最低詞綴等級",
+    genesisSpecialMinLevel: "專屬詞綴最低等級",
+    genesisBlockedTags: "排除詞綴類型",
+    genesisLuckyScope: "額外取值 2 次",
+    genesisReserve: "保留空詞綴",
+    genesisCraftedMod: "5% 外延工藝詞綴節點",
+    genesisMaximumPrefix: "項鍊前綴數值上限",
+    genesisMaximumSuffix: "項鍊後綴數值上限",
+    growGenesis: "孕育裝備",
+  });
 
   document.addEventListener("DOMContentLoaded", function () {
     bindElements();
@@ -652,6 +717,19 @@
       "customStats",
       "applyCustomButton",
       "clearCustomButton",
+      "genesisRoute",
+      "genesisAffixCount",
+      "genesisMinLevel",
+      "genesisSpecialMinLevel",
+      "genesisBlockedTags",
+      "genesisLuckyScope",
+      "genesisReserve",
+      "genesisCraftedMod",
+      "genesisMaximumControls",
+      "genesisMaximumPrefix",
+      "genesisMaximumSuffix",
+      "growGenesisButton",
+      "genesisStats",
       "currencySearch",
       "currencyCategory",
       "currencyCategoryTabs",
@@ -1338,6 +1416,12 @@
       ["preserved_vertebrae", state.lang === "en" ? "Vertebrae desecration" : uiText("椎骨亵渎")],
     ];
 
+    entries.push(
+      ["genesis_minion", genesisLabel("起源之树 / 召唤生物", "創生之樹 / 召喚物", "Genesis Tree / Minion")],
+      ["genesis_caster", genesisLabel("起源之树 / 施法", "創生之樹 / 施法", "Genesis Tree / Caster")],
+      ["genesis_crafted", genesisLabel("起源之树 / 5% 外延工艺", "創生之樹 / 5% 外延工藝", "Genesis Tree / 5% Otherworldly")]
+    );
+
     Core.CURRENCIES.forEach(function (action) {
       if (!["essence", "alloy", "liquid_emotion", "desecration", "soul_core"].includes(action.category)) return;
       if (entries.some(function (entry) { return entry[0] === action.id; })) return;
@@ -1362,6 +1446,21 @@
     els.customModSearch.addEventListener("input", renderCustomPanel);
     els.applyCustomButton.addEventListener("click", applyCustomStart);
     els.clearCustomButton.addEventListener("click", clearCustomStart);
+    if (els.growGenesisButton) els.growGenesisButton.addEventListener("click", applyGenesisStart);
+    [
+      els.genesisRoute,
+      els.genesisAffixCount,
+      els.genesisMinLevel,
+      els.genesisSpecialMinLevel,
+      els.genesisBlockedTags,
+      els.genesisLuckyScope,
+      els.genesisReserve,
+      els.genesisCraftedMod,
+      els.genesisMaximumPrefix,
+      els.genesisMaximumSuffix,
+    ].filter(Boolean).forEach(function (control) {
+      control.addEventListener("change", renderGenesisPanel);
+    });
     customModSelects().forEach(function (select) {
       select.addEventListener("change", renderCustomPanel);
     });
@@ -1481,6 +1580,218 @@
     return customModSelects().map(function (select) {
       return select.disabled ? "" : select.value;
     }).filter(Boolean);
+  }
+
+  function genesisLabel(hans, hant, english) {
+    if (state.lang === "en") return english;
+    if (state.lang === "zh-Hant") return hant;
+    return hans;
+  }
+
+  function setGenesisSelectOptions(select, options, fallbackValue) {
+    if (!select) return;
+    const previous = select.value;
+    select.innerHTML = "";
+    options.forEach(function (entry) {
+      const option = document.createElement("option");
+      option.value = entry.value;
+      option.textContent = entry.label;
+      select.appendChild(option);
+    });
+    const values = options.map(function (entry) { return entry.value; });
+    select.value = values.includes(previous) ? previous : fallbackValue;
+  }
+
+  function genesisRouteOptions(base) {
+    const options = [{
+      value: "normal:0",
+      label: genesisLabel("普通词缀池", "普通詞綴池", "Normal modifier pool"),
+    }];
+    if (!base || !["ring", "belt"].includes(base.classId)) return options;
+    [
+      ["minion", "召唤生物", "召喚物", "Minion"],
+      ["caster", "施法", "施法", "Caster"],
+    ].forEach(function (route) {
+      options.push({
+        value: route[0] + ":0",
+        label: genesisLabel("可出现" + route[1] + "词缀", "可出現" + route[2] + "詞綴", route[3] + " modifiers enabled"),
+      });
+      options.push({
+        value: route[0] + ":1",
+        label: genesisLabel("保证 1 条" + route[1] + "词缀", "保證 1 條" + route[2] + "詞綴", "Guarantee 1 " + route[3].toLowerCase() + " modifier"),
+      });
+      options.push({
+        value: route[0] + ":2",
+        label: genesisLabel("保证 2 条" + route[1] + "词缀", "保證 2 條" + route[2] + "詞綴", "Guarantee 2 " + route[3].toLowerCase() + " modifiers"),
+      });
+    });
+    return options;
+  }
+
+  function genesisBlockedOptions(base) {
+    const options = [{ value: "none", label: t("none") }];
+    const labels = {
+      attributes: genesisLabel("属性", "屬性", "Attributes"),
+      elements: genesisLabel("火焰、冰霜、闪电", "火焰、冰冷、閃電", "Fire, cold and lightning"),
+      resources: genesisLabel("生命与魔力", "生命與魔力", "Life and mana"),
+      caster: genesisLabel("施法", "施法", "Caster"),
+      critical: genesisLabel("暴击", "暴擊", "Critical"),
+      attack: genesisLabel("攻击", "攻擊", "Attack"),
+      utility: genesisLabel("药剂与咒符", "藥劑與護符", "Flask and charm"),
+    };
+    const groups = base && GENESIS_BLOCK_GROUPS[base.classId] ? GENESIS_BLOCK_GROUPS[base.classId] : {};
+    Object.keys(groups).forEach(function (id) {
+      options.push({ value: id, label: labels[id] || id });
+    });
+    return options;
+  }
+
+  function genesisLuckyOptions(base, hasSpecialPool) {
+    const options = [{ value: "none", label: t("none") }];
+    if (!base) return options;
+    if (base.classId === "amulet") {
+      options.push({ value: "prefix", label: t("prefix") });
+      options.push({ value: "suffix", label: t("suffix") });
+      return options;
+    }
+    options.push({ value: "all", label: genesisLabel("所有词缀", "所有詞綴", "All modifiers") });
+    if (hasSpecialPool) options.push({ value: "genesis", label: genesisLabel("专属词缀", "專屬詞綴", "Special modifiers") });
+    return options;
+  }
+
+  function genesisReserveOptions() {
+    return [
+      { value: "none", label: t("none") },
+      { value: "prefix", label: t("prefix") },
+      { value: "suffix", label: t("suffix") },
+    ];
+  }
+
+  function genesisCraftedOptions(draft) {
+    const options = [{ value: "none", label: t("none") }];
+    if (!draft || !Core.eligibleGenesisCraftedMods) return options;
+    Core.eligibleGenesisCraftedMods(draft, { ignoreItemState: true })
+      .slice()
+      .sort(function (left, right) {
+        return left.type.localeCompare(right.type) || renderRangeText(left).localeCompare(renderRangeText(right));
+      })
+      .forEach(function (mod) {
+        const localized = localizedEntry(I18N.modifiers, mod.id);
+        const name = localized && localized.name ? localized.name : (state.lang === "en" ? englishFromId(mod.name) : uiText(mod.name));
+        options.push({
+          value: mod.id,
+          label: (mod.type === "prefix" ? t("prefix") : t("suffix")) + " · " + [name, renderRangeText(mod)].filter(Boolean).join(" · ") + " · 5%",
+        });
+      });
+    return options;
+  }
+
+  function parseGenesisRoute() {
+    const parts = String(els.genesisRoute ? els.genesisRoute.value : "normal:0").split(":");
+    return {
+      pool: parts[0] === "minion" || parts[0] === "caster" ? parts[0] : "",
+      guaranteedCount: Number(parts[1]) || 0,
+    };
+  }
+
+  function genesisOptionsFromControls(base) {
+    const route = parseGenesisRoute();
+    const blockedGroup = els.genesisBlockedTags ? els.genesisBlockedTags.value : "none";
+    const blockedGroups = base && GENESIS_BLOCK_GROUPS[base.classId] ? GENESIS_BLOCK_GROUPS[base.classId] : {};
+    const reserve = els.genesisReserve ? els.genesisReserve.value : "none";
+    return {
+      pool: route.pool,
+      guaranteedCount: route.guaranteedCount,
+      targetAffixCount: Number(els.genesisAffixCount && els.genesisAffixCount.value) || 4,
+      minLevel: Number(els.genesisMinLevel && els.genesisMinLevel.value) || 0,
+      genesisMinLevel: Number(els.genesisSpecialMinLevel && els.genesisSpecialMinLevel.value) || 0,
+      blockedTags: blockedGroups[blockedGroup] || [],
+      luckyScope: els.genesisLuckyScope && els.genesisLuckyScope.value !== "none" ? els.genesisLuckyScope.value : "",
+      reservePrefix: reserve === "prefix",
+      reserveSuffix: reserve === "suffix",
+      maximumPrefix: !!(base && base.classId === "amulet" && els.genesisMaximumPrefix && els.genesisMaximumPrefix.checked),
+      maximumSuffix: !!(base && base.classId === "amulet" && els.genesisMaximumSuffix && els.genesisMaximumSuffix.checked),
+      craftedModId: els.genesisCraftedMod && els.genesisCraftedMod.value !== "none" ? els.genesisCraftedMod.value : "",
+    };
+  }
+
+  function renderGenesisPanel() {
+    if (!els.genesisRoute) return;
+    const base = Core.getBase(els.baseSelect.value);
+    const supported = !!(base && GENESIS_CLASSES.has(base.classId));
+
+    setGenesisSelectOptions(els.genesisRoute, genesisRouteOptions(base), "normal:0");
+    const route = parseGenesisRoute();
+    setGenesisSelectOptions(els.genesisBlockedTags, genesisBlockedOptions(base), "none");
+    setGenesisSelectOptions(els.genesisLuckyScope, genesisLuckyOptions(base, !!route.pool), "none");
+    setGenesisSelectOptions(els.genesisReserve, genesisReserveOptions(), "none");
+
+    const controls = [
+      els.genesisRoute,
+      els.genesisAffixCount,
+      els.genesisMinLevel,
+      els.genesisBlockedTags,
+      els.genesisLuckyScope,
+      els.genesisReserve,
+      els.genesisCraftedMod,
+    ].filter(Boolean);
+    controls.forEach(function (control) { control.disabled = !supported; });
+    if (els.genesisSpecialMinLevel) els.genesisSpecialMinLevel.disabled = !supported || !route.pool;
+    if (els.genesisMaximumControls) els.genesisMaximumControls.classList.toggle("is-hidden", !supported || base.classId !== "amulet");
+    if (els.genesisMaximumPrefix) els.genesisMaximumPrefix.disabled = !supported || base.classId !== "amulet";
+    if (els.genesisMaximumSuffix) els.genesisMaximumSuffix.disabled = !supported || base.classId !== "amulet";
+    if (els.growGenesisButton) els.growGenesisButton.disabled = !supported;
+
+    if (!supported) {
+      els.genesisStats.textContent = genesisLabel("仅支持戒指、项链和腰带", "僅支援戒指、項鍊和腰帶", "Rings, amulets and belts only");
+      return;
+    }
+
+    const itemLevel = Math.max(Number(els.itemLevel.value) || 1, base.requiredLevel);
+    const draft = Core.makeItem(base.id, itemLevel, "genesis-reference");
+    draft.rarity = "rare";
+    setGenesisSelectOptions(els.genesisCraftedMod, genesisCraftedOptions(draft), "none");
+    const options = genesisOptionsFromControls(base);
+    const specialPool = route.pool ? Core.eligibleGenesisMods(draft, Object.assign({}, options, { genesisOnly: true })) : [];
+    const fullPool = Core.eligibleGenesisMods(draft, options);
+    els.genesisStats.textContent = route.pool
+      ? genesisLabel("专属 " + specialPool.length + " · 总池 " + fullPool.length, "專屬 " + specialPool.length + " · 總池 " + fullPool.length, "Special " + specialPool.length + " · total " + fullPool.length)
+      : genesisLabel("总池 " + fullPool.length, "總池 " + fullPool.length, "Total pool " + fullPool.length);
+    const craftedCount = Core.eligibleGenesisCraftedMods ? Core.eligibleGenesisCraftedMods(draft, { ignoreItemState: true }).length : 0;
+    els.genesisStats.textContent += genesisLabel(" · 5% 工艺 " + craftedCount, " · 5% 工藝 " + craftedCount, " · 5% crafted " + craftedCount);
+  }
+
+  function applyGenesisStart() {
+    const base = Core.getBase(els.baseSelect.value);
+    if (!base || !GENESIS_CLASSES.has(base.classId)) {
+      state.lastMessage = genesisLabel("起源之树只能孕育戒指、项链或腰带。", "創生之樹只能孕育戒指、項鍊或腰帶。", "The Genesis Tree can only grow rings, amulets or belts.");
+      render();
+      return;
+    }
+    const itemLevel = Math.max(Number(els.itemLevel.value) || 1, base.requiredLevel);
+    if (!els.seedLock.checked) els.seedInput.value = makeSeed();
+    els.itemLevel.value = String(itemLevel);
+
+    const result = Core.makeGenesisItem(base.id, itemLevel, els.seedInput.value, genesisOptionsFromControls(base));
+    if (!result.ok) {
+      state.lastMessage = result.reason;
+      render();
+      return;
+    }
+
+    state.item = result.item;
+    state.undoStack = [];
+    const craftedResult = state.item.genesis && state.item.genesis.craftedModId
+      ? (state.item.genesis.craftedTriggered
+        ? genesisLabel("，5% 工艺词缀命中。", "，5% 工藝詞綴命中。", "; the 5% crafted modifier hit.")
+        : genesisLabel("，5% 工艺词缀未命中。", "，5% 工藝詞綴未命中。", "; the 5% crafted modifier missed."))
+      : "";
+    state.lastMessage = genesisLabel(
+      "已从起源之树孕育 " + Core.countExplicit(state.item) + " 词缀装备",
+      "已從創生之樹孕育 " + Core.countExplicit(state.item) + " 詞綴裝備",
+      "Genesis Tree item grown with " + Core.countExplicit(state.item) + " modifiers"
+    ) + craftedResult;
+    render();
   }
 
   function undo() {
@@ -1821,6 +2132,9 @@
   }
 
   function modWeightLabel(mod) {
+    if (mod && mod.genesisCrafted) {
+      return genesisLabel("节点固定概率 5%", "節點固定機率 5%", "Fixed node chance 5%");
+    }
     const label = state.lang === "en" ? "Weight " : uiText("权重 ");
     if (mod && mod.effectiveWeight != null && Number(mod.effectiveWeight) !== Number(mod.weight)) {
       return label + formatWeight(mod.weight) + " -> " + formatWeight(mod.effectiveWeight);
@@ -1843,6 +2157,7 @@
   }
 
   function modChanceText(mod, typeTotals) {
+    if (mod && mod.genesisCrafted) return ((Number(mod.craftChance) || 0) * 100) + "%";
     const typeTotal = typeTotals[mod.type === "prefix" ? "prefix" : "suffix"];
     return modChanceTextFromTotal(mod, typeTotal);
   }
@@ -1857,6 +2172,7 @@
   function render() {
     renderItem();
     renderCustomPanel();
+    renderGenesisPanel();
     renderActionButtons();
     renderCostSummary();
     renderHistory();
@@ -1906,6 +2222,7 @@
       '<div class="item-badges">',
       '<span class="badge">' + escapeHtml(state.lang === "en" ? "Item level " : uiText("物等 ")) + item.itemLevel + "</span>",
       '<span class="badge">' + escapeHtml(displayClassLabel(base)) + "</span>",
+      item.genesis && item.genesis.grown ? '<span class="badge badge-genesis">' + escapeHtml(genesisLabel("起源之树", "創生之樹", "Genesis Tree")) + "</span>" : "",
       item.quality ? '<span class="badge">' + escapeHtml(state.lang === "en" ? "Quality " : uiText("品质 ")) + item.quality + "%</span>" : "",
       item.catalyst && item.catalyst.quality ? '<span class="badge">' + escapeHtml(t("catalyst") + " " + uiText(item.catalyst.name) + " " + item.catalyst.quality + "%") + "</span>" : "",
       item.sockets.length ? '<span class="badge">' + escapeHtml(state.lang === "en" ? "Sockets " : uiText("插槽 ")) + item.sockets.length + "</span>" : "",
@@ -1918,6 +2235,13 @@
       "</div>",
     ].join("");
     els.itemPanel.appendChild(header);
+
+    if (item.genesis && item.genesis.grown) {
+      els.itemPanel.appendChild(sectionBlock(
+        genesisLabel("孕育来源", "孕育來源", "Growth source"),
+        genesisEffectLines(item.genesis).map(escapeHtml)
+      ));
+    }
 
     if (item.hinekoraLock) {
       const lines = [state.lang === "en" ? "Hinekora's Lock: waiting to preview the next currency result" : uiText("辛格拉的发辫：等待预示下一次通货结果")];
@@ -2000,6 +2324,38 @@
     return section;
   }
 
+  function genesisEffectLines(genesis) {
+    const lines = [genesisLabel("起源之树", "創生之樹", "The Genesis Tree")];
+    if (genesis.pool) {
+      const poolName = genesis.pool === "minion"
+        ? genesisLabel("召唤生物", "召喚物", "Minion")
+        : genesisLabel("施法", "施法", "Caster");
+      lines.push(poolName + (genesis.guaranteedCount
+        ? genesisLabel(" · 保证 " + genesis.guaranteedCount + " 条", " · 保證 " + genesis.guaranteedCount + " 條", " · guaranteed " + genesis.guaranteedCount)
+        : genesisLabel(" · 可出现", " · 可出現", " · enabled")));
+    }
+    lines.push(genesisLabel("生成词缀 " + genesis.targetAffixCount, "生成詞綴 " + genesis.targetAffixCount, "Generated modifiers " + genesis.targetAffixCount));
+    if (genesis.minLevel) lines.push(genesisLabel("最低词缀等级 " + genesis.minLevel, "最低詞綴等級 " + genesis.minLevel, "Minimum modifier level " + genesis.minLevel));
+    if (genesis.genesisMinLevel) lines.push(genesisLabel("专属最低等级 " + genesis.genesisMinLevel, "專屬最低等級 " + genesis.genesisMinLevel, "Special minimum level " + genesis.genesisMinLevel));
+    if (genesis.blockedTags && genesis.blockedTags.length) {
+      lines.push(genesisLabel("排除标签：", "排除標籤：", "Excluded tags: ") + genesis.blockedTags.join(", "));
+    }
+    if (genesis.reservePrefix) lines.push(genesisLabel("保留空前缀", "保留空前綴", "Reserved empty prefix"));
+    if (genesis.reserveSuffix) lines.push(genesisLabel("保留空后缀", "保留空後綴", "Reserved empty suffix"));
+    if (genesis.luckyScope) lines.push(genesisLabel("额外取值 2 次：", "額外取值 2 次：", "Two extra value rolls: ") + genesis.luckyScope);
+    if (genesis.maximumPrefix) lines.push(genesisLabel("前缀数值上限", "前綴數值上限", "Maximum prefix values"));
+    if (genesis.maximumSuffix) lines.push(genesisLabel("后缀数值上限", "後綴數值上限", "Maximum suffix values"));
+    if (genesis.craftedModId) {
+      const definition = Core.MODIFIERS.find(function (mod) { return mod.id === genesis.craftedModId; });
+      const result = genesis.craftedTriggered
+        ? genesisLabel("命中", "命中", "hit")
+        : genesisLabel("未命中", "未命中", "missed");
+      lines.push(genesisLabel("5% 外延工艺：", "5% 外延工藝：", "5% Otherworldly craft: ")
+        + (definition ? renderRangeText(definition) : genesis.craftedModId) + " · " + result);
+    }
+    return lines;
+  }
+
   function renderFinalItemSummary(item, base, baseStatLines, prefixMods, suffixMods) {
     const details = document.createElement("details");
     details.className = "final-item-summary";
@@ -2021,6 +2377,9 @@
       (state.lang === "en" ? "Quality " : uiText("品质 ")) + item.quality + "% / " + Core.qualityCapFor(item) + "%",
       (state.lang === "en" ? "Sockets " : uiText("插槽 ")) + item.sockets.length,
     ];
+    if (item.genesis && item.genesis.grown) {
+      overview.push(genesisLabel("起源之树孕育", "創生之樹孕育", "Grown on the Genesis Tree"));
+    }
     if (item.catalyst && item.catalyst.quality) {
       overview.push((state.lang === "en" ? "Catalyst " : uiText("催化剂 ")) + uiText(item.catalyst.name) + " " + item.catalyst.quality + "%");
     }
@@ -2172,19 +2531,34 @@
     if (mod.desecrated) classes.push("is-desecrated");
     if (mod.desecrated && mod.revealed === false) classes.push("is-unrevealed");
     if (mod.fractured) classes.push("is-fractured");
+    if (mod.genesisPool || mod.genesisCrafted) classes.push("is-genesis");
     if (removalPreviewKeys && removalPreviewKeys.has(Core.modKey(mod))) classes.push("is-removal-candidate");
     return classes.join(" ");
   }
 
   function modMetaText(mod, item) {
-    if (mod.desecrated && mod.revealed === false) return "亵渎 · 未揭露";
+    if (mod.desecrated && mod.revealed === false) {
+      return state.lang === "en" ? "Desecrated · Unrevealed" : uiText("亵渎 · 未揭露");
+    }
     const effectIncrease = item && Core.modifierEffectIncrease ? Core.modifierEffectIncrease(item, mod) : 0;
+    const localized = localizedEntry(I18N.modifiers, mod.id);
+    const modName = localized && localized.name
+      ? localized.name
+      : (state.lang === "en" ? englishFromId(mod.name) : uiText(mod.name));
+    const genesisSource = mod.genesisCrafted
+      ? genesisLabel("起源之树 5% 外延工艺", "創生之樹 5% 外延工藝", "Genesis 5% Otherworldly craft")
+      : (mod.genesisPool ? genesisLabel(
+        "起源之树" + (mod.genesisPool === "minion" ? "召唤" : "施法"),
+        "創生之樹" + (mod.genesisPool === "minion" ? "召喚" : "施法"),
+        "Genesis " + mod.genesisPool
+      ) : "");
     return [
-      mod.desecrated ? "亵渎" : "显式",
+      genesisSource,
+      mod.desecrated ? (state.lang === "en" ? "Desecrated" : uiText("亵渎")) : (state.lang === "en" ? "Explicit" : uiText("显式")),
       mod.tier,
-      "等级 " + mod.level,
-      mod.name,
-      mod.fractured ? "破溃" : "",
+      (state.lang === "en" ? "Level " : uiText("等级 ")) + mod.level,
+      modName,
+      mod.fractured ? (state.lang === "en" ? "Fractured" : uiText("破溃")) : "",
       effectIncrease > 0 ? (state.lang === "en" ? "Modifier effect +" : uiText("词缀效果 +")) + effectIncrease + "%" : "",
     ].filter(Boolean).join(" · ");
   }
@@ -2338,7 +2712,10 @@
   function costableHistorySteps() {
     if (!state.item || !Array.isArray(state.item.history)) return [];
     return state.item.history.filter(function (step) {
-      return step && step.currencyName && step.actionId !== "custom_item" && step.tier !== "custom";
+      return step
+        && step.currencyName
+        && !["custom_item", "genesis_tree"].includes(step.actionId)
+        && !["custom", "genesis"].includes(step.tier);
     });
   }
 
@@ -2608,6 +2985,9 @@
   }
 
   function displayStepCurrency(step) {
+    if (step && step.actionId === "genesis_tree") {
+      return genesisLabel("起源之树孕育", "創生之樹孕育", "Genesis Tree growth");
+    }
     const action = step && step.actionId ? Core.getAction(step.actionId) : null;
     if (action) {
       if (state.lang === "en") return englishStepCurrencyName(action, step.tier || "normal");
@@ -2642,7 +3022,13 @@
     const tier = els.tierSelect.value;
     const actionEntry = Core.getAction(action);
     const isDesecrationPool = !!(actionEntry && actionEntry.category === "desecration");
-    const actualPool = Core.summarizePool(item, tier, action || null);
+    const isGenesisCraftedPool = action === "genesis_crafted";
+    const genesisPool = action === "genesis_minion" ? "minion" : action === "genesis_caster" ? "caster" : "";
+    const actualPool = isGenesisCraftedPool
+      ? Core.summarizeGenesisCraftedPool(item)
+      : (genesisPool
+        ? Core.summarizeGenesisPool(item, { pool: genesisPool, genesisOnly: true, ignoreItemState: true })
+        : Core.summarizePool(item, tier, action || null));
     const pool = isDesecrationPool
       ? Core.summarizePool(item, tier, action || null, { ignoreItemState: true })
       : actualPool;
@@ -2673,6 +3059,15 @@
       (state.lang === "en" ? "Total weight " : uiText("总权重 ")) + pool.totalWeight,
     ].join(" · ");
 
+    if (isGenesisCraftedPool) {
+      els.poolStats.textContent = [
+        (state.lang === "en" ? "Available " : uiText("可选 ")) + filtered.length + "/" + pool.mods.length,
+        t("prefix") + " " + pool.prefixCount,
+        t("suffix") + " " + pool.suffixCount,
+        genesisLabel("所选节点固定 5% 几率", "所選節點固定 5% 機率", "Each selected node has a fixed 5% chance"),
+      ].join(" · ");
+    }
+
     if (isDesecrationPool) {
       els.poolStats.textContent = els.poolStats.textContent.replace(minLevelText, (state.lang === "en" ? "Actually rollable " : uiText("当前可抽 ")) + actualPool.mods.length + (state.lang === "en" ? " routes " : uiText(" 路 ")) + minLevelText);
     }
@@ -2695,13 +3090,16 @@
       const kindText = mod.desecrated
         ? (state.lang === "en" ? "Desecrated " + (mod.type === "prefix" ? "prefix" : "suffix") : uiText(mod.type === "prefix" ? "亵渎前" : "亵渎后"))
         : (mod.type === "prefix" ? t("prefix") : t("suffix"));
+      const metaText = mod.genesisCrafted
+        ? mod.tier + " · " + (state.lang === "en" ? "Level " : uiText("等级 ")) + mod.level + " · " + modWeightLabel(mod)
+        : mod.tier + " · " + (state.lang === "en" ? "Level " : uiText("等级 ")) + mod.level + " · " + modWeightLabel(mod) + " · " + (state.lang === "en" ? "Group " + englishFromId(mod.group) : uiText("组 ") + uiText(mod.group));
       row.innerHTML = [
         '<div class="pool-main">',
         '<span class="pool-kind ' + mod.type + '">' + kindText + "</span>",
         '<span class="pool-text">' + escapeHtml(renderRangeText(mod)) + "</span>",
         '<span class="pool-chance">' + escapeHtml((state.lang === "en" ? "Chance " : uiText("出现 ")) + chance) + "</span>",
         "</div>",
-        '<div class="pool-meta">' + escapeHtml(mod.tier + " · " + (state.lang === "en" ? "Level " : uiText("等级 ")) + mod.level + " · " + modWeightLabel(mod) + " · " + (state.lang === "en" ? "Group " + englishFromId(mod.group) : uiText("组 ") + uiText(mod.group))) + "</div>",
+        '<div class="pool-meta">' + escapeHtml(metaText) + "</div>",
       ].join("");
       els.poolList.appendChild(row);
     });

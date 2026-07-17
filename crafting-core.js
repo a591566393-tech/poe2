@@ -5,7 +5,7 @@
   }
   root.CraftingCore = core;
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
-  const DATA_VERSION = "poe2db-weighted-2026-07-10-v16";
+  const DATA_VERSION = "poe2db-weighted-2026-07-17-v18";
 
   const RARITIES = {
     normal: { label: "普通", maxPrefixes: 0, maxSuffixes: 0 },
@@ -541,6 +541,10 @@
         desecrated: false,
         sourcePage: mod.sourcePage || "",
         sourceUrl: mod.sourceUrl || "",
+        sourceSection: mod.raw && mod.raw.sourceSection ? String(mod.raw.sourceSection) : "normal",
+        genesisPool: mod.raw && mod.raw.genesisPool ? String(mod.raw.genesisPool) : "",
+        genesisCrafted: !!(mod.raw && mod.raw.genesisCrafted),
+        craftChance: mod.raw && Number.isFinite(Number(mod.raw.craftChance)) ? Number(mod.raw.craftChance) : 0,
       };
     }).filter(function (mod) {
       return mod && mod.weight > 0 && mod.rolls.every(function (roll) {
@@ -1227,7 +1231,20 @@
     };
   }
 
-  function rollModifier(item, mod) {
+  function rollModifier(item, mod, options) {
+    const rollMode = options && options.rollMode ? options.rollMode : "normal";
+    let values;
+    if (rollMode === "maximum") {
+      values = mod.rolls.map(function (roll) { return roll.max; });
+    } else if (rollMode === "lucky") {
+      values = mod.rolls.map(function (roll) {
+        return Math.max.apply(null, [0, 1, 2].map(function () {
+          return rollValues(item, [roll])[0];
+        }));
+      });
+    } else {
+      values = rollValues(item, mod.rolls);
+    }
     return {
       id: mod.id,
       baseId: mod.baseId,
@@ -1240,15 +1257,21 @@
       tags: mod.tags,
       template: mod.template,
       rolls: clone(mod.rolls),
-      values: rollValues(item, mod.rolls),
+      values,
       desecrated: !!mod.desecrated,
-        revealed: !mod.desecrated || mod.revealed !== false,
-        fractured: false,
-        sourceText: mod.sourceText || "",
-        soulCoreCategory: mod.soulCoreCategory || "",
-        ownerSlug: mod.ownerSlug || "",
-      };
-    }
+      revealed: !mod.desecrated || mod.revealed !== false,
+      fractured: false,
+      sourceText: mod.sourceText || "",
+      sourcePage: mod.sourcePage || "",
+      sourceUrl: mod.sourceUrl || "",
+      sourceSection: mod.sourceSection || "normal",
+      genesisPool: mod.genesisPool || "",
+      genesisCrafted: !!mod.genesisCrafted,
+      craftChance: Number(mod.craftChance) || 0,
+      soulCoreCategory: mod.soulCoreCategory || "",
+      ownerSlug: mod.ownerSlug || "",
+    };
+  }
 
   function renderImplicit(implicitEntry) {
     return formatRoll(implicitEntry.template, implicitEntry.values);
@@ -1483,6 +1506,177 @@
     return { ok: true, item, added };
   }
 
+  function normalizeGenesisOptions(options) {
+    const input = options || {};
+    const pool = input.pool === "minion" || input.pool === "caster" ? input.pool : "";
+    const guaranteedCount = Math.max(0, Math.min(2, Number(input.guaranteedCount) || 0));
+    const targetAffixCount = Math.max(4, Math.min(6, Number(input.targetAffixCount) || 4));
+    const minLevel = [0, 20, 30].includes(Number(input.minLevel)) ? Number(input.minLevel) : 0;
+    const genesisMinLevel = [0, 35, 50].includes(Number(input.genesisMinLevel)) ? Number(input.genesisMinLevel) : 0;
+    const luckyScope = ["all", "prefix", "suffix", "genesis"].includes(input.luckyScope) ? input.luckyScope : "";
+    return {
+      pool,
+      guaranteedCount: pool ? guaranteedCount : 0,
+      targetAffixCount,
+      minLevel,
+      genesisMinLevel,
+      blockedTags: Array.isArray(input.blockedTags) ? input.blockedTags.map(String) : [],
+      reservePrefix: !!input.reservePrefix,
+      reserveSuffix: !!input.reserveSuffix,
+      luckyScope,
+      maximumPrefix: !!input.maximumPrefix,
+      maximumSuffix: !!input.maximumSuffix,
+      craftedModId: String(input.craftedModId || ""),
+    };
+  }
+
+  function genesisRollMode(options, mod) {
+    if (mod.type === "prefix" && options.maximumPrefix) return "maximum";
+    if (mod.type === "suffix" && options.maximumSuffix) return "maximum";
+    if (options.luckyScope === "all" || options.luckyScope === mod.type) return "lucky";
+    if (options.luckyScope === "genesis" && mod.genesisPool) return "lucky";
+    return "normal";
+  }
+
+  function modHasAnyTag(mod, tags) {
+    if (!tags || tags.length === 0) return false;
+    const modTags = new Set((mod.tags || []).map(function (tag) { return String(tag).toLowerCase(); }));
+    return tags.some(function (tag) { return modTags.has(String(tag).toLowerCase()); });
+  }
+
+  function eligibleGenesisMods(item, rawOptions) {
+    const options = normalizeGenesisOptions(rawOptions);
+    const genesisPools = options.pool ? [options.pool] : [];
+    return eligibleMods(item, {
+      minLevel: options.minLevel,
+      genesisPools,
+      genesisOnly: !!(rawOptions && rawOptions.genesisOnly),
+      ignoreItemState: !!(rawOptions && rawOptions.ignoreItemState),
+    }).filter(function (mod) {
+      if (mod.genesisPool && mod.level < options.genesisMinLevel) return false;
+      if (modHasAnyTag(mod, options.blockedTags)) return false;
+      const reserved = mod.type === "prefix" ? options.reservePrefix : options.reserveSuffix;
+      if (reserved && countByType(item, mod.type) >= capFor(item, mod.type) - 1) return false;
+      return true;
+    });
+  }
+
+  function addGenesisMod(item, rawOptions) {
+    const options = normalizeGenesisOptions(rawOptions);
+    const mods = eligibleGenesisMods(item, Object.assign({}, options, {
+      genesisOnly: !!rawOptions.genesisOnly,
+    }));
+    if (mods.length === 0) return { ok: false, reason: "起源之树当前路线没有可用词缀。" };
+    const definition = pickWeighted(item, mods);
+    const mod = rollModifier(item, definition, { rollMode: genesisRollMode(options, definition) });
+    if (mod.type === "prefix") item.prefixes.push(mod);
+    else item.suffixes.push(mod);
+    return { ok: true, mod };
+  }
+
+  function eligibleGenesisCraftedMods(item, rawOptions) {
+    return eligibleMods(item, {
+      includeGenesisCrafted: true,
+      genesisCraftedOnly: true,
+      ignoreItemState: !!(rawOptions && rawOptions.ignoreItemState),
+    });
+  }
+
+  function addGenesisCraftedMod(item, definition, options) {
+    const reserved = definition.type === "prefix" ? options.reservePrefix : options.reserveSuffix;
+    if (reserved && countByType(item, definition.type) >= capFor(item, definition.type) - 1) {
+      return { ok: false, reason: "所选 5% 工艺词缀与保留空词缀节点冲突。" };
+    }
+    if (!eligibleGenesisCraftedMods(item).some(function (mod) { return mod.id === definition.id; })) {
+      return { ok: false, reason: "所选起源之树工艺词缀无法加入当前装备。" };
+    }
+    const mod = rollModifier(item, definition, { rollMode: genesisRollMode(options, definition) });
+    if (mod.type === "prefix") item.prefixes.push(mod);
+    else item.suffixes.push(mod);
+    return { ok: true, mod };
+  }
+
+  function makeGenesisItem(baseId, itemLevel, seed, rawOptions) {
+    const item = makeItem(baseId, itemLevel, seed);
+    const base = getBase(baseId);
+    const options = normalizeGenesisOptions(rawOptions);
+    if (!base || !["ring", "amulet", "belt"].includes(base.classId)) {
+      return { ok: false, item, reason: "起源之树只能孕育戒指、项链或腰带。" };
+    }
+    if (options.pool && base.classId === "amulet") {
+      return { ok: false, item, reason: "编年史没有项链的起源之树召唤生物或施法专属词缀池。" };
+    }
+    if (options.reservePrefix && options.reserveSuffix) {
+      return { ok: false, item, reason: "空白词缀节点一次只能选择保留前缀或后缀。" };
+    }
+    const craftedDefinition = options.craftedModId
+      ? MODIFIERS.find(function (mod) { return mod.id === options.craftedModId && mod.genesisCrafted; })
+      : null;
+    if (options.craftedModId && (!craftedDefinition || !craftedDefinition.classes.includes(base.classId))) {
+      return { ok: false, item, reason: "所选 5% 工艺词缀不属于当前孕育装备类型。" };
+    }
+    item.rarity = "rare";
+    const availableCapacity = (capFor(item, "prefix") - (options.reservePrefix ? 1 : 0))
+      + (capFor(item, "suffix") - (options.reserveSuffix ? 1 : 0));
+    if (options.targetAffixCount > availableCapacity) {
+      return { ok: false, item, reason: "保留的空前后缀与目标词缀数量冲突。" };
+    }
+
+    const added = [];
+    const craftedTriggered = !!(craftedDefinition && nextFloat(item) < craftedDefinition.craftChance);
+    if (craftedTriggered) {
+      const craftedResult = addGenesisCraftedMod(item, craftedDefinition, options);
+      if (!craftedResult.ok) return { ok: false, item, reason: craftedResult.reason };
+      added.push(craftedResult.mod);
+    }
+    for (let index = 0; index < options.guaranteedCount; index += 1) {
+      const result = addGenesisMod(item, Object.assign({}, options, { genesisOnly: true }));
+      if (!result.ok) return { ok: false, item, reason: result.reason };
+      added.push(result.mod);
+    }
+    while (countExplicit(item) < options.targetAffixCount) {
+      const result = addGenesisMod(item, options);
+      if (!result.ok) return { ok: false, item, reason: result.reason };
+      added.push(result.mod);
+    }
+
+    item.genesis = {
+      grown: true,
+      source: "The Genesis Tree",
+      pool: options.pool,
+      guaranteedCount: options.guaranteedCount,
+      targetAffixCount: options.targetAffixCount,
+      minLevel: options.minLevel,
+      genesisMinLevel: options.genesisMinLevel,
+      blockedTags: options.blockedTags.slice(),
+      reservePrefix: options.reservePrefix,
+      reserveSuffix: options.reserveSuffix,
+      luckyScope: options.luckyScope,
+      maximumPrefix: options.maximumPrefix,
+      maximumSuffix: options.maximumSuffix,
+      craftedModId: options.craftedModId,
+      craftedChance: craftedDefinition ? craftedDefinition.craftChance : 0,
+      craftedTriggered,
+    };
+    item.history.push({
+      actionId: "genesis_tree",
+      currencyName: "起源之树孕育",
+      tier: "genesis",
+      beforeRarity: "normal",
+      afterRarity: "rare",
+      added: clone(added),
+      removed: [],
+      revealed: [],
+      rerolled: 0,
+      note: craftedDefinition
+        ? "由孕育赠礼在起源之树上生成；5% 工艺节点" + (craftedTriggered ? "命中" : "未命中")
+        : "由孕育赠礼在起源之树上生成",
+      omenSet: null,
+      omenConsumed: null,
+    });
+    return { ok: true, item, added, options };
+  }
+
   function tierMinLevel(actionId, tierId) {
     const imported = currencyTierData();
     const importedLevel = imported && imported[tierId] && imported[tierId].minLevelByAction
@@ -1617,9 +1811,17 @@
     const minLevel = options && options.minLevel ? options.minLevel : 0;
     const forceType = options && options.type ? options.type : null;
     const ignoreItemState = !!(options && options.ignoreItemState);
+    const genesisPools = options && Array.isArray(options.genesisPools) ? options.genesisPools : [];
+    const genesisOnly = !!(options && options.genesisOnly);
+    const includeGenesisCrafted = !!(options && options.includeGenesisCrafted);
+    const genesisCraftedOnly = !!(options && options.genesisCraftedOnly);
     const groups = occupiedGroups(item);
 
     return MODIFIERS.filter(function (mod) {
+      if (mod.genesisPool && !genesisPools.includes(mod.genesisPool)) return false;
+      if (genesisOnly && !mod.genesisPool) return false;
+      if (mod.genesisCrafted && !includeGenesisCrafted) return false;
+      if (genesisCraftedOnly && !mod.genesisCrafted) return false;
       if (forceType && mod.type !== forceType) return false;
       if (!mod.classes.includes(base.classId)) return false;
       if (!modMatchesBaseTags(mod, base)) return false;
@@ -3039,6 +3241,29 @@
     return summary;
   }
 
+  function summarizeGenesisPool(item, rawOptions) {
+    const options = normalizeGenesisOptions(rawOptions);
+    const mods = uniqueModifiers(eligibleGenesisMods(item, Object.assign({}, options, {
+      genesisOnly: !!(rawOptions && rawOptions.genesisOnly),
+      ignoreItemState: !!(rawOptions && rawOptions.ignoreItemState),
+    })));
+    const summary = summarizeMods(mods);
+    summary.minLevel = Math.max(options.minLevel, options.genesisMinLevel);
+    summary.actionId = "genesis_" + (options.pool || "normal");
+    summary.tierId = "genesis";
+    return summary;
+  }
+
+  function summarizeGenesisCraftedPool(item) {
+    const mods = uniqueModifiers(eligibleGenesisCraftedMods(item, { ignoreItemState: true }));
+    const summary = summarizeMods(mods);
+    summary.minLevel = 0;
+    summary.actionId = "genesis_crafted";
+    summary.tierId = "genesis";
+    summary.fixedChance = 0.05;
+    return summary;
+  }
+
   function summarizeMods(mods) {
     return {
       mods,
@@ -3059,6 +3284,7 @@
       liquidEmotionCount: IMPORTED_CRAFTING_DATA.liquidEmotions.length,
       catalystCount: IMPORTED_CRAFTING_DATA.catalysts.length,
       soulCoreCount: IMPORTED_CRAFTING_DATA.soulCores.length,
+      genesisCraftedCount: MODIFIERS.filter(function (mod) { return mod.genesisCrafted; }).length,
     },
     RARITIES,
     CURRENCY_TIERS,
@@ -3068,6 +3294,7 @@
     DESECRATED_MODIFIERS,
     makeItem,
     makeCustomItem,
+    makeGenesisItem,
     getBase,
     getAction,
     baseStatLines,
@@ -3082,7 +3309,11 @@
     qualityCapFor,
     hasOpenSlot,
     eligibleMods,
+    eligibleGenesisMods,
+    eligibleGenesisCraftedMods,
     eligibleDesecratedMods,
+    summarizeGenesisPool,
+    summarizeGenesisCraftedPool,
     summarizePool,
     validateCurrency,
     previewCurrency,

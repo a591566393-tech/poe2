@@ -1198,6 +1198,92 @@ for (let index = 0; index < 256; index += 1) {
 }
 assert(liquidSideCounts.prefix > 0 && liquidSideCounts.suffix > 0, `Liquid Contempt should exercise both same-side replacement paths: ${JSON.stringify(liquidSideCounts)}`);
 
+const importedGenesisMods = (globalThis.POE2DB_MOD_DATA.modifiers || []).filter((mod) => mod.raw?.genesisPool);
+assert(importedGenesisMods.length === 163, `expected 163 Genesis modifiers, got ${importedGenesisMods.length}`);
+const importedGenesisCraftedMods = (globalThis.POE2DB_MOD_DATA.modifiers || []).filter((mod) => mod.raw?.genesisCrafted);
+assert(importedGenesisCraftedMods.length === 36, `expected 36 Genesis crafted modifiers, got ${importedGenesisCraftedMods.length}`);
+const ordinaryGenesisLeak = Core.eligibleMods(makeRareRubyRing("smoke-genesis-ordinary-pool"), { ignoreItemState: true })
+  .filter((mod) => mod.genesisPool || mod.genesisCrafted);
+assert(ordinaryGenesisLeak.length === 0, `ordinary ring pool leaked ${ordinaryGenesisLeak.length} Genesis modifiers`);
+
+const genesisMinionReference = Core.makeItem("ring_ruby", 82, "smoke-genesis-minion-reference");
+genesisMinionReference.rarity = "rare";
+const genesisMinionPool = Core.eligibleGenesisMods(genesisMinionReference, {
+  pool: "minion",
+  genesisOnly: true,
+});
+assert(genesisMinionPool.length === 36, `expected 36 ring Genesis minion rows, got ${genesisMinionPool.length}`);
+assert(genesisMinionPool.every((mod) => mod.genesisPool === "minion"), "Genesis minion reference pool contains another source");
+
+const genesisRing = Core.makeGenesisItem("ring_ruby", 82, "smoke-genesis-ring", {
+  pool: "minion",
+  guaranteedCount: 2,
+  targetAffixCount: 4,
+  minLevel: 30,
+  genesisMinLevel: 50,
+  reservePrefix: false,
+  reserveSuffix: false,
+});
+assert(genesisRing.ok, `Genesis ring generation failed: ${genesisRing.reason || "unknown"}`);
+assert(Core.countExplicit(genesisRing.item) === 4, `Genesis ring should have 4 modifiers, got ${Core.countExplicit(genesisRing.item)}`);
+assert(Core.allMods(genesisRing.item).filter((mod) => mod.genesisPool === "minion").length >= 2,
+  "Genesis ring should guarantee at least two minion modifiers");
+assert(Core.allMods(genesisRing.item).every((mod) => mod.level >= 30), "Genesis global minimum modifier level was not enforced");
+assert(Core.allMods(genesisRing.item).filter((mod) => mod.genesisPool).every((mod) => mod.level >= 50),
+  "Genesis special minimum modifier level was not enforced");
+
+const genesisBeforeExalt = Core.allMods(genesisRing.item).filter((mod) => mod.genesisPool).length;
+const genesisExalt = Core.applyCurrency(genesisRing.item, "exalted", "normal");
+assert(genesisExalt.ok, `Exalted Orb should continue crafting a Genesis item: ${genesisExalt.reason || "unknown"}`);
+assert((genesisExalt.step.added || []).every((mod) => !mod.genesisPool), "ordinary Exalted Orb added a Genesis-only modifier");
+assert(Core.allMods(genesisExalt.item).filter((mod) => mod.genesisPool).length === genesisBeforeExalt,
+  "ordinary Exalted Orb changed the count of existing Genesis modifiers");
+
+const amuletBase = Core.BASES.find((base) => base.classId === "amulet");
+assert(amuletBase, "missing amulet base for Genesis maximum-roll test");
+const genesisAmulet = Core.makeGenesisItem(amuletBase.id, 82, "smoke-genesis-amulet-max-prefix", {
+  targetAffixCount: 4,
+  maximumPrefix: true,
+});
+assert(genesisAmulet.ok, `Genesis amulet generation failed: ${genesisAmulet.reason || "unknown"}`);
+assert(genesisAmulet.item.prefixes.length > 0, "Genesis amulet maximum-prefix test produced no prefixes");
+assert(genesisAmulet.item.prefixes.every((mod) => mod.values.every((value, index) => value === mod.rolls[index].max)),
+  "Genesis maximum prefix values did not use the top roll");
+
+const genesisReserved = Core.makeGenesisItem("belt_heavy", 82, "smoke-genesis-reserved-slots", {
+  pool: "caster",
+  guaranteedCount: 1,
+  targetAffixCount: 5,
+  reservePrefix: true,
+});
+assert(genesisReserved.ok, `Genesis reserved-slot belt failed: ${genesisReserved.reason || "unknown"}`);
+assert(genesisReserved.item.prefixes.length === 2 && genesisReserved.item.suffixes.length === 3,
+  `Genesis reserved prefix should produce 2/3 affixes, got ${genesisReserved.item.prefixes.length}/${genesisReserved.item.suffixes.length}`);
+
+const genesisCraftedPool = Core.eligibleGenesisCraftedMods(genesisMinionReference, { ignoreItemState: true });
+assert(genesisCraftedPool.length === 16, `expected 16 ring Genesis crafted rows, got ${genesisCraftedPool.length}`);
+const craftedDefinition = genesisCraftedPool.find((mod) => mod.rolls.length > 0) || genesisCraftedPool[0];
+let craftedHit = null;
+let craftedMiss = null;
+for (let index = 0; index < 500 && (!craftedHit || !craftedMiss); index += 1) {
+  const result = Core.makeGenesisItem("ring_ruby", 82, `smoke-genesis-crafted-${index}`, {
+    targetAffixCount: 4,
+    craftedModId: craftedDefinition.id,
+  });
+  assert(result.ok, `Genesis crafted-node generation failed at seed ${index}: ${result.reason || "unknown"}`);
+  if (result.item.genesis.craftedTriggered) craftedHit = result;
+  else craftedMiss = result;
+}
+assert(craftedHit, "500 Genesis crafted-node rolls did not produce the sourced 5% outcome");
+assert(craftedMiss, "Genesis crafted-node test did not exercise a miss");
+assert(Core.countExplicit(craftedHit.item) === 4, "Genesis crafted modifier should occupy one of the generated affix slots");
+assert(Core.allMods(craftedHit.item).filter((mod) => mod.genesisCrafted).length === 1,
+  "a successful Genesis crafted node should add exactly one selected crafted modifier");
+assert(Core.allMods(craftedHit.item).some((mod) => mod.id === craftedDefinition.id),
+  "the successful Genesis crafted node added a different modifier");
+assert(Core.allMods(craftedMiss.item).every((mod) => !mod.genesisCrafted),
+  "a missed Genesis crafted node should not add a crafted modifier");
+
 console.log(JSON.stringify({
   ok: true,
   checks: {
@@ -1254,6 +1340,16 @@ console.log(JSON.stringify({
       abyssalChoices: revealedJewel.choices.length,
     },
     liquidEmotionSameSide: liquidSideCounts,
+    genesisTree: {
+      importedRows: importedGenesisMods.length,
+      craftedRows: importedGenesisCraftedMods.length,
+      ringMinionRows: genesisMinionPool.length,
+      ringCraftedRows: genesisCraftedPool.length,
+      craftedNodeHit: craftedDefinition.id,
+      guaranteedMinionCount: Core.allMods(genesisRing.item).filter((mod) => mod.genesisPool === "minion").length,
+      ordinaryPoolLeak: ordinaryGenesisLeak.length,
+      reservedAffixes: [genesisReserved.item.prefixes.length, genesisReserved.item.suffixes.length],
+    },
     dataVersion: Core.DATA_VERSION,
     craftingVersion: globalThis.POE2DB_CRAFTING_DATA.version,
   },

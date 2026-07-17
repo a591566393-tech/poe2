@@ -348,6 +348,59 @@ p {
   gap: 8px;
 }
 
+.genesis-start-panel {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line-strong);
+}
+
+.genesis-start-panel .mini-heading h3 {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.genesis-control-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.genesis-control-grid label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.genesis-control-grid span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.genesis-control-grid select {
+  min-width: 0;
+}
+
+.genesis-maximum-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.genesis-maximum-controls.is-hidden {
+  display: none;
+}
+
+.genesis-maximum-controls .check-row {
+  margin: 0;
+  align-items: flex-start;
+}
+
+.genesis-grow-button {
+  width: 100%;
+}
+
 .item-header {
   display: flex;
   justify-content: space-between;
@@ -397,6 +450,12 @@ p {
   color: var(--muted);
   border-radius: 999px;
   white-space: nowrap;
+}
+
+.badge-genesis {
+  border-color: rgba(38, 122, 79, 0.45);
+  background: #edf8f1;
+  color: #1f6845;
 }
 
 .item-section {
@@ -590,6 +649,12 @@ p {
 .mod-row.is-fractured {
   border-color: rgba(154, 106, 16, 0.72);
   box-shadow: inset 0 0 0 1px rgba(154, 106, 16, 0.18);
+}
+
+.mod-row.is-genesis {
+  border-color: rgba(38, 122, 79, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(38, 122, 79, 0.12);
+  background: #f1faf5;
 }
 
 .mod-row.is-over-cap {
@@ -1302,6 +1367,8 @@ p {
   }
 
   .field-grid,
+  .genesis-control-grid,
+  .genesis-maximum-controls,
   .explicit-grid,
   .final-item-summary-body,
   .pool-tools {

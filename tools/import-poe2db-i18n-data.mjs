@@ -19,7 +19,7 @@ const currentCrafting = globalThis.POE2DB_CRAFTING_DATA || {};
 const pages = Array.from(new Set(currentMods
   .map((mod) => mod.sourcePage)
   .filter(Boolean)
-  .filter((page) => page !== "Jewels")));
+  .filter((page) => page !== "Jewels" && page !== "The_Genesis_Tree")));
 
 const jewelPages = [
   "Ruby",
@@ -33,6 +33,12 @@ const jewelPages = [
 const langs = [
   { key: "en", path: "us" },
   { key: "zhHant", path: "tw" },
+];
+
+const genesisCraftedSources = [
+  { section: "OtherworldlyAmuletModifiers", nextSection: "OtherworldlyRingModifiers" },
+  { section: "OtherworldlyRingModifiers", nextSection: "OtherworldlyBeltModifiers" },
+  { section: "OtherworldlyBeltModifiers", nextSection: "MinionModifiers" },
 ];
 
 function decodeEntities(value) {
@@ -60,6 +66,21 @@ function stripHtmlLoose(value) {
     .replace(/<br\s*\/?>/gi, "\n")
     .replace(/<[^>]*>/g, ""))
     .replace(/\s+/g, " ");
+}
+
+function extractTabSection(html, id, nextId) {
+  const start = html.indexOf(`id="${id}"`);
+  if (start < 0) throw new Error(`${id} section not found`);
+  const next = nextId ? html.indexOf(`id="${nextId}"`, start + id.length) : -1;
+  return html.slice(start, next > start ? next : html.length);
+}
+
+function extractTableCells(rowHtml) {
+  return Array.from(String(rowHtml).matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)).map((match) => match[1]);
+}
+
+function removeBadgeMarkup(html) {
+  return String(html).replace(/<span\b[^>]*\bbadge\b[^>]*>[\s\S]*?<\/span>/gi, "");
 }
 
 function normalizeValueMarkup(html) {
@@ -167,11 +188,12 @@ function generationType(rawMod) {
   return null;
 }
 
-function normalKey(sourcePage, rawMod) {
+function normalKey(sourcePage, rawMod, sourceSection = "normal") {
   const parsed = parseTemplateAndRolls(rawMod.str || "");
   const group = (rawMod.ModFamilyList && rawMod.ModFamilyList[0]) || "";
   return [
     sourcePage,
+    sourceSection,
     generationType(rawMod),
     group,
     Number(rawMod.Level || 0),
@@ -198,6 +220,7 @@ function jewelKey(rawMod, jewelPool) {
 function currentNormalKey(mod) {
   return [
     mod.sourcePage,
+    mod.raw?.sourceSection || "normal",
     mod.type,
     mod.group,
     Number(mod.level || 0),
@@ -267,8 +290,10 @@ function actionLocalizations() {
 async function importAll() {
   const normalIndex = new Map();
   const jewelIndex = new Map();
+  const genesisCraftedIndex = new Map();
   for (const mod of currentMods) {
     if (mod.sourcePage === "Jewels") jewelIndex.set(currentJewelKey(mod), mod);
+    else if (mod.raw?.genesisCrafted) genesisCraftedIndex.set(`${mod.raw.sourceSection}|${mod.raw.sourceRow}`, mod);
     else normalIndex.set(currentNormalKey(mod), mod);
   }
 
@@ -279,14 +304,35 @@ async function importAll() {
     let rows = 0;
     for (const page of pages) {
       const payload = extractModsViewObject(await cachedPage(lang.path, page), `${lang.path}/${page}`);
-      for (const rawMod of payload.normal || []) {
-        rows += 1;
-        const mod = normalIndex.get(normalKey(page, rawMod));
-        if (!mod) continue;
-        if (!modifiers[mod.id]) modifiers[mod.id] = {};
-        addLocalization(modifiers[mod.id], lang.key, rawMod);
-        matched += 1;
+      for (const sourceSection of ["normal", "breach_minion", "breach_caster"]) {
+        for (const rawMod of payload[sourceSection] || []) {
+          rows += 1;
+          const mod = normalIndex.get(normalKey(page, rawMod, sourceSection));
+          if (!mod) continue;
+          if (!modifiers[mod.id]) modifiers[mod.id] = {};
+          addLocalization(modifiers[mod.id], lang.key, rawMod);
+          matched += 1;
+        }
       }
+    }
+
+    const genesisHtml = await cachedPage(lang.path, "The_Genesis_Tree");
+    for (const source of genesisCraftedSources) {
+      const section = extractTabSection(genesisHtml, source.section, source.nextSection);
+      const tableRows = Array.from(section.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi))
+        .map((match) => extractTableCells(match[1]))
+        .filter((cells) => cells.length >= 3);
+      tableRows.forEach((cells, index) => {
+        rows += 1;
+        const mod = genesisCraftedIndex.get(`${source.section}|${index}`);
+        if (!mod) return;
+        if (!modifiers[mod.id]) modifiers[mod.id] = {};
+        addLocalization(modifiers[mod.id], lang.key, {
+          Name: stripHtml(cells[0]),
+          str: removeBadgeMarkup(cells[2]),
+        });
+        matched += 1;
+      });
     }
 
     const jewelSourceMap = {
@@ -314,7 +360,7 @@ async function importAll() {
 
   mkdirSync(dataDir, { recursive: true });
   const data = {
-    version: "poe2db-i18n-2026-07-12-1",
+    version: "poe2db-i18n-2026-07-17-genesis2",
     generatedAt: new Date().toISOString(),
     source: "PoE2DB /us and /tw ModsView pages",
     summary,

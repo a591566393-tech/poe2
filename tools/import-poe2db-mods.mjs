@@ -80,6 +80,17 @@ const currencySources = [
   { action: "chaos", tier: "perfect", page: "Perfect_Chaos_Orb" },
 ];
 
+const genesisPools = [
+  { key: "breach_minion", id: "minion" },
+  { key: "breach_caster", id: "caster" },
+];
+
+const genesisCraftedSources = [
+  { section: "OtherworldlyAmuletModifiers", nextSection: "OtherworldlyRingModifiers", classId: "amulet" },
+  { section: "OtherworldlyRingModifiers", nextSection: "OtherworldlyBeltModifiers", classId: "ring" },
+  { section: "OtherworldlyBeltModifiers", nextSection: "MinionModifiers", classId: "belt" },
+];
+
 function extractModsViewObject(html, sourceName) {
   const marker = "new ModsView(";
   const start = html.indexOf(marker);
@@ -308,11 +319,12 @@ function normalizeRawMod(rawMod, source, index) {
 
   if (!type || weight <= 0 || level <= 0 || !parsed.template || (!source.allowFixed && parsed.rolls.length === 0)) return null;
 
+  const sourceId = source.id || source.page;
   return {
-    id: `poe2db_${source.page}_${index}`,
+    id: `poe2db_${sourceId}_${index}`,
     sourcePage: source.page,
-    sourceUrl: `https://poe2db.tw/cn/${source.page}`,
-    baseId: `${source.page}_${group}_${level}_${index}`,
+    sourceUrl: `https://poe2db.tw/cn/${source.page}${source.sourceSection ? `#${source.sourceSection}` : ""}`,
+    baseId: `${sourceId}_${group}_${level}_${index}`,
     type,
     classes: source.classes,
     requiredBaseTags: source.requiredBaseTags || [],
@@ -331,8 +343,75 @@ function normalizeRawMod(rawMod, source, index) {
       adds_no: rawMod.adds_no || [],
       hover: rawMod.hover || "",
       jewelPool: source.jewelPool || "",
+      sourceSection: source.sourceSection || "normal",
+      genesisPool: source.genesisPool || "",
     },
   };
+}
+
+function normalizeGenesisCraftedRow(cells, source, index, existingMods) {
+  if (cells.length < 3) return null;
+  const name = stripHtml(cells[0]);
+  const type = typeFromCell(cells[1]);
+  const descriptionHtml = removeBadgeMarkup(cells[2]);
+  const parsed = parseTemplateAndRolls(descriptionHtml);
+  if (!type || !parsed.template) return null;
+
+  const matchingFamily = existingMods.find((mod) => (
+    mod.type === type
+    && mod.classes.includes(source.classId)
+    && mod.template === parsed.template
+  ));
+  const group = matchingFamily
+    ? matchingFamily.group
+    : `genesis_crafted_${source.classId}_${type}_${slugify(name || parsed.template) || index}`;
+
+  return {
+    id: `poe2db_The_Genesis_Tree_${source.section}_${index}`,
+    sourcePage: "The_Genesis_Tree",
+    sourceUrl: `https://poe2db.tw/cn/The_Genesis_Tree#${source.section}`,
+    baseId: `The_Genesis_Tree_${source.section}_${index}`,
+    type,
+    classes: [source.classId],
+    requiredBaseTags: [],
+    requiredAnyBaseTags: [],
+    group,
+    name: name || group,
+    template: parsed.template,
+    level: 1,
+    weight: 1,
+    tier: "Crafted",
+    tags: extractHtmlTags(cells[2]),
+    rolls: parsed.rolls,
+    raw: {
+      sourceSection: source.section,
+      sourceRow: index,
+      genesisPool: "",
+      genesisCrafted: true,
+      craftChance: 0.05,
+      weightSource: "Fixed 5% Genesis Tree crafted-node outcome; not a weighted modifier pool.",
+    },
+  };
+}
+
+function importGenesisCraftedMods(existingMods) {
+  const html = readFileSync(join(cacheDir, "The_Genesis_Tree.html"), "utf8");
+  const mods = [];
+  const summary = {};
+
+  for (const source of genesisCraftedSources) {
+    const section = extractTabSection(html, source.section, source.nextSection);
+    const rows = Array.from(section.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi))
+      .map((match) => extractTableCells(match[1]))
+      .filter((cells) => cells.length > 0);
+    const imported = rows
+      .map((cells, index) => normalizeGenesisCraftedRow(cells, source, index, existingMods.concat(mods)))
+      .filter(Boolean);
+    mods.push(...imported);
+    summary[source.section] = imported.length;
+  }
+
+  return { mods, summary };
 }
 
 function jewelModKey(mod) {
@@ -405,7 +484,8 @@ function importJewelMods() {
 function assignTiers(mods) {
   const buckets = new Map();
   for (const mod of mods) {
-    const key = `${mod.sourcePage}|${mod.classes.join(",")}|${mod.type}|${mod.group}`;
+    if (mod.raw?.genesisCrafted) continue;
+    const key = `${mod.sourcePage}|${mod.raw?.genesisPool || "normal"}|${mod.classes.join(",")}|${mod.type}|${mod.group}`;
     if (!buckets.has(key)) buckets.set(key, []);
     buckets.get(key).push(mod);
   }
@@ -457,6 +537,29 @@ function importAll() {
       imported += 1;
     });
 
+    const genesisSummary = {};
+    for (const pool of genesisPools) {
+      const poolRows = Array.isArray(payload[pool.key]) ? payload[pool.key] : [];
+      let poolImported = 0;
+      const genesisSource = {
+        ...source,
+        id: `${source.page}_${pool.key}`,
+        sourceSection: pool.key,
+        genesisPool: pool.id,
+        allowFixed: true,
+      };
+      poolRows.forEach((rawMod, index) => {
+        const mod = normalizeRawMod(rawMod, genesisSource, index);
+        if (!mod) return;
+        mods.push(mod);
+        poolImported += 1;
+      });
+      genesisSummary[pool.key] = {
+        rows: poolRows.length,
+        imported: poolImported,
+      };
+    }
+
     sourceSummary.push({
       page: source.page,
       url: `https://poe2db.tw/cn/${source.page}`,
@@ -464,8 +567,18 @@ function importAll() {
       requiredBaseTags: source.requiredBaseTags || [],
       normalRows: normalMods.length,
       imported,
+      genesis: genesisSummary,
     });
   }
+
+  const genesisCrafted = importGenesisCraftedMods(mods);
+  mods.push(...genesisCrafted.mods);
+  sourceSummary.push({
+    page: "The_Genesis_Tree",
+    url: "https://poe2db.tw/cn/The_Genesis_Tree",
+    genesisCrafted: genesisCrafted.summary,
+    craftChance: 0.05,
+  });
 
   for (const source of currencySources) {
     const html = readFileSync(join(cacheDir, "currency", `${source.page}.html`), "utf8");
@@ -487,10 +600,10 @@ function importAll() {
     "(function (root) {",
     "  root.POE2DB_MOD_DATA = ",
     JSON.stringify({
-      version: "poe2db-mods-2026-07-12-jewel-colours1",
+      version: "poe2db-mods-2026-07-17-genesis2",
       generatedAt: new Date().toISOString(),
       source: "PoE2DB Modifiers Calc pages cached from https://poe2db.tw/cn/",
-      note: "Weights are imported from PoE2DB ModsView DropChance fields. Jewel colour eligibility is merged from the individual Ruby, Emerald, Sapphire, and Time-Lost jewel pages.",
+      note: "Weights are imported from PoE2DB ModsView DropChance fields. Genesis minion/caster pools and fixed 5% crafted-node outcomes are kept separate from ordinary crafting pools.",
       sources: sourceSummary,
       currencyTiers,
       modifiers: mods,

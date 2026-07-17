@@ -260,3 +260,34 @@ Fix current crafting-state regressions without inventing unsourced crafting prob
 
 - Run targeted core checks for Liquid Contempt, Liquid Emotion repeat rejection, catalyst effective weights, and omen replacement/merge behavior.
 - Run JavaScript syntax checks and the core smoke test.
+
+## Genesis Tree Jewellery
+
+### Goal
+
+Genesis Tree jewellery must use the dedicated PoE2DB growth pools and selected tree effects without allowing Genesis-only modifiers to appear through ordinary currency crafting.
+
+### Acceptance Criteria
+
+- Import `ModsView.breach_minion` and `ModsView.breach_caster` from the cached Rings and Belts pages with their exact modifier side, level, weight, family, tags, and value ranges.
+- Import all 36 `Otherworldly*Modifiers` rows from `The_Genesis_Tree`: 4 amulet, 16 ring, and 16 belt crafted outcomes.
+- Record each imported modifier's Genesis pool and source page so ordinary `eligibleMods()` calls can exclude it by default.
+- A Genesis Tree start is available only for ring, amulet, and belt bases and creates a rare item that can continue through the normal crafting workflow.
+- The Genesis generator can include or guarantee one or two minion/caster modifiers only where PoE2DB exposes that pool for the selected jewellery class.
+- Genesis minimum modifier-level effects, blocked tag families, reserved empty prefix/suffix slots, extra value rolls, and maximum-value effects are applied during generation only.
+- Guaranteed modifiers are selected from the requested Genesis family before the remaining ordinary affixes and respect item level, affix capacity, and occupied modifier families.
+- Genesis-only modifiers already present on a generated item remain valid item state, but Chaos, Exalted, and other ordinary currencies cannot add a new Genesis-only modifier.
+- A selected Otherworldly crafted node uses PoE2DB's fixed 5% trigger chance, occupies one generated affix slot on success, and is never represented as a weighted ordinary modifier roll.
+- The item panel and history identify the item as grown on the Genesis Tree and retain the selected growth effects for inspection.
+
+### Verification
+
+- A dedicated audit compares every imported Genesis modifier row against cached PoE2DB `breach_minion` and `breach_caster` payloads.
+- The audit also compares every Otherworldly row's item class, affix side, tags, value ranges, and English/Traditional localization against the three cached Genesis Tree pages.
+- Core smoke verifies that ordinary ring and belt pools contain no Genesis-only rows.
+- Core smoke generates representative minion and caster jewellery, verifies guaranteed counts and minimum modifier levels, and confirms maximum-value growth uses each modifier's top roll.
+- Browser verification covers generating Genesis jewellery, viewing its source/effects, and continuing to craft it with ordinary currency.
+
+### Risk
+
+PoE2DB exposes the modifier weights and individual tree effects, but not a single canonical probability for every possible allocated-tree layout. The simulator must use imported weights for the selected growth pool and must not display an invented overall Genesis outcome probability. Tree pathing and Hiveblood economy are outside this first equipment-crafting implementation.

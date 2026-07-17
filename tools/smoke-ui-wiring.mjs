@@ -19,6 +19,9 @@ assert(html.includes('value="soul_core"'), "Soul Core category option is missing
 assert(html.includes('value="liquid_emotion"'), "Liquid Emotion category option is missing from index.html");
 assert(html.includes('value="catalyst"'), "Catalyst category option is missing from index.html");
 assert(html.includes('id="languageSelect"'), "Language switch is missing from index.html");
+assert(html.includes('id="genesisRoute"'), "Genesis Tree route control is missing from index.html");
+assert(html.includes('id="genesisCraftedMod"'), "Genesis 5% crafted modifier control is missing from index.html");
+assert(html.includes('id="growGenesisButton"'), "Genesis Tree grow action is missing from index.html");
 assert(html.includes("poe2db-i18n-data.js"), "PoE2DB i18n data script is missing from index.html");
 assert(html.includes('value="zh-Hans"'), "Simplified Chinese language option is missing");
 assert(html.includes('value="zh-Hant"'), "Traditional Chinese language option is missing");
@@ -45,6 +48,16 @@ assert(app.includes("失落時空藍玉珠寶"), "base search aliases should inc
 assert(app.includes("液化情緒"), "action search aliases should include Traditional Chinese liquid emotion text");
 assert(app.includes("催化劑"), "action search aliases should include Traditional Chinese catalyst text");
 assert(app.includes("褻瀆"), "action search aliases should include Traditional Chinese desecration text");
+assert(app.includes("Core.makeGenesisItem"), "UI should generate Genesis Tree jewellery through CraftingCore");
+assert(app.includes("Core.eligibleGenesisCraftedMods"), "UI should list item-specific Genesis crafted modifiers");
+assert(app.includes("Core.summarizeGenesisCraftedPool"), "UI should expose the Genesis crafted modifier reference pool");
+
+const genesisRing = Core.makeItem("ring_ruby", 82, "ui-genesis-ring");
+genesisRing.rarity = "rare";
+const genesisCraftedPool = Core.eligibleGenesisCraftedMods(genesisRing, { ignoreItemState: true });
+assert(genesisCraftedPool.length === 16, `expected 16 ring Genesis crafted rows in UI pool, got ${genesisCraftedPool.length}`);
+assert(genesisCraftedPool.every((mod) => mod.genesisCrafted && mod.craftChance === 0.05),
+  "Genesis crafted UI pool should contain only fixed 5% node outcomes");
 
 const soulCoreActions = Core.CURRENCIES.filter((action) => action.category === "soul_core").map((action) => action.id);
 assert(soulCoreActions.length === 6, `expected 6 Soul Core modifier actions, got ${soulCoreActions.length}`);
@@ -87,5 +100,6 @@ console.log(JSON.stringify({
   soulCoreActions,
   medvedPool: pool.mods.length,
   qualityBase: qualityBase.id,
+  genesisCraftedPool: genesisCraftedPool.length,
   categoryOption: true,
 }, null, 2));

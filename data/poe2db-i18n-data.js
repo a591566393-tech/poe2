@@ -1,19 +1,19 @@
 (function (root) {
   root.POE2DB_I18N_DATA = 
 {
-  "version": "poe2db-i18n-2026-07-12-1",
-  "generatedAt": "2026-07-12T11:00:25.395Z",
+  "version": "poe2db-i18n-2026-07-17-genesis2",
+  "generatedAt": "2026-07-17T08:59:11.706Z",
   "source": "PoE2DB /us and /tw ModsView pages",
   "summary": [
     {
       "lang": "en",
-      "rows": 8260,
-      "matched": 7880
+      "rows": 8459,
+      "matched": 8079
     },
     {
       "lang": "zhHant",
-      "rows": 8260,
-      "matched": 7880
+      "rows": 8459,
+      "matched": 8079
     }
   ],
   "bases": {
@@ -11276,6 +11276,71 @@
         "name": "The Runefathers Alloy"
       }
     },
+    "Diluted_Liquid_Ire": {
+      "en": {
+        "name": "Diluted Liquid Ire"
+      }
+    },
+    "Diluted_Liquid_Guilt": {
+      "en": {
+        "name": "Diluted Liquid Guilt"
+      }
+    },
+    "Diluted_Liquid_Greed": {
+      "en": {
+        "name": "Diluted Liquid Greed"
+      }
+    },
+    "Liquid_Paranoia": {
+      "en": {
+        "name": "Liquid Paranoia"
+      }
+    },
+    "Liquid_Envy": {
+      "en": {
+        "name": "Liquid Envy"
+      }
+    },
+    "Liquid_Disgust": {
+      "en": {
+        "name": "Liquid Disgust"
+      }
+    },
+    "Liquid_Despair": {
+      "en": {
+        "name": "Liquid Despair"
+      }
+    },
+    "Concentrated_Liquid_Fear": {
+      "en": {
+        "name": "Concentrated Liquid Fear"
+      }
+    },
+    "Concentrated_Liquid_Suffering": {
+      "en": {
+        "name": "Concentrated Liquid Suffering"
+      }
+    },
+    "Concentrated_Liquid_Isolation": {
+      "en": {
+        "name": "Concentrated Liquid Isolation"
+      }
+    },
+    "Potent_Liquid_Melancholy": {
+      "en": {
+        "name": "Potent Liquid Melancholy"
+      }
+    },
+    "Potent_Liquid_Ferocity": {
+      "en": {
+        "name": "Potent Liquid Ferocity"
+      }
+    },
+    "Potent_Liquid_Contempt": {
+      "en": {
+        "name": "Potent Liquid Contempt"
+      }
+    },
     "Ancient_Diluted_Liquid_Ire": {
       "en": {
         "name": "Ancient Diluted Liquid Ire"
@@ -14861,6 +14926,786 @@
       "zhHant": {
         "name": "稀有之",
         "template": "減少#%護符充能使用"
+      }
+    },
+    "poe2db_Belts_breach_minion_0": {
+      "en": {
+        "name": "of Persuasion",
+        "template": "Minions have #% increased Movement Speed"
+      },
+      "zhHant": {
+        "name": "說服之",
+        "template": "增加#%召喚物移動速度"
+      }
+    },
+    "poe2db_Belts_breach_minion_1": {
+      "en": {
+        "name": "of Pressure",
+        "template": "Minions have #% increased Movement Speed"
+      },
+      "zhHant": {
+        "name": "壓力之",
+        "template": "增加#%召喚物移動速度"
+      }
+    },
+    "poe2db_Belts_breach_minion_2": {
+      "en": {
+        "name": "of Coercion",
+        "template": "Minions have #% increased Movement Speed"
+      },
+      "zhHant": {
+        "name": "威脅之",
+        "template": "增加#%召喚物移動速度"
+      }
+    },
+    "poe2db_Belts_breach_minion_3": {
+      "en": {
+        "name": "of Compulsion",
+        "template": "Minions have #% increased Movement Speed"
+      },
+      "zhHant": {
+        "name": "強迫之",
+        "template": "增加#%召喚物移動速度"
+      }
+    },
+    "poe2db_Belts_breach_minion_4": {
+      "en": {
+        "name": "Bearing",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "負重的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Belts_breach_minion_5": {
+      "en": {
+        "name": "Bracing",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "支撐的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Belts_breach_minion_6": {
+      "en": {
+        "name": "Toughening",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "韌化的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Belts_breach_minion_7": {
+      "en": {
+        "name": "Reinforcing",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "加固的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Belts_breach_minion_8": {
+      "en": {
+        "name": "Bolstering",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "增強的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Belts_breach_minion_9": {
+      "en": {
+        "name": "Fortifying",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "強化的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Belts_breach_minion_10": {
+      "en": {
+        "name": "Stirring",
+        "template": "Minions Revive #% faster"
+      },
+      "zhHant": {
+        "name": "萌動的",
+        "template": "召喚物的復甦速度加快#%"
+      }
+    },
+    "poe2db_Belts_breach_minion_11": {
+      "en": {
+        "name": "Rousing",
+        "template": "Minions Revive #% faster"
+      },
+      "zhHant": {
+        "name": "喚醒的",
+        "template": "召喚物的復甦速度加快#%"
+      }
+    },
+    "poe2db_Belts_breach_minion_12": {
+      "en": {
+        "name": "Waking",
+        "template": "Minions Revive #% faster"
+      },
+      "zhHant": {
+        "name": "甦醒的",
+        "template": "召喚物的復甦速度加快#%"
+      }
+    },
+    "poe2db_Belts_breach_minion_13": {
+      "en": {
+        "name": "Restless",
+        "template": "Minions Revive #% faster"
+      },
+      "zhHant": {
+        "name": "躁動的",
+        "template": "召喚物的復甦速度加快#%"
+      }
+    },
+    "poe2db_Belts_breach_minion_14": {
+      "en": {
+        "name": "Guide's",
+        "template": "Minions deal #% increased Damage with Command Skills"
+      },
+      "zhHant": {
+        "name": "嚮導的",
+        "template": "增加#%召喚物的號令技能造成的傷害"
+      }
+    },
+    "poe2db_Belts_breach_minion_15": {
+      "en": {
+        "name": "Lookout's",
+        "template": "Minions deal #% increased Damage with Command Skills"
+      },
+      "zhHant": {
+        "name": "哨衛的",
+        "template": "增加#%召喚物的號令技能造成的傷害"
+      }
+    },
+    "poe2db_Belts_breach_minion_16": {
+      "en": {
+        "name": "Watcher's",
+        "template": "Minions deal #% increased Damage with Command Skills"
+      },
+      "zhHant": {
+        "name": "看守者的",
+        "template": "增加#%召喚物的號令技能造成的傷害"
+      }
+    },
+    "poe2db_Belts_breach_minion_17": {
+      "en": {
+        "name": "Sentry's",
+        "template": "Minions deal #% increased Damage with Command Skills"
+      },
+      "zhHant": {
+        "name": "哨兵的",
+        "template": "增加#%召喚物的號令技能造成的傷害"
+      }
+    },
+    "poe2db_Belts_breach_minion_18": {
+      "en": {
+        "name": "Shepherd's",
+        "template": "Minions deal #% increased Damage with Command Skills"
+      },
+      "zhHant": {
+        "name": "牧者的",
+        "template": "增加#%召喚物的號令技能造成的傷害"
+      }
+    },
+    "poe2db_Belts_breach_minion_19": {
+      "en": {
+        "name": "Custodian's",
+        "template": "Minions deal #% increased Damage with Command Skills"
+      },
+      "zhHant": {
+        "name": "保管者的",
+        "template": "增加#%召喚物的號令技能造成的傷害"
+      }
+    },
+    "poe2db_Belts_breach_minion_20": {
+      "en": {
+        "name": "of the Taskmaster",
+        "template": "+# to Level of all Minion Skills"
+      },
+      "zhHant": {
+        "name": "監工之",
+        "template": "全部召喚物技能等級+#"
+      }
+    },
+    "poe2db_Belts_breach_minion_21": {
+      "en": {
+        "name": "of the Despot",
+        "template": "+# to Level of all Minion Skills"
+      },
+      "zhHant": {
+        "name": "暴君之",
+        "template": "全部召喚物技能等級+#"
+      }
+    },
+    "poe2db_Belts_breach_minion_22": {
+      "en": {
+        "name": "of Clutching",
+        "template": "Minions have #% increased Immobilisation buildup"
+      },
+      "zhHant": {
+        "name": "緊扣之",
+        "template": "增加#%召喚物禁錮累積"
+      }
+    },
+    "poe2db_Belts_breach_minion_23": {
+      "en": {
+        "name": "of Grasping",
+        "template": "Minions have #% increased Immobilisation buildup"
+      },
+      "zhHant": {
+        "name": "攫取之",
+        "template": "增加#%召喚物禁錮累積"
+      }
+    },
+    "poe2db_Belts_breach_minion_24": {
+      "en": {
+        "name": "of Gripping",
+        "template": "Minions have #% increased Immobilisation buildup"
+      },
+      "zhHant": {
+        "name": "緊握之",
+        "template": "增加#%召喚物禁錮累積"
+      }
+    },
+    "poe2db_Belts_breach_minion_25": {
+      "en": {
+        "name": "of Snaring",
+        "template": "Minions have #% increased Immobilisation buildup"
+      },
+      "zhHant": {
+        "name": "誘捕之",
+        "template": "增加#%召喚物禁錮累積"
+      }
+    },
+    "poe2db_Belts_breach_minion_26": {
+      "en": {
+        "name": "of Grappling",
+        "template": "Minions have #% increased Immobilisation buildup"
+      },
+      "zhHant": {
+        "name": "擒抱之",
+        "template": "增加#%召喚物禁錮累積"
+      }
+    },
+    "poe2db_Belts_breach_minion_27": {
+      "en": {
+        "name": "of Seizing",
+        "template": "Minions have #% increased Immobilisation buildup"
+      },
+      "zhHant": {
+        "name": "奪取之",
+        "template": "增加#%召喚物禁錮累積"
+      }
+    },
+    "poe2db_Belts_breach_minion_28": {
+      "en": {
+        "name": "of Tradition",
+        "template": "Offering Skills have #% increased Duration"
+      },
+      "zhHant": {
+        "name": "傳統之",
+        "template": "奉獻技能增加#%持續時間"
+      }
+    },
+    "poe2db_Belts_breach_minion_29": {
+      "en": {
+        "name": "of Observance",
+        "template": "Offering Skills have #% increased Duration"
+      },
+      "zhHant": {
+        "name": "奉行之",
+        "template": "奉獻技能增加#%持續時間"
+      }
+    },
+    "poe2db_Belts_breach_minion_30": {
+      "en": {
+        "name": "of the Rite",
+        "template": "Offering Skills have #% increased Duration"
+      },
+      "zhHant": {
+        "name": "儀軌之",
+        "template": "奉獻技能增加#%持續時間"
+      }
+    },
+    "poe2db_Belts_breach_minion_31": {
+      "en": {
+        "name": "of Ceremony",
+        "template": "Offering Skills have #% increased Duration"
+      },
+      "zhHant": {
+        "name": "儀典之",
+        "template": "奉獻技能增加#%持續時間"
+      }
+    },
+    "poe2db_Belts_breach_minion_32": {
+      "en": {
+        "name": "of Liturgy",
+        "template": "Offering Skills have #% increased Duration"
+      },
+      "zhHant": {
+        "name": "祭禮之",
+        "template": "奉獻技能增加#%持續時間"
+      }
+    },
+    "poe2db_Belts_breach_minion_33": {
+      "en": {
+        "name": "of Scurrying",
+        "template": "Minions have #% increased Area of Effect"
+      },
+      "zhHant": {
+        "name": "急竄之",
+        "template": "增加#%召喚物的範圍效果"
+      }
+    },
+    "poe2db_Belts_breach_minion_34": {
+      "en": {
+        "name": "of Bustling",
+        "template": "Minions have #% increased Area of Effect"
+      },
+      "zhHant": {
+        "name": "奔忙之",
+        "template": "增加#%召喚物的範圍效果"
+      }
+    },
+    "poe2db_Belts_breach_minion_35": {
+      "en": {
+        "name": "of Trampling",
+        "template": "Minions have #% increased Area of Effect"
+      },
+      "zhHant": {
+        "name": "踐踏之",
+        "template": "增加#%召喚物的範圍效果"
+      }
+    },
+    "poe2db_Belts_breach_minion_36": {
+      "en": {
+        "name": "of Storming",
+        "template": "Minions have #% increased Area of Effect"
+      },
+      "zhHant": {
+        "name": "猛攻之",
+        "template": "增加#%召喚物的範圍效果"
+      }
+    },
+    "poe2db_Belts_breach_minion_37": {
+      "en": {
+        "name": "of Stampeding",
+        "template": "Minions have #% increased Area of Effect"
+      },
+      "zhHant": {
+        "name": "狂奔之",
+        "template": "增加#%召喚物的範圍效果"
+      }
+    },
+    "poe2db_Belts_breach_caster_0": {
+      "en": {
+        "name": "Shining",
+        "template": "+# to maximum Energy Shield"
+      },
+      "zhHant": {
+        "name": "發光的",
+        "template": "+#最大能量護盾"
+      }
+    },
+    "poe2db_Belts_breach_caster_1": {
+      "en": {
+        "name": "Glimmering",
+        "template": "+# to maximum Energy Shield"
+      },
+      "zhHant": {
+        "name": "微光的",
+        "template": "+#最大能量護盾"
+      }
+    },
+    "poe2db_Belts_breach_caster_2": {
+      "en": {
+        "name": "Glittering",
+        "template": "+# to maximum Energy Shield"
+      },
+      "zhHant": {
+        "name": "閃閃發亮的",
+        "template": "+#最大能量護盾"
+      }
+    },
+    "poe2db_Belts_breach_caster_3": {
+      "en": {
+        "name": "Glowing",
+        "template": "+# to maximum Energy Shield"
+      },
+      "zhHant": {
+        "name": "泛光的",
+        "template": "+#最大能量護盾"
+      }
+    },
+    "poe2db_Belts_breach_caster_4": {
+      "en": {
+        "name": "Radiating",
+        "template": "+# to maximum Energy Shield"
+      },
+      "zhHant": {
+        "name": "輻射的",
+        "template": "+#最大能量護盾"
+      }
+    },
+    "poe2db_Belts_breach_caster_5": {
+      "en": {
+        "name": "Pulsing",
+        "template": "+# to maximum Energy Shield"
+      },
+      "zhHant": {
+        "name": "脈衝的",
+        "template": "+#最大能量護盾"
+      }
+    },
+    "poe2db_Belts_breach_caster_6": {
+      "en": {
+        "name": "Blazing",
+        "template": "+# to maximum Energy Shield"
+      },
+      "zhHant": {
+        "name": "熾烈的",
+        "template": "+#最大能量護盾"
+      }
+    },
+    "poe2db_Belts_breach_caster_7": {
+      "en": {
+        "name": "Dazzling",
+        "template": "+# to maximum Energy Shield"
+      },
+      "zhHant": {
+        "name": "眩目的",
+        "template": "+#最大能量護盾"
+      }
+    },
+    "poe2db_Belts_breach_caster_8": {
+      "en": {
+        "name": "Scintillating",
+        "template": "+# to maximum Energy Shield"
+      },
+      "zhHant": {
+        "name": "奪目的",
+        "template": "+#最大能量護盾"
+      }
+    },
+    "poe2db_Belts_breach_caster_9": {
+      "en": {
+        "name": "Incandescent",
+        "template": "+# to maximum Energy Shield"
+      },
+      "zhHant": {
+        "name": "熾焰的",
+        "template": "+#最大能量護盾"
+      }
+    },
+    "poe2db_Belts_breach_caster_10": {
+      "en": {
+        "name": "of Excitement",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "興奮之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Belts_breach_caster_11": {
+      "en": {
+        "name": "of Joy",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "喜悅之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Belts_breach_caster_12": {
+      "en": {
+        "name": "of Elation",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "興高采烈之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Belts_breach_caster_13": {
+      "en": {
+        "name": "of Bliss",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "極樂之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Belts_breach_caster_14": {
+      "en": {
+        "name": "of Euphoria",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "幸福之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Belts_breach_caster_15": {
+      "en": {
+        "name": "of Nirvana",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "涅槃之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Belts_breach_caster_16": {
+      "en": {
+        "name": "Activating",
+        "template": "#% increased Spell Damage during any Flask Effect"
+      },
+      "zhHant": {
+        "name": "啟動的",
+        "template": "在任意藥劑效果期間增加#%法術傷害"
+      }
+    },
+    "poe2db_Belts_breach_caster_17": {
+      "en": {
+        "name": "Stimulating",
+        "template": "#% increased Spell Damage during any Flask Effect"
+      },
+      "zhHant": {
+        "name": "刺激的",
+        "template": "在任意藥劑效果期間增加#%法術傷害"
+      }
+    },
+    "poe2db_Belts_breach_caster_18": {
+      "en": {
+        "name": "Awakening",
+        "template": "#% increased Spell Damage during any Flask Effect"
+      },
+      "zhHant": {
+        "name": "覺醒的",
+        "template": "在任意藥劑效果期間增加#%法術傷害"
+      }
+    },
+    "poe2db_Belts_breach_caster_19": {
+      "en": {
+        "name": "Elevating",
+        "template": "#% increased Spell Damage during any Flask Effect"
+      },
+      "zhHant": {
+        "name": "提升的",
+        "template": "在任意藥劑效果期間增加#%法術傷害"
+      }
+    },
+    "poe2db_Belts_breach_caster_20": {
+      "en": {
+        "name": "Energising",
+        "template": "#% increased Spell Damage during any Flask Effect"
+      },
+      "zhHant": {
+        "name": "充能的",
+        "template": "在任意藥劑效果期間增加#%法術傷害"
+      }
+    },
+    "poe2db_Belts_breach_caster_21": {
+      "en": {
+        "name": "Exhilarating",
+        "template": "#% increased Spell Damage during any Flask Effect"
+      },
+      "zhHant": {
+        "name": "振奮的",
+        "template": "在任意藥劑效果期間增加#%法術傷害"
+      }
+    },
+    "poe2db_Belts_breach_caster_22": {
+      "en": {
+        "name": "Taxing",
+        "template": "#% of Damage is taken from Mana before Life"
+      },
+      "zhHant": {
+        "name": "費力的",
+        "template": "生命值所受的#%傷害由魔力扣除"
+      }
+    },
+    "poe2db_Belts_breach_caster_23": {
+      "en": {
+        "name": "Draining",
+        "template": "#% of Damage is taken from Mana before Life"
+      },
+      "zhHant": {
+        "name": "消耗的",
+        "template": "生命值所受的#%傷害由魔力扣除"
+      }
+    },
+    "poe2db_Belts_breach_caster_24": {
+      "en": {
+        "name": "Exhausting",
+        "template": "#% of Damage is taken from Mana before Life"
+      },
+      "zhHant": {
+        "name": "耗竭的",
+        "template": "生命值所受的#%傷害由魔力扣除"
+      }
+    },
+    "poe2db_Belts_breach_caster_25": {
+      "en": {
+        "name": "Enervating",
+        "template": "#% of Damage is taken from Mana before Life"
+      },
+      "zhHant": {
+        "name": "衰弱的",
+        "template": "生命值所受的#%傷害由魔力扣除"
+      }
+    },
+    "poe2db_Belts_breach_caster_26": {
+      "en": {
+        "name": "of Accumulation",
+        "template": "#% chance for Remnants you pick up to count as picking up an additional Remnant"
+      },
+      "zhHant": {
+        "name": "累積之",
+        "template": "你拾起痕跡時，有#%機率視為拾起額外一個痕跡"
+      }
+    },
+    "poe2db_Belts_breach_caster_27": {
+      "en": {
+        "name": "of Proliferation",
+        "template": "#% chance for Remnants you pick up to count as picking up an additional Remnant"
+      },
+      "zhHant": {
+        "name": "擴散之",
+        "template": "你拾起痕跡時，有#%機率視為拾起額外一個痕跡"
+      }
+    },
+    "poe2db_Belts_breach_caster_28": {
+      "en": {
+        "name": "of Expansion",
+        "template": "#% chance for Remnants you pick up to count as picking up an additional Remnant"
+      },
+      "zhHant": {
+        "name": "擴張之",
+        "template": "你拾起痕跡時，有#%機率視為拾起額外一個痕跡"
+      }
+    },
+    "poe2db_Belts_breach_caster_29": {
+      "en": {
+        "name": "of Magnification",
+        "template": "#% chance for Remnants you pick up to count as picking up an additional Remnant"
+      },
+      "zhHant": {
+        "name": "放大之",
+        "template": "你拾起痕跡時，有#%機率視為拾起額外一個痕跡"
+      }
+    },
+    "poe2db_Belts_breach_caster_30": {
+      "en": {
+        "name": "of Multiplication",
+        "template": "#% chance for Remnants you pick up to count as picking up an additional Remnant"
+      },
+      "zhHant": {
+        "name": "倍增之",
+        "template": "你拾起痕跡時，有#%機率視為拾起額外一個痕跡"
+      }
+    },
+    "poe2db_Belts_breach_caster_31": {
+      "en": {
+        "name": "of Hurrying",
+        "template": "#% increased Cast Speed during any Flask Effect"
+      },
+      "zhHant": {
+        "name": "匆忙之",
+        "template": "在任何藥劑效果期間，增加#%施放速度"
+      }
+    },
+    "poe2db_Belts_breach_caster_32": {
+      "en": {
+        "name": "of Quickening",
+        "template": "#% increased Cast Speed during any Flask Effect"
+      },
+      "zhHant": {
+        "name": "靈動之",
+        "template": "在任何藥劑效果期間，增加#%施放速度"
+      }
+    },
+    "poe2db_Belts_breach_caster_33": {
+      "en": {
+        "name": "of Hastening",
+        "template": "#% increased Cast Speed during any Flask Effect"
+      },
+      "zhHant": {
+        "name": "急速之",
+        "template": "在任何藥劑效果期間，增加#%施放速度"
+      }
+    },
+    "poe2db_Belts_breach_caster_34": {
+      "en": {
+        "name": "of Accelerating",
+        "template": "#% increased Cast Speed during any Flask Effect"
+      },
+      "zhHant": {
+        "name": "加速之",
+        "template": "在任何藥劑效果期間，增加#%施放速度"
+      }
+    },
+    "poe2db_Belts_breach_caster_35": {
+      "en": {
+        "name": "Imagninative",
+        "template": "Spells have #% increased Cooldown Recovery Rate"
+      },
+      "zhHant": {
+        "name": "想像的",
+        "template": "法術增加#%冷卻時間恢復率"
+      }
+    },
+    "poe2db_Belts_breach_caster_36": {
+      "en": {
+        "name": "Inventive",
+        "template": "Spells have #% increased Cooldown Recovery Rate"
+      },
+      "zhHant": {
+        "name": "發明的",
+        "template": "法術增加#%冷卻時間恢復率"
+      }
+    },
+    "poe2db_Belts_breach_caster_37": {
+      "en": {
+        "name": "Pioneering",
+        "template": "Spells have #% increased Cooldown Recovery Rate"
+      },
+      "zhHant": {
+        "name": "先驅的",
+        "template": "法術增加#%冷卻時間恢復率"
+      }
+    },
+    "poe2db_Belts_breach_caster_38": {
+      "en": {
+        "name": "Trailblazing",
+        "template": "Spells have #% increased Cooldown Recovery Rate"
+      },
+      "zhHant": {
+        "name": "開拓的",
+        "template": "法術增加#%冷卻時間恢復率"
+      }
+    },
+    "poe2db_Belts_breach_caster_39": {
+      "en": {
+        "name": "Ingenious",
+        "template": "Spells have #% increased Cooldown Recovery Rate"
+      },
+      "zhHant": {
+        "name": "巧妙的",
+        "template": "法術增加#%冷卻時間恢復率"
       }
     },
     "poe2db_Body_Armours_str_0": {
@@ -70453,6 +71298,856 @@
         "template": "增加#%施放速度"
       }
     },
+    "poe2db_Rings_breach_minion_0": {
+      "en": {
+        "name": "Hustler's",
+        "template": "Minions deal #% increased Damage"
+      },
+      "zhHant": {
+        "name": "投機者的",
+        "template": "增加#%召喚物造成的傷害"
+      }
+    },
+    "poe2db_Rings_breach_minion_1": {
+      "en": {
+        "name": "Conniver's",
+        "template": "Minions deal #% increased Damage"
+      },
+      "zhHant": {
+        "name": "默許者的",
+        "template": "增加#%召喚物造成的傷害"
+      }
+    },
+    "poe2db_Rings_breach_minion_2": {
+      "en": {
+        "name": "Schemer's",
+        "template": "Minions deal #% increased Damage"
+      },
+      "zhHant": {
+        "name": "策劃者的",
+        "template": "增加#%召喚物造成的傷害"
+      }
+    },
+    "poe2db_Rings_breach_minion_3": {
+      "en": {
+        "name": "Plotter's",
+        "template": "Minions deal #% increased Damage"
+      },
+      "zhHant": {
+        "name": "密謀者的",
+        "template": "增加#%召喚物造成的傷害"
+      }
+    },
+    "poe2db_Rings_breach_minion_4": {
+      "en": {
+        "name": "Conspirator's",
+        "template": "Minions deal #% increased Damage"
+      },
+      "zhHant": {
+        "name": "陰謀家的",
+        "template": "增加#%召喚物造成的傷害"
+      }
+    },
+    "poe2db_Rings_breach_minion_5": {
+      "en": {
+        "name": "Exploiter's",
+        "template": "Minions deal #% increased Damage"
+      },
+      "zhHant": {
+        "name": "剝削者的",
+        "template": "增加#%召喚物造成的傷害"
+      }
+    },
+    "poe2db_Rings_breach_minion_6": {
+      "en": {
+        "name": "Manipulator's",
+        "template": "Minions deal #% increased Damage"
+      },
+      "zhHant": {
+        "name": "擺佈者的",
+        "template": "增加#%召喚物造成的傷害"
+      }
+    },
+    "poe2db_Rings_breach_minion_7": {
+      "en": {
+        "name": "Puppeteer's",
+        "template": "Minions deal #% increased Damage"
+      },
+      "zhHant": {
+        "name": "魁儡師的",
+        "template": "增加#%召喚物造成的傷害"
+      }
+    },
+    "poe2db_Rings_breach_minion_8": {
+      "en": {
+        "name": "of Numbness",
+        "template": "Minions have +#% to all Elemental Resistances"
+      },
+      "zhHant": {
+        "name": "麻木之",
+        "template": "召喚物+#%全部元素抗性"
+      }
+    },
+    "poe2db_Rings_breach_minion_9": {
+      "en": {
+        "name": "of Dullness",
+        "template": "Minions have +#% to all Elemental Resistances"
+      },
+      "zhHant": {
+        "name": "遲鈍之",
+        "template": "召喚物+#%全部元素抗性"
+      }
+    },
+    "poe2db_Rings_breach_minion_10": {
+      "en": {
+        "name": "of Desensitisation",
+        "template": "Minions have +#% to all Elemental Resistances"
+      },
+      "zhHant": {
+        "name": "脫敏之",
+        "template": "召喚物+#%全部元素抗性"
+      }
+    },
+    "poe2db_Rings_breach_minion_11": {
+      "en": {
+        "name": "of Conditioning",
+        "template": "Minions have +#% to all Elemental Resistances"
+      },
+      "zhHant": {
+        "name": "制約之",
+        "template": "召喚物+#%全部元素抗性"
+      }
+    },
+    "poe2db_Rings_breach_minion_12": {
+      "en": {
+        "name": "of Acclimatisation",
+        "template": "Minions have +#% to all Elemental Resistances"
+      },
+      "zhHant": {
+        "name": "適應之",
+        "template": "召喚物+#%全部元素抗性"
+      }
+    },
+    "poe2db_Rings_breach_minion_13": {
+      "en": {
+        "name": "of Adaptation",
+        "template": "Minions have +#% to all Elemental Resistances"
+      },
+      "zhHant": {
+        "name": "演化之",
+        "template": "召喚物+#%全部元素抗性"
+      }
+    },
+    "poe2db_Rings_breach_minion_14": {
+      "en": {
+        "name": "of Guidance",
+        "template": "Minions have #% increased Attack and Cast Speed"
+      },
+      "zhHant": {
+        "name": "引導之",
+        "template": "召喚物增加#%攻擊和施放速度"
+      }
+    },
+    "poe2db_Rings_breach_minion_15": {
+      "en": {
+        "name": "of Direction",
+        "template": "Minions have #% increased Attack and Cast Speed"
+      },
+      "zhHant": {
+        "name": "導向之",
+        "template": "召喚物增加#%攻擊和施放速度"
+      }
+    },
+    "poe2db_Rings_breach_minion_16": {
+      "en": {
+        "name": "of Management",
+        "template": "Minions have #% increased Attack and Cast Speed"
+      },
+      "zhHant": {
+        "name": "管理之",
+        "template": "召喚物增加#%攻擊和施放速度"
+      }
+    },
+    "poe2db_Rings_breach_minion_17": {
+      "en": {
+        "name": "of Control",
+        "template": "Minions have #% increased Attack and Cast Speed"
+      },
+      "zhHant": {
+        "name": "控制之",
+        "template": "召喚物增加#%攻擊和施放速度"
+      }
+    },
+    "poe2db_Rings_breach_minion_18": {
+      "en": {
+        "name": "of Pricking",
+        "template": "Minions have #% increased Critical Hit Chance"
+      },
+      "zhHant": {
+        "name": "刺痛之",
+        "template": "增加#%召喚物的暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_minion_19": {
+      "en": {
+        "name": "of Stinging",
+        "template": "Minions have #% increased Critical Hit Chance"
+      },
+      "zhHant": {
+        "name": "螫刺之",
+        "template": "增加#%召喚物的暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_minion_20": {
+      "en": {
+        "name": "of Gouging",
+        "template": "Minions have #% increased Critical Hit Chance"
+      },
+      "zhHant": {
+        "name": "鑿擊之",
+        "template": "增加#%召喚物的暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_minion_21": {
+      "en": {
+        "name": "of Puncturing",
+        "template": "Minions have #% increased Critical Hit Chance"
+      },
+      "zhHant": {
+        "name": "穿刺之",
+        "template": "增加#%召喚物的暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_minion_22": {
+      "en": {
+        "name": "of Lacinating",
+        "template": "Minions have #% increased Critical Hit Chance"
+      },
+      "zhHant": {
+        "name": "割裂之",
+        "template": "增加#%召喚物的暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_minion_23": {
+      "en": {
+        "name": "of Piercing",
+        "template": "Minions have #% increased Critical Hit Chance"
+      },
+      "zhHant": {
+        "name": "穿透之",
+        "template": "增加#%召喚物的暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_minion_24": {
+      "en": {
+        "name": "of Quashing",
+        "template": "Minions have #% increased Critical Damage Bonus"
+      },
+      "zhHant": {
+        "name": "鎮壓之",
+        "template": "召喚物增加#%暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_minion_25": {
+      "en": {
+        "name": "of Purging",
+        "template": "Minions have #% increased Critical Damage Bonus"
+      },
+      "zhHant": {
+        "name": "淨化之",
+        "template": "召喚物增加#%暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_minion_26": {
+      "en": {
+        "name": "of Elimination",
+        "template": "Minions have #% increased Critical Damage Bonus"
+      },
+      "zhHant": {
+        "name": "殲滅之",
+        "template": "召喚物增加#%暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_minion_27": {
+      "en": {
+        "name": "of Devastation",
+        "template": "Minions have #% increased Critical Damage Bonus"
+      },
+      "zhHant": {
+        "name": "毀滅之",
+        "template": "召喚物增加#%暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_minion_28": {
+      "en": {
+        "name": "of Eradication",
+        "template": "Minions have #% increased Critical Damage Bonus"
+      },
+      "zhHant": {
+        "name": "根除之",
+        "template": "召喚物增加#%暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_minion_29": {
+      "en": {
+        "name": "of Extinction",
+        "template": "Minions have #% increased Critical Damage Bonus"
+      },
+      "zhHant": {
+        "name": "滅絕之",
+        "template": "召喚物增加#%暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_minion_30": {
+      "en": {
+        "name": "Bearing",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "負重的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Rings_breach_minion_31": {
+      "en": {
+        "name": "Bracing",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "支撐的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Rings_breach_minion_32": {
+      "en": {
+        "name": "Toughening",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "韌化的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Rings_breach_minion_33": {
+      "en": {
+        "name": "Reinforcing",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "加固的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Rings_breach_minion_34": {
+      "en": {
+        "name": "Bolstering",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "增強的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Rings_breach_minion_35": {
+      "en": {
+        "name": "Fortifying",
+        "template": "Minions have #% increased maximum Life"
+      },
+      "zhHant": {
+        "name": "強化的",
+        "template": "召喚物增加#%最大生命"
+      }
+    },
+    "poe2db_Rings_breach_caster_0": {
+      "en": {
+        "name": "of Excitement",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "興奮之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Rings_breach_caster_1": {
+      "en": {
+        "name": "of Joy",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "喜悅之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Rings_breach_caster_2": {
+      "en": {
+        "name": "of Elation",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "興高采烈之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Rings_breach_caster_3": {
+      "en": {
+        "name": "of Bliss",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "極樂之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Rings_breach_caster_4": {
+      "en": {
+        "name": "of Euphoria",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "幸福之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Rings_breach_caster_5": {
+      "en": {
+        "name": "of Nirvana",
+        "template": "#% increased Mana Regeneration Rate"
+      },
+      "zhHant": {
+        "name": "涅槃之",
+        "template": "增加#%魔力回復率"
+      }
+    },
+    "poe2db_Rings_breach_caster_6": {
+      "en": {
+        "name": "Apprentice's",
+        "template": "#% increased Spell Damage"
+      },
+      "zhHant": {
+        "name": "學徒的",
+        "template": "增加#%法術傷害"
+      }
+    },
+    "poe2db_Rings_breach_caster_7": {
+      "en": {
+        "name": "Adept's",
+        "template": "#% increased Spell Damage"
+      },
+      "zhHant": {
+        "name": "精通者的",
+        "template": "增加#%法術傷害"
+      }
+    },
+    "poe2db_Rings_breach_caster_8": {
+      "en": {
+        "name": "Scholar's",
+        "template": "#% increased Spell Damage"
+      },
+      "zhHant": {
+        "name": "學者的",
+        "template": "增加#%法術傷害"
+      }
+    },
+    "poe2db_Rings_breach_caster_9": {
+      "en": {
+        "name": "Professor's",
+        "template": "#% increased Spell Damage"
+      },
+      "zhHant": {
+        "name": "教授的",
+        "template": "增加#%法術傷害"
+      }
+    },
+    "poe2db_Rings_breach_caster_10": {
+      "en": {
+        "name": "Occultist's",
+        "template": "#% increased Spell Damage"
+      },
+      "zhHant": {
+        "name": "術士的",
+        "template": "增加#%法術傷害"
+      }
+    },
+    "poe2db_Rings_breach_caster_11": {
+      "en": {
+        "name": "Incanter's",
+        "template": "#% increased Spell Damage"
+      },
+      "zhHant": {
+        "name": "詠唱者的",
+        "template": "增加#%法術傷害"
+      }
+    },
+    "poe2db_Rings_breach_caster_12": {
+      "en": {
+        "name": "Glyphic",
+        "template": "#% increased Spell Damage"
+      },
+      "zhHant": {
+        "name": "符記的",
+        "template": "增加#%法術傷害"
+      }
+    },
+    "poe2db_Rings_breach_caster_13": {
+      "en": {
+        "name": "Runic",
+        "template": "#% increased Spell Damage"
+      },
+      "zhHant": {
+        "name": "符文的",
+        "template": "增加#%法術傷害"
+      }
+    },
+    "poe2db_Rings_breach_caster_14": {
+      "en": {
+        "name": "Thoughtful",
+        "template": "#% increased Mana Cost Efficiency of Spells"
+      },
+      "zhHant": {
+        "name": "深思的",
+        "template": "增加#%法術的魔力消耗效率"
+      }
+    },
+    "poe2db_Rings_breach_caster_15": {
+      "en": {
+        "name": "Considerate",
+        "template": "#% increased Mana Cost Efficiency of Spells"
+      },
+      "zhHant": {
+        "name": "周全的",
+        "template": "增加#%法術的魔力消耗效率"
+      }
+    },
+    "poe2db_Rings_breach_caster_16": {
+      "en": {
+        "name": "Prudent",
+        "template": "#% increased Mana Cost Efficiency of Spells"
+      },
+      "zhHant": {
+        "name": "謹慎的",
+        "template": "增加#%法術的魔力消耗效率"
+      }
+    },
+    "poe2db_Rings_breach_caster_17": {
+      "en": {
+        "name": "Astute",
+        "template": "#% increased Mana Cost Efficiency of Spells"
+      },
+      "zhHant": {
+        "name": "精明的",
+        "template": "增加#%法術的魔力消耗效率"
+      }
+    },
+    "poe2db_Rings_breach_caster_18": {
+      "en": {
+        "name": "Sagacious",
+        "template": "#% increased Mana Cost Efficiency of Spells"
+      },
+      "zhHant": {
+        "name": "睿智的",
+        "template": "增加#%法術的魔力消耗效率"
+      }
+    },
+    "poe2db_Rings_breach_caster_19": {
+      "en": {
+        "name": "Calculating",
+        "template": "#% increased Mana Cost Efficiency of Spells"
+      },
+      "zhHant": {
+        "name": "算計的",
+        "template": "增加#%法術的魔力消耗效率"
+      }
+    },
+    "poe2db_Rings_breach_caster_20": {
+      "en": {
+        "name": "Eager",
+        "template": "#% increased effect of Arcane Surge on you"
+      },
+      "zhHant": {
+        "name": "渴望的",
+        "template": "增加#%你身上的秘能波動效果"
+      }
+    },
+    "poe2db_Rings_breach_caster_21": {
+      "en": {
+        "name": "Enthusiastic",
+        "template": "#% increased effect of Arcane Surge on you"
+      },
+      "zhHant": {
+        "name": "熱忱的",
+        "template": "增加#%你身上的秘能波動效果"
+      }
+    },
+    "poe2db_Rings_breach_caster_22": {
+      "en": {
+        "name": "Spirited",
+        "template": "#% increased effect of Arcane Surge on you"
+      },
+      "zhHant": {
+        "name": "奮發的",
+        "template": "增加#%你身上的秘能波動效果"
+      }
+    },
+    "poe2db_Rings_breach_caster_23": {
+      "en": {
+        "name": "Passionate",
+        "template": "#% increased effect of Arcane Surge on you"
+      },
+      "zhHant": {
+        "name": "激昂的",
+        "template": "增加#%你身上的秘能波動效果"
+      }
+    },
+    "poe2db_Rings_breach_caster_24": {
+      "en": {
+        "name": "of Menace",
+        "template": "#% increased Critical Hit Chance for Spells"
+      },
+      "zhHant": {
+        "name": "威脅之",
+        "template": "增加#%法術暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_caster_25": {
+      "en": {
+        "name": "of Havoc",
+        "template": "#% increased Critical Hit Chance for Spells"
+      },
+      "zhHant": {
+        "name": "浩劫之",
+        "template": "增加#%法術暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_caster_26": {
+      "en": {
+        "name": "of Disaster",
+        "template": "#% increased Critical Hit Chance for Spells"
+      },
+      "zhHant": {
+        "name": "災難之",
+        "template": "增加#%法術暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_caster_27": {
+      "en": {
+        "name": "of Calamity",
+        "template": "#% increased Critical Hit Chance for Spells"
+      },
+      "zhHant": {
+        "name": "厄運之",
+        "template": "增加#%法術暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_caster_28": {
+      "en": {
+        "name": "of Ruin",
+        "template": "#% increased Critical Hit Chance for Spells"
+      },
+      "zhHant": {
+        "name": "毀滅之",
+        "template": "增加#%法術暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_caster_29": {
+      "en": {
+        "name": "of Unmaking",
+        "template": "#% increased Critical Hit Chance for Spells"
+      },
+      "zhHant": {
+        "name": "瓦解之",
+        "template": "增加#%法術暴擊率"
+      }
+    },
+    "poe2db_Rings_breach_caster_30": {
+      "en": {
+        "name": "of Ire",
+        "template": "#% increased Critical Spell Damage Bonus"
+      },
+      "zhHant": {
+        "name": "怒火之",
+        "template": "增加#%法術暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_caster_31": {
+      "en": {
+        "name": "of Anger",
+        "template": "#% increased Critical Spell Damage Bonus"
+      },
+      "zhHant": {
+        "name": "憤怒之",
+        "template": "增加#%法術暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_caster_32": {
+      "en": {
+        "name": "of Rage",
+        "template": "#% increased Critical Spell Damage Bonus"
+      },
+      "zhHant": {
+        "name": "狂暴之",
+        "template": "增加#%法術暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_caster_33": {
+      "en": {
+        "name": "of Fury",
+        "template": "#% increased Critical Spell Damage Bonus"
+      },
+      "zhHant": {
+        "name": "狂怒之",
+        "template": "增加#%法術暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_caster_34": {
+      "en": {
+        "name": "of Ferocity",
+        "template": "#% increased Critical Spell Damage Bonus"
+      },
+      "zhHant": {
+        "name": "兇殘之",
+        "template": "增加#%法術暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_caster_35": {
+      "en": {
+        "name": "of Destruction",
+        "template": "#% increased Critical Spell Damage Bonus"
+      },
+      "zhHant": {
+        "name": "破壞之",
+        "template": "增加#%法術暴擊傷害加成"
+      }
+    },
+    "poe2db_Rings_breach_caster_36": {
+      "en": {
+        "name": "Hexing",
+        "template": "#% increased Curse Magnitudes"
+      },
+      "zhHant": {
+        "name": "妖術的",
+        "template": "增加#%詛咒幅度"
+      }
+    },
+    "poe2db_Rings_breach_caster_37": {
+      "en": {
+        "name": "Condemning",
+        "template": "#% increased Curse Magnitudes"
+      },
+      "zhHant": {
+        "name": "定罪的",
+        "template": "增加#%詛咒幅度"
+      }
+    },
+    "poe2db_Rings_breach_caster_38": {
+      "en": {
+        "name": "Maledicting",
+        "template": "#% increased Curse Magnitudes"
+      },
+      "zhHant": {
+        "name": "惡咒的",
+        "template": "增加#%詛咒幅度"
+      }
+    },
+    "poe2db_Rings_breach_caster_39": {
+      "en": {
+        "name": "Dooming",
+        "template": "#% increased Curse Magnitudes"
+      },
+      "zhHant": {
+        "name": "厄運的",
+        "template": "增加#%詛咒幅度"
+      }
+    },
+    "poe2db_Rings_breach_caster_40": {
+      "en": {
+        "name": "of Jordan",
+        "template": "+# to Level of all Spell Skills"
+      },
+      "zhHant": {
+        "name": "喬丹之",
+        "template": "全部法術技能等級+#"
+      }
+    },
+    "poe2db_Rings_breach_caster_41": {
+      "en": {
+        "name": "of Analysis",
+        "template": "Spell Skills have #% increased Area of Effect"
+      },
+      "zhHant": {
+        "name": "分析之",
+        "template": "法術技能增加#%範圍效果"
+      }
+    },
+    "poe2db_Rings_breach_caster_42": {
+      "en": {
+        "name": "of Experimentation",
+        "template": "Spell Skills have #% increased Area of Effect"
+      },
+      "zhHant": {
+        "name": "實驗之",
+        "template": "法術技能增加#%範圍效果"
+      }
+    },
+    "poe2db_Rings_breach_caster_43": {
+      "en": {
+        "name": "of Understanding",
+        "template": "Spell Skills have #% increased Area of Effect"
+      },
+      "zhHant": {
+        "name": "理解之",
+        "template": "法術技能增加#%範圍效果"
+      }
+    },
+    "poe2db_Rings_breach_caster_44": {
+      "en": {
+        "name": "of Receiving",
+        "template": "Remnants can be collected from #% further away"
+      },
+      "zhHant": {
+        "name": "接收之",
+        "template": "痕跡可從#%更遠距離撿拾"
+      }
+    },
+    "poe2db_Rings_breach_caster_45": {
+      "en": {
+        "name": "of Collecting",
+        "template": "Remnants can be collected from #% further away"
+      },
+      "zhHant": {
+        "name": "收集之",
+        "template": "痕跡可從#%更遠距離撿拾"
+      }
+    },
+    "poe2db_Rings_breach_caster_46": {
+      "en": {
+        "name": "of Amassing",
+        "template": "Remnants can be collected from #% further away"
+      },
+      "zhHant": {
+        "name": "聚斂之",
+        "template": "痕跡可從#%更遠距離撿拾"
+      }
+    },
+    "poe2db_Rings_breach_caster_47": {
+      "en": {
+        "name": "of Absorbing",
+        "template": "Remnants can be collected from #% further away"
+      },
+      "zhHant": {
+        "name": "吸收之",
+        "template": "痕跡可從#%更遠距離撿拾"
+      }
+    },
+    "poe2db_Rings_breach_caster_48": {
+      "en": {
+        "name": "of Engulfing",
+        "template": "Remnants can be collected from #% further away"
+      },
+      "zhHant": {
+        "name": "吞噬之",
+        "template": "痕跡可從#%更遠距離撿拾"
+      }
+    },
     "poe2db_Sceptres_0": {
       "en": {
         "name": "of the Brute",
@@ -87281,6 +88976,366 @@
       "zhHant": {
         "name": "風縛的",
         "template": "獲得等同於傷害#%的額外閃電傷害"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyAmuletModifiers_0": {
+      "en": {
+        "name": "Tul's",
+        "template": "Gain #% of Physical Damage as Extra Cold Damage"
+      },
+      "zhHant": {
+        "name": "托沃的",
+        "template": "獲得等同於#%物理傷害的額外冰冷傷害"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyAmuletModifiers_1": {
+      "en": {
+        "name": "Uul-Netol's",
+        "template": "Inflict Anaemia on Hit Anaemia allows +# Corrupted Blood debuffs to be inflicted on enemies"
+      },
+      "zhHant": {
+        "name": "烏爾尼多的",
+        "template": "擊中時施加缺血 缺血允許敵人被施加+#層腐化之血減益"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyAmuletModifiers_2": {
+      "en": {
+        "name": "of Xoph",
+        "template": "+#% to Fire Spell Critical Hit Chance"
+      },
+      "zhHant": {
+        "name": "索伏之",
+        "template": "火焰法術暴擊機率+#%"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyAmuletModifiers_3": {
+      "en": {
+        "name": "of Esh",
+        "template": "Sealed Skills have +# to maximum Seals"
+      },
+      "zhHant": {
+        "name": "艾許之",
+        "template": "被封印技能擁有+#最大封印"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_0": {
+      "en": {
+        "name": "of Amplification",
+        "template": "+# to maximum number of Elemental Infusions"
+      },
+      "zhHant": {
+        "name": "增幅之",
+        "template": "+#最大元素灌注數量"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_1": {
+      "en": {
+        "name": "Dedicated",
+        "template": "Offering Skills have #% increased Buff effect"
+      },
+      "zhHant": {
+        "name": "專注的",
+        "template": "增加#%奉獻效果"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_2": {
+      "en": {
+        "name": "of Multitudes",
+        "template": "Temporary Minion Skills have +# to Limit of Minions summoned"
+      },
+      "zhHant": {
+        "name": "眾群之",
+        "template": "暫時召喚物技能具有 +# 召出召喚物上限"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_3": {
+      "en": {
+        "name": "Scratching",
+        "template": "Minions Break Armour equal to #% of Physical damage dealt"
+      },
+      "zhHant": {
+        "name": "刮擦的",
+        "template": "召喚物破壞的護甲值等同於所造成物理傷害的#%"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_4": {
+      "en": {
+        "name": "Contaminating",
+        "template": "Minions have #% increased Magnitude of Damaging Ailments"
+      },
+      "zhHant": {
+        "name": "汙染的",
+        "template": "增加#%召喚物所施加之傷害型異常狀態的幅度"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_5": {
+      "en": {
+        "name": "of Punctuality",
+        "template": "Minions have #% increased Skill Speed with Command Skills"
+      },
+      "zhHant": {
+        "name": "準時之",
+        "template": "增加#%召喚物的號令技能速度"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_6": {
+      "en": {
+        "name": "of Invigoration",
+        "template": "Minions have #% increased Cooldown Recovery Rate"
+      },
+      "zhHant": {
+        "name": "振奮之",
+        "template": "增加#%召喚物的冷卻時間恢復率"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_7": {
+      "en": {
+        "name": "of the Cabal",
+        "template": "#% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill"
+      },
+      "zhHant": {
+        "name": "秘社之",
+        "template": "每當你使用號令技能時，有#%滿溢機率獲得一層傀儡大師"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_8": {
+      "en": {
+        "name": "Storm Chaser's",
+        "template": "Gain #% of Damage as Extra Lightning Damage with Spells"
+      },
+      "zhHant": {
+        "name": "逐風者的",
+        "template": "法術獲得等同於傷害#%的額外閃電傷害"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_9": {
+      "en": {
+        "name": "Fire Breather's",
+        "template": "Gain #% of Damage as Extra Fire Damage with Spells"
+      },
+      "zhHant": {
+        "name": "吐火者的",
+        "template": "法術獲得等同於傷害#%的額外火焰傷害"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_10": {
+      "en": {
+        "name": "Tempest Rider's",
+        "template": "Gain #% of Damage as Extra Cold Damage with Spells"
+      },
+      "zhHant": {
+        "name": "風暴騎士的",
+        "template": "法術獲得等同於傷害#%的額外冰冷傷害"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_11": {
+      "en": {
+        "name": "Soul Stealer's",
+        "template": "Spells Gain #% of Damage as extra Chaos Damage"
+      },
+      "zhHant": {
+        "name": "竊魂者的",
+        "template": "法術獲得等同於傷害#%的額外混沌傷害"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_12": {
+      "en": {
+        "name": "Burdensome",
+        "template": "#% of Damage is taken from Mana before Life"
+      },
+      "zhHant": {
+        "name": "沉重的",
+        "template": "生命值所受的#%傷害由魔力扣除"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_13": {
+      "en": {
+        "name": "of Drenching",
+        "template": "#% increased Exposure Effect"
+      },
+      "zhHant": {
+        "name": "浸透之",
+        "template": "增加#%曝曬效果"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_14": {
+      "en": {
+        "name": "of Vastness",
+        "template": "Invocated skills have #% increased Maximum Energy"
+      },
+      "zhHant": {
+        "name": "浩瀚之",
+        "template": "增加#%祈願技能的最大能量"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyRingModifiers_15": {
+      "en": {
+        "name": "of Lancing",
+        "template": "#% increased Magnitude of Impales inflicted with Spells"
+      },
+      "zhHant": {
+        "name": "突刺之",
+        "template": "增加#%法術所造成之穿刺的幅度"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_0": {
+      "en": {
+        "name": "of Scattering",
+        "template": "Minions have +#% Surpassing chance to fire an additional Projectile"
+      },
+      "zhHant": {
+        "name": "散射之",
+        "template": "召喚物擁有+#%機率發射一個額外投射物"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_1": {
+      "en": {
+        "name": "of Expectation",
+        "template": "Sealed Skills have #% increased Seal gain frequency"
+      },
+      "zhHant": {
+        "name": "期許之",
+        "template": "增加#%被封印的技能獲取封印的頻率"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_2": {
+      "en": {
+        "name": "Erupting",
+        "template": "#% increased Fire Damage if you've collected a Fire Infusion in the last 8 seconds"
+      },
+      "zhHant": {
+        "name": "噴發的",
+        "template": "若你在過去8秒內拾起了火焰灌注，增加#%火焰傷害"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_3": {
+      "en": {
+        "name": "Energising",
+        "template": "#% increased Lightning Damage if you've collected a Lightning Infusion in the last 8 seconds"
+      },
+      "zhHant": {
+        "name": "充能的",
+        "template": "若你在過去8秒內拾起了閃電灌注，增加#%閃電傷害"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_4": {
+      "en": {
+        "name": "Glacial",
+        "template": "#% increased Cold Damage if you've collected a Cold Infusion in the last 8 seconds"
+      },
+      "zhHant": {
+        "name": "冰川的",
+        "template": "若你在過去8秒內拾起了冰冷灌注，增加#%冰冷傷害"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_5": {
+      "en": {
+        "name": "Unshackling",
+        "template": "#% increased effect of Archon Buffs on you"
+      },
+      "zhHant": {
+        "name": "解放的",
+        "template": "增加#%你的統治者增益效果"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_6": {
+      "en": {
+        "name": "of Reverberation",
+        "template": "Skills have #% chance to not remove Elemental Infusions but still count as consuming them if you've lost an Archon Buff in the past 6 seconds"
+      },
+      "zhHant": {
+        "name": "迴盪之",
+        "template": "若你在過去6秒內失去過統治者增益效果，技能有#%機率不移除元素灌注但仍視為消耗了元素灌注"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_7": {
+      "en": {
+        "name": "of Imbuing",
+        "template": "#% increased Magnitude of Elemental Ailments you inflict with Spells"
+      },
+      "zhHant": {
+        "name": "灌注之",
+        "template": "增加#%你以法術施加的元素異常狀態幅度"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_8": {
+      "en": {
+        "name": "of Exertion",
+        "template": "#% increased Archon Buff duration"
+      },
+      "zhHant": {
+        "name": "竭力之",
+        "template": "增加#%統治者持續時間"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_9": {
+      "en": {
+        "name": "of Unending",
+        "template": "#% to gain Archon of Undeath when you create an Offering"
+      },
+      "zhHant": {
+        "name": "無盡之",
+        "template": "當你創造一個奉獻時，有#%機率獲得亡靈統治者"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_10": {
+      "en": {
+        "name": "Instructor's",
+        "template": "#% increased Minion Damage per different Command Skill used in the past 15 seconds"
+      },
+      "zhHant": {
+        "name": "導師的",
+        "template": "你在過去15秒內每個使用的不同號令技能都會增加#%召喚物傷害"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_11": {
+      "en": {
+        "name": "Monstrous",
+        "template": "Your Minions are Gigantic if they have Revived Recently"
+      },
+      "zhHant": {
+        "name": "巨大的",
+        "template": "若你的召喚物近期被復甦，則為極大狀態"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_12": {
+      "en": {
+        "name": "Underling's",
+        "template": "#% of Damage from Hits is taken from your Spectres' Life before you"
+      },
+      "zhHant": {
+        "name": "僕從的",
+        "template": "被擊中時，生命值所受的#%傷害由你的幽魂扣除"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_13": {
+      "en": {
+        "name": "of Coherence",
+        "template": "#% increased Reservation Efficiency of Minion Skills"
+      },
+      "zhHant": {
+        "name": "凝聚之",
+        "template": "召喚物技能增加#%保留效率"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_14": {
+      "en": {
+        "name": "of Ravaging",
+        "template": "Minions' Strikes have Melee Splash"
+      },
+      "zhHant": {
+        "name": "蹂躪之",
+        "template": "召喚物的打擊擁有近戰擴散"
+      }
+    },
+    "poe2db_The_Genesis_Tree_OtherworldlyBeltModifiers_15": {
+      "en": {
+        "name": "of Binding",
+        "template": "#% increased Minion Duration"
+      },
+      "zhHant": {
+        "name": "束縛之",
+        "template": "增加#%召喚物持續時間"
       }
     }
   }

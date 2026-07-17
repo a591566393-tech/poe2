@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PoE2 做装模拟器</title>
-    <link rel="stylesheet" href="./styles.css?v=20260716-final-item-values1">
+    <link rel="stylesheet" href="./styles.css?v=20260717-genesis2">
   </head>
   <body>
     <header class="topbar">
@@ -133,6 +133,69 @@
             <button id="applyCustomButton" type="button" data-i18n="applyCustom">应用自定义开局</button>
             <button id="clearCustomButton" type="button" data-i18n="clearCustom">清空选择</button>
           </div>
+          <section class="genesis-start-panel" aria-label="起源之树孕育">
+            <div class="mini-heading">
+              <h3 data-i18n="genesisStart">起源之树孕育</h3>
+              <span id="genesisStats" class="field-hint"></span>
+            </div>
+            <div class="genesis-control-grid">
+              <label>
+                <span data-i18n="genesisRoute">词缀路线</span>
+                <select id="genesisRoute"></select>
+              </label>
+              <label>
+                <span data-i18n="genesisAffixCount">生成词缀数</span>
+                <select id="genesisAffixCount">
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
+              </label>
+              <label>
+                <span data-i18n="genesisMinLevel">全局最低词缀等级</span>
+                <select id="genesisMinLevel">
+                  <option value="0" data-i18n="none">无</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                </select>
+              </label>
+              <label>
+                <span data-i18n="genesisSpecialMinLevel">专属词缀最低等级</span>
+                <select id="genesisSpecialMinLevel">
+                  <option value="0" data-i18n="none">无</option>
+                  <option value="35">35</option>
+                  <option value="50">50</option>
+                </select>
+              </label>
+              <label>
+                <span data-i18n="genesisBlockedTags">排除词缀类型</span>
+                <select id="genesisBlockedTags"></select>
+              </label>
+              <label>
+                <span data-i18n="genesisLuckyScope">额外取值 2 次</span>
+                <select id="genesisLuckyScope"></select>
+              </label>
+              <label>
+                <span data-i18n="genesisReserve">保留空词缀</span>
+                <select id="genesisReserve"></select>
+              </label>
+              <label>
+                <span data-i18n="genesisCraftedMod">5% 外延工艺词缀节点</span>
+                <select id="genesisCraftedMod"></select>
+              </label>
+            </div>
+            <div id="genesisMaximumControls" class="genesis-maximum-controls">
+              <label class="check-row">
+                <input id="genesisMaximumPrefix" type="checkbox">
+                <span data-i18n="genesisMaximumPrefix">项链前缀数值上限</span>
+              </label>
+              <label class="check-row">
+                <input id="genesisMaximumSuffix" type="checkbox">
+                <span data-i18n="genesisMaximumSuffix">项链后缀数值上限</span>
+              </label>
+            </div>
+            <button id="growGenesisButton" type="button" class="genesis-grow-button" data-i18n="growGenesis">孕育装备</button>
+          </section>
         </section>
       </section>
 
@@ -193,10 +256,10 @@
     </main>
 
     <script src="./data/poe2db-base-data.js?v=20260711-jewels1"></script>
-    <script src="./data/poe2db-mod-data.js?v=20260711-jewels1"></script>
+    <script src="./data/poe2db-mod-data.js?v=20260717-genesis2"></script>
     <script src="./data/poe2db-crafting-data.js?v=20260715-desecration-routing1"></script>
-    <script src="./data/poe2db-i18n-data.js?v=20260712-i18n-data1"></script>
-    <script src="./crafting-core.js?v=20260716-affix-effect1"></script>
-    <script src="./app.js?v=20260716-final-item-values1"></script>
+    <script src="./data/poe2db-i18n-data.js?v=20260717-genesis2"></script>
+    <script src="./crafting-core.js?v=20260717-genesis2"></script>
+    <script src="./app.js?v=20260717-genesis2"></script>
   </body>
 </html>
