@@ -5,7 +5,7 @@
   }
   root.CraftingCore = core;
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
-  const DATA_VERSION = "poe2db-weighted-2026-07-17-v18";
+  const DATA_VERSION = "poe2db-weighted-2026-07-18-v19";
 
   const RARITIES = {
     normal: { label: "普通", maxPrefixes: 0, maxSuffixes: 0 },
@@ -1903,6 +1903,36 @@
     });
   }
 
+  function summarizeChaosActionPool(item, minLevel, addType) {
+    const candidates = chaosRemovalCandidates(item, { minLevel, addType });
+    const chanceById = new Map();
+    const definitionById = new Map();
+    const branchChance = candidates.length > 0 ? 1 / candidates.length : 0;
+
+    candidates.forEach(function (candidate) {
+      const draft = clone(item);
+      removeSpecificMod(draft, candidate);
+      const mods = eligibleMods(draft, { minLevel, type: addType });
+      const branchWeight = totalWeight(mods);
+      if (branchWeight <= 0) return;
+
+      mods.forEach(function (mod) {
+        definitionById.set(mod.id, mod);
+        const chance = branchChance * modRollWeight(mod) / branchWeight;
+        chanceById.set(mod.id, (chanceById.get(mod.id) || 0) + chance);
+      });
+    });
+
+    const mods = Array.from(definitionById.values()).map(function (mod) {
+      return Object.assign({}, mod, { actionChance: chanceById.get(mod.id) || 0 });
+    });
+    const summary = summarizeMods(mods);
+    summary.probabilityMode = "chaos_action";
+    summary.branchCount = candidates.length;
+    summary.totalActionChance = mods.reduce(function (sum, mod) { return sum + mod.actionChance; }, 0);
+    return summary;
+  }
+
   function uniqueModifiers(mods) {
     const seen = new Set();
     const unique = [];
@@ -3231,6 +3261,13 @@
     const minLevel = actionId ? tierMinLevel(actionId, tierId || "normal") : 0;
     const omenEntry = actionId ? activeOmen(item, actionId) : null;
     const addType = omenEntry && (omenEntry.effect.addType || (omenEntry.effect.addSameType ? sameKindType(item) : null));
+    if (actionId === "chaos") {
+      const summary = summarizeChaosActionPool(item, minLevel, addType);
+      summary.minLevel = minLevel;
+      summary.actionId = actionId;
+      summary.tierId = tierId || "normal";
+      return summary;
+    }
     const mods = uniqueModifiers(previewItemsForAction(item, actionId).flatMap(function (draft) {
       return eligibleMods(draft, { minLevel, type: addType });
     }));

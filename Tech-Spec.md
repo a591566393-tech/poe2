@@ -291,3 +291,24 @@ Genesis Tree jewellery must use the dedicated PoE2DB growth pools and selected t
 ### Risk
 
 PoE2DB exposes the modifier weights and individual tree effects, but not a single canonical probability for every possible allocated-tree layout. The simulator must use imported weights for the selected growth pool and must not display an invented overall Genesis outcome probability. Tree pathing and Hiveblood economy are outside this first equipment-crafting implementation.
+
+## Chaos Action Probability
+
+### Goal
+
+The modifier pool must show the final probability of a Chaos Orb result for the current item, tier, and active omens. It must not merge all post-removal pools into one artificial denominator.
+
+### Acceptance Criteria
+
+- Determine the exact legal removal candidates using the current Chaos omen, including left/right erasure and lowest-level removal.
+- Treat each legal removal candidate with the same probability used by `applyCurrency()`.
+- For every removal branch, build the exact post-removal modifier pool using the selected Chaos tier's minimum modifier level and current open affix slots/groups.
+- Aggregate each modifier's final probability across removal branches as `P(removal branch) * P(modifier | branch)`.
+- Pool rows for Chaos display this final action probability; non-Chaos reference pools retain their existing PoE2DB same-affix weight display.
+- A full rare item with a left-erasure omen only evaluates prefix-removal branches, but the omen does not directly multiply modifier weights.
+
+### Verification
+
+- A focused audit uses an item-level 82 one-handed mace whose T1 cold flat-damage prefix has PoE2DB weight 80 and a normal prefix-pool chance of about 0.1792%.
+- With three full prefixes, three full suffixes, Sinistral Erasure, and Perfect Chaos, the audit independently calculates every removal branch and verifies the summarized final chance is about 0.9937% for the representative state.
+- Core smoke confirms the action-probability metadata is present and sums to 100% across all reachable Chaos outcomes.

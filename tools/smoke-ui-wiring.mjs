@@ -51,6 +51,8 @@ assert(app.includes("褻瀆"), "action search aliases should include Traditional
 assert(app.includes("Core.makeGenesisItem"), "UI should generate Genesis Tree jewellery through CraftingCore");
 assert(app.includes("Core.eligibleGenesisCraftedMods"), "UI should list item-specific Genesis crafted modifiers");
 assert(app.includes("Core.summarizeGenesisCraftedPool"), "UI should expose the Genesis crafted modifier reference pool");
+assert(app.includes("mod.actionChance"), "Chaos pool rows should display final action probability metadata");
+assert(app.includes("最终概率含"), "Chaos pool stats should explain that removal branches are included");
 
 const genesisRing = Core.makeItem("ring_ruby", 82, "ui-genesis-ring");
 genesisRing.rarity = "rare";

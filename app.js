@@ -2158,6 +2158,9 @@
 
   function modChanceText(mod, typeTotals) {
     if (mod && mod.genesisCrafted) return ((Number(mod.craftChance) || 0) * 100) + "%";
+    if (mod && Number.isFinite(Number(mod.actionChance))) {
+      return formatChancePercent(Number(mod.actionChance) * 100);
+    }
     const typeTotal = typeTotals[mod.type === "prefix" ? "prefix" : "suffix"];
     return modChanceTextFromTotal(mod, typeTotal);
   }
@@ -2165,6 +2168,10 @@
   function modChanceTextFromTotal(mod, typeTotal) {
     if (!typeTotal) return "0%";
     const percent = (modWeightValue(mod) / typeTotal) * 100;
+    return formatChancePercent(percent);
+  }
+
+  function formatChancePercent(percent) {
     if (percent > 0 && percent < 0.001) return "<0.001%";
     return percent.toFixed(3).replace(/\.?0+$/, "") + "%";
   }
@@ -3051,12 +3058,19 @@
     const minLevelText = pool.minLevel > 0
       ? (state.lang === "en" ? "Minimum modifier level " + pool.minLevel : uiText("最低词缀等级 ") + pool.minLevel)
       : (state.lang === "en" ? "No minimum modifier level" : uiText("无最低词缀等级限制"));
+    const weightSummary = pool.probabilityMode === "chaos_action"
+      ? genesisLabel(
+        "最终概率含 " + pool.branchCount + " 个移除分支",
+        "最終機率含 " + pool.branchCount + " 個移除分支",
+        "Final chance includes " + pool.branchCount + " removal branches"
+      )
+      : (state.lang === "en" ? "Total weight " : uiText("总权重 ")) + pool.totalWeight;
     els.poolStats.textContent = [
       (state.lang === "en" ? "Available " : uiText("可选 ")) + filtered.length + "/" + pool.mods.length,
       minLevelText,
       t("prefix") + " " + pool.prefixCount,
       t("suffix") + " " + pool.suffixCount,
-      (state.lang === "en" ? "Total weight " : uiText("总权重 ")) + pool.totalWeight,
+      weightSummary,
     ].join(" · ");
 
     if (isGenesisCraftedPool) {

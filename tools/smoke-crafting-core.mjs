@@ -773,6 +773,28 @@ const comboChaos = Core.applyCurrency(prefixLowestOmen.item, "chaos", "perfect")
 assert(comboChaos.ok, `perfect chaos with combined prefix+lowest omens failed: ${comboChaos.reason || "unknown"}`);
 assert(comboChaos.step.removed.length === 1 && comboChaos.step.removed[0].id === lowPrefixDesecratedMod.id, "combined prefix+lowest chaos should remove low-level prefix desecrated mod");
 
+const chaosProbabilityItem = Core.makeCustomItem("one_hand_mace_wooden_club", 82, "smoke-chaos-action-probability", {
+  rarity: "rare",
+  explicitModIds: [
+    "poe2db_One_Hand_Maces_31",
+    "poe2db_One_Hand_Maces_51",
+    "poe2db_One_Hand_Maces_59",
+    "poe2db_One_Hand_Maces_71",
+    "poe2db_One_Hand_Maces_95",
+    "poe2db_One_Hand_Maces_107",
+  ],
+});
+assert(chaosProbabilityItem.ok, `could not build Chaos probability regression item: ${chaosProbabilityItem.reason || "unknown"}`);
+const chaosProbabilityOmen = Core.applyCurrency(chaosProbabilityItem.item, "omen_chaos_prefix", "normal");
+assert(chaosProbabilityOmen.ok, `could not apply left Chaos omen: ${chaosProbabilityOmen.reason || "unknown"}`);
+const chaosProbabilityPool = Core.summarizePool(chaosProbabilityOmen.item, "perfect", "chaos");
+const chaosProbabilityTarget = chaosProbabilityPool.mods.find((mod) => mod.id === "poe2db_One_Hand_Maces_41");
+assert(chaosProbabilityPool.probabilityMode === "chaos_action", "Chaos pool should expose final action probabilities");
+assert(chaosProbabilityPool.branchCount === 3, `left Chaos omen should have three removal branches, got ${chaosProbabilityPool.branchCount}`);
+assert(Math.abs(chaosProbabilityPool.totalActionChance - 1) < 1e-12, "Chaos final outcome probabilities should sum to 100%");
+assert(chaosProbabilityTarget && Math.abs(chaosProbabilityTarget.actionChance - 0.009936660757959402) < 1e-12,
+  `unexpected T1 cold damage Perfect Chaos chance ${chaosProbabilityTarget && chaosProbabilityTarget.actionChance}`);
+
 assert(Core.DATA_STATUS.modDataLoaded, "PoE2DB modifier data must be loaded; fallback modifier data is not acceptable for verification");
 assert(Core.DATA_STATUS.craftingDataLoaded, "PoE2DB crafting data must be loaded; fallback crafting data is not acceptable for verification");
 const perfectAugmentationRing = Core.makeItem("ring_ruby", 82, "smoke-perfect-augmentation-fire-resistance");
@@ -1302,6 +1324,11 @@ console.log(JSON.stringify({
     chaosLowestPreview: preview.candidates.length,
     chaosLowestDesecrated: true,
     stackedChaosOmens: true,
+    chaosActionProbability: {
+      branches: chaosProbabilityPool.branchCount,
+      targetChancePercent: chaosProbabilityTarget.actionChance * 100,
+      totalOutcomePercent: chaosProbabilityPool.totalActionChance * 100,
+    },
     importedModifierData: Core.DATA_STATUS.modDataLoaded,
     perfectAugmentationFireResistance: "T1 level 82 range 41-45",
     ringDamagePercentagePrefixes: requiredRingDamagePercentageGroups,
